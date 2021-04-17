@@ -22,15 +22,18 @@ Si intende creare un meccanismo biella manovella per la trasmissione di moto tra
     - La lunghezza totale dipende da: _stroke_, _dShaft_, _wBiella_. Sarà pari alla loro somma più dei termini aggiuntivi per l'accoppiamento con l'albero e con la biella.
     - Termine aggiuntivo per accoppiamento biella-manovella è pari a 1/5 della larghezza della biella.
     - Termine aggiuntivo per accoppiamento manovella-albero è pari a 1/5 del diametro dell'albero.
+
     VINCOLI:
     - La metà della corsa deve essere maggiore dei raggi delle due coppie.
 * __BIELLA__: collega biella e pistone.
     - La lunghezza della biella (_lenBiella_) è la distanza tra gli assi degli accoppiamenti biella-manovella e biella-pistone.
     - La coppia manovella-pistone è interna al pistone, con un termine per l'accoppiamento biella-pistone pari a 1/5 della larghezza della biella.
+
     VINCOLI:
     - La lunghezza minima deve essere tale da evitare interferenza tra biella e pistone nella posizione di punto morto inferiore (_angle_ pari a 180°), quindi dovrà essere maggiore della distanza tra asse della coppia biella-manovella e di tutto il corpo di accoppiamento manovella-albero (considerando le condizioni di accoppiamento biella-pistone).
     - La larghezza della biella non può essere inferiore ad 1/6 della sua lunghezza
 * __PISTONE__: organo di collegamento per moto traslatorio.
+
     VINCOLI:
     - Diametro del pistone e altezza del pistone (rispettivamente _dPiston_ e _hPiston_) devono essere tali da rispettare il limiti per laccoppiamento biella pistone.
 * __ANGOLO__: angolo della biella per la rappresentazione del meccanismo (_angle_).
