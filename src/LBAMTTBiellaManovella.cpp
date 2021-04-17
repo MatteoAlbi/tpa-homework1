@@ -30,10 +30,10 @@ int LBAMTTcheckIntegrity (const LBAMTTdevice * device){
     else if (device->dPistone <= 0) return 1;
 
     //controllo che la lunghezze rispettino i vincoli di costruzione (vedi README.md)
-    else if (device->stroke/2  <= device->dShaft/2 + device->wBiella/2) return 1; //vincolo lunghezza MANOVELLA
-    else if (device->hPistone <= device->wBiella*7/5 || device->dPistone <= device->wBiella*7/5) return 1; //vincoli PISTONE
-    else if (device->lenBiella <= device->stroke/2 + device->dShaft*7/10) return 1; //vincolo lunghezza BIELLA
-    else if (device->wBiella <= device->lenBiella*1/6) return 1; //vincolo larghezza BIELLA
+    else if (device->stroke/2  <= device->dShaft/2 + device->wBiella/2) return 2; //vincolo lunghezza MANOVELLA
+    else if (device->hPistone <= device->wBiella*7/5 || device->dPistone <= device->wBiella*7/5) return 3; //vincoli PISTONE
+    else if (device->lenBiella <= device->stroke/2 + device->dShaft*7/10) return 4; //vincolo lunghezza BIELLA
+    else if (device->wBiella <= device->lenBiella*1/6) return 5; //vincolo larghezza BIELLA
 
     else return 0;
 };

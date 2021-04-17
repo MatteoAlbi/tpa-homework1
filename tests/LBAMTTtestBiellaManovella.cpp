@@ -31,7 +31,7 @@ TEST_CASE("checkIntegrity ritorna 1 quando i parametri del device non rispettano
     double stroke = 10;
     double lenBiella = 10;
     double wBiella = 2;
-    double hPistone = 3;
+    double hPistone = 4;
     double dPistone = 4;
 
     LBAMTTdevice * device = new(nothrow) LBAMTTdevice;
@@ -47,32 +47,32 @@ TEST_CASE("checkIntegrity ritorna 1 quando i parametri del device non rispettano
 
     //parametro nullo/minore di zero
     device->dShaft = -5;
-    REQUIRE( LBAMTTcheckIntegrity(device) );
+    REQUIRE( LBAMTTcheckIntegrity(device) == 1 );
     device->dShaft = 0;
-    REQUIRE( LBAMTTcheckIntegrity(device) );
+    REQUIRE( LBAMTTcheckIntegrity(device) == 1 );
     device->dShaft = dShaft;
-
-    //vincoli dimensioni PISTONE
-    device->hPistone = 2;
-    REQUIRE( LBAMTTcheckIntegrity(device) );
-    device->hPistone;
-    device->dPistone = 2;
-    REQUIRE( LBAMTTcheckIntegrity(device) );
-    device->dPistone = dPistone;
 
     //vincolo lunghezza MANOVELLA
     device->stroke = 6;
-    REQUIRE( LBAMTTcheckIntegrity(device) );
+    REQUIRE( LBAMTTcheckIntegrity(device) == 2);
     device->stroke = stroke;
+
+    //vincoli dimensioni PISTONE
+    device->hPistone = 2;
+    REQUIRE( LBAMTTcheckIntegrity(device) == 3 );
+    device->hPistone = hPistone;
+    device->dPistone = 2;
+    REQUIRE( LBAMTTcheckIntegrity(device) == 3 );
+    device->dPistone = dPistone;
     
     //vincolo lunghezza BIELLA
     device->lenBiella = 7;
-    REQUIRE( LBAMTTcheckIntegrity(device) );
+    REQUIRE( LBAMTTcheckIntegrity(device) == 4 );
     device->lenBiella = lenBiella;
 
     //vincolo larghezza BIELLA
     device->wBiella = 1;
-    REQUIRE( LBAMTTcheckIntegrity(device) );
+    REQUIRE( LBAMTTcheckIntegrity(device) == 5 );
 
     LBAMTTdelete(device);    
 }
