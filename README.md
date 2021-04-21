@@ -32,6 +32,7 @@ Si intende creare un meccanismo biella manovella per la trasmissione di moto tra
     VINCOLI:
     - La lunghezza minima deve essere tale da evitare interferenza tra biella e pistone nella posizione di punto morto inferiore (_angle_ pari a 180°), quindi dovrà essere maggiore della distanza tra asse della coppia biella-manovella e di tutto il corpo di accoppiamento manovella-albero (considerando le condizioni di accoppiamento biella-pistone).
     - La larghezza della biella non può essere inferiore ad 1/6 della sua lunghezza
+    - La larghezza della biella non può essere superiore al diametro dell'albero motore
 * __PISTONE__: organo di collegamento per moto traslatorio.
 
     VINCOLI:
