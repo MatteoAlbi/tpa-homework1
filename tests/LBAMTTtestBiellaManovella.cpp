@@ -2,8 +2,8 @@
 #include "catch2/catch2.hpp"
 #include "LBAMTTBiellaManovella.h"
 
-
-TEST_CASE("init restituisce un puntatore a device inizializzato", "[LBAMTTBiellaManovella]") {
+//init, check, delete
+TEST_CASE("test init con inizializzazione di parametri che rispettano i vincoli", "[LBAMTTBiellaManovella]") {
     double dShaft = 5;
     double stroke = 10;
     double lenBiella = 10;
@@ -12,21 +12,21 @@ TEST_CASE("init restituisce un puntatore a device inizializzato", "[LBAMTTBiella
     double dPistone = 4;
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
-    REQUIRE( device != NULL);
+    REQUIRE( device != NULL );
 
-    REQUIRE( device->dShaft == dShaft);
-    REQUIRE( device->stroke == stroke);
-    REQUIRE( device->lenBiella == lenBiella);
-    REQUIRE( device->wBiella == wBiella);
-    REQUIRE( device->hPistone == hPistone);
-    REQUIRE( device->dPistone == dPistone);
-    REQUIRE( device->angle == 0.0);
-    REQUIRE( device->verse == N);
+    REQUIRE( device->dShaft == dShaft );
+    REQUIRE( device->stroke == stroke );
+    REQUIRE( device->lenBiella == lenBiella );
+    REQUIRE( device->wBiella == wBiella );
+    REQUIRE( device->hPistone == hPistone );
+    REQUIRE( device->dPistone == dPistone );
+    REQUIRE( device->angle == 0.0 );
+    REQUIRE( device->verse == N );
 
     LBAMTTdelete(device);    
 }
 
-TEST_CASE("checkIntegrity ritorna 1 quando i parametri del device non rispettano i vincoli", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test dei diversi codici di errore di checkIntegrity", "[LBAMTTBiellaManovella]") {
     double dShaft = 5;
     double stroke = 10;
     double lenBiella = 10;
@@ -54,7 +54,7 @@ TEST_CASE("checkIntegrity ritorna 1 quando i parametri del device non rispettano
 
     //vincolo lunghezza MANOVELLA
     device->stroke = 6;
-    REQUIRE( LBAMTTcheckIntegrity(device) == 2);
+    REQUIRE( LBAMTTcheckIntegrity(device) == 2 );
     device->stroke = stroke;
 
     //vincoli dimensioni PISTONE
@@ -73,11 +73,16 @@ TEST_CASE("checkIntegrity ritorna 1 quando i parametri del device non rispettano
     //vincolo larghezza BIELLA
     device->wBiella = 1;
     REQUIRE( LBAMTTcheckIntegrity(device) == 5 );
+    device->wBiella = 6;
+    device->stroke = 12;
+    device->dPistone = 10;
+    device->hPistone = 10;
+    REQUIRE( LBAMTTcheckIntegrity(device) == 5 );
 
     LBAMTTdelete(device);    
 }
 
-TEST_CASE("init restituisce NULL si parametri del device non rispettano i vincoli", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test init passando valori che non rispettano i vincoli", "[LBAMTTBiellaManovella]") {
     double dShaft = 5;
     double stroke = 10;
     double lenBiella = 7;
@@ -86,47 +91,122 @@ TEST_CASE("init restituisce NULL si parametri del device non rispettano i vincol
     double dPistone = 4;
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
-    REQUIRE( device == NULL);
+    REQUIRE( device == NULL );
     
     LBAMTTdelete(device);    
 }
-/*
-TEST_CASE("add should insert element at the start of the list", "[LinkedList]") {
-    
-    labtpa::LinkedList* ll = labtpa::init();
-    labtpa::add(ll,"a");
-    REQUIRE( std::string(ll->head->label) == "a");
-    labtpa::add(ll,"b");
-    REQUIRE( std::string(ll->head->label) == "b");
-    labtpa::add(ll,"c");
-    REQUIRE( std::string(ll->head->label) == "c"); 
-    REQUIRE( labtpa::size(ll) == 3);
 
-    labtpa::destroy(ll);
+//set
+TEST_CASE("test setDShaft quando il parametro rispetta i vincoli e non", "[LBAMTTBiellaManovella]") {
+    double dShaft = 80;
+    double stroke = 200;
+    double lenBiella = 300;
+    double wBiella = 60;
+    double hPistone = 100;
+    double dPistone = 100;
+
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+
+    REQUIRE( LBAMTTsetDShaft(device,81) == 0 );
+    REQUIRE( device->dShaft == 81 );
+
+    REQUIRE( LBAMTTsetDShaft(device,50) == 1 );
+    REQUIRE( device->dShaft == 81 );
+
+    LBAMTTdelete(device);  
 }
 
-TEST_CASE("to_string should return the string format of the list", "[LinkedList]") {
-    
-    labtpa::LinkedList* ll = labtpa::init();
-    labtpa::add(ll,"a");
-    labtpa::add(ll,"b");
-    labtpa::add(ll,"c");
-    REQUIRE( labtpa::to_string(ll) == std::string("LinkedList: c; b; a; ") );  
+TEST_CASE("test setStroke quando il parametro rispetta i vincoli e non", "[LBAMTTBiellaManovella]") {
+    double dShaft = 80;
+    double stroke = 200;
+    double lenBiella = 300;
+    double wBiella = 60;
+    double hPistone = 100;
+    double dPistone = 100;
 
-    labtpa::destroy(ll);
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+
+    REQUIRE( LBAMTTsetStroke(device,201) == 0 );
+    REQUIRE( device->stroke == 201 );
+
+    REQUIRE( LBAMTTsetStroke(device,50) == 1 );
+    REQUIRE( device->stroke == 201 );
+
+    LBAMTTdelete(device);  
 }
 
-//test case search
+TEST_CASE("test setLenBiella quando il parametro rispetta i vincoli e non", "[LBAMTTBiellaManovella]") {
+    double dShaft = 80;
+    double stroke = 200;
+    double lenBiella = 300;
+    double wBiella = 60;
+    double hPistone = 100;
+    double dPistone = 100;
 
-TEST_CASE("pop should delete last node", "[LinkedList]") {
-    
-    labtpa::LinkedList* ll = labtpa::init();
-    labtpa::add(ll,"a");
-    labtpa::add(ll,"b");
-    labtpa::add(ll,"c");
-    REQUIRE( labtpa::to_string(ll) == std::string("LinkedList: c; b; a; ") );  
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
 
-    labtpa::destroy(ll);
+    REQUIRE( LBAMTTsetLenBiella(device,301) == 0 );
+    REQUIRE( device->lenBiella == 301 );
+
+    REQUIRE( LBAMTTsetLenBiella(device,50) == 1 );
+    REQUIRE( device->lenBiella == 301 );
+
+    LBAMTTdelete(device);  
 }
 
-*/
+TEST_CASE("test setWBiella quando il parametro rispetta i vincoli e non", "[LBAMTTBiellaManovella]") {
+    double dShaft = 80;
+    double stroke = 200;
+    double lenBiella = 300;
+    double wBiella = 60;
+    double hPistone = 100;
+    double dPistone = 100;
+
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+
+    REQUIRE( LBAMTTsetWBiella(device,61) == 0 );
+    REQUIRE( device->wBiella == 61 );
+
+    REQUIRE( LBAMTTsetWBiella(device,100) == 1 );
+    REQUIRE( device->wBiella == 61 );
+
+    LBAMTTdelete(device);  
+}
+
+TEST_CASE("test setHPistone quando il parametro rispetta i vincoli e non", "[LBAMTTBiellaManovella]") {
+    double dShaft = 80;
+    double stroke = 200;
+    double lenBiella = 300;
+    double wBiella = 60;
+    double hPistone = 100;
+    double dPistone = 100;
+
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+ 
+    REQUIRE( LBAMTTsetHPistone(device,101) == 0 );
+    REQUIRE( device->hPistone == 101 );
+
+    REQUIRE( LBAMTTsetHPistone(device,50) == 1 );
+    REQUIRE( device->hPistone == 101 );
+
+    LBAMTTdelete(device);  
+}
+
+TEST_CASE("test setDPistone quando il parametro rispetta i vincoli e non", "[LBAMTTBiellaManovella]") {
+    double dShaft = 80;
+    double stroke = 200;
+    double lenBiella = 300;
+    double wBiella = 60;
+    double hPistone = 100;
+    double dPistone = 100;
+
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+
+    REQUIRE( LBAMTTsetDPistone(device,101) == 0 );
+    REQUIRE( device->dPistone == 101 );
+
+    REQUIRE( LBAMTTsetDPistone(device,50) == 1 );
+    REQUIRE( device->dPistone == 101 );
+
+    LBAMTTdelete(device);  
+}
