@@ -43,7 +43,11 @@ LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl 
  * Controlla che le misure date siano compatibili con l'integrità strutturale del device.
  * @param device puntatore a device di cui controllare i parametri
  * @return 0 se vengono rispettati i vincoli
- * @return 1 in caso di errore
+ * @return 1 se i parametri sono <= 0
+ * @return 2 se non viene rispettato il vincolo sulla manovella
+ * @return 3 se non vengono rispettati i vincoli sul pistone
+ * @return 4 se non viene rispettato il vincolo sulla lunghezza della biella
+ * @return 5 se non viene rispettato il vincolo sulla larghezza della biella
 */
 int LBAMTTcheckIntegrity (const LBAMTTdevice * device);
 
@@ -54,5 +58,13 @@ int LBAMTTcheckIntegrity (const LBAMTTdevice * device);
  * @return 1 in caso di errore 
 */
 int LBAMTTdelete (LBAMTTdevice * device);
+
+/**
+ * Crea una stringa in codice SVG per la rappresentazione del device
+ * @param device puntatore a struttura da rappresentare
+ * @return string deviceSVG se il processo è avvenuto con successo
+ * @return NULL in caso di errore 
+*/
+string LBAMTTtoStringSVG (LBAMTTdevice * device);
 
 #endif

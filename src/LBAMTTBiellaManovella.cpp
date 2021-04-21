@@ -45,3 +45,11 @@ int LBAMTTdelete (LBAMTTdevice * device){
         return 0;
     }
 }
+
+string LBAMTTtoStringSVG (LBAMTTdevice * device){
+    string deviceSVG = "";
+
+    deviceSVG += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n\n <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"600\" >\n\n";
+
+
+};
