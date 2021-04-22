@@ -12,9 +12,10 @@ int main(int, char**) {
     double wBiella = 60;
     double hPistone = 100;
     double dPistone = 100;
+    double angle = 30;
 
 
-    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone, angle);
     //cout << LBAMTTtoStringSVG(device);
     LBAMTTsaveToFile(LBAMTTtoStringSVG(device),"prova-biella-manovella.svg");
     

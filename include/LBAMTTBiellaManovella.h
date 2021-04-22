@@ -25,7 +25,7 @@ typedef struct LBAMTTdevice{
     double hPistone; //altezza pistone
     double dPistone; //diametro pistone
     double angle; //angolo in gradi della biella
-    LBAMTTorientation verse; //orientazione pistone, preimpostata a N
+    LBAMTTorientation verse; //orientazione pistone
 } LBAMTTdevice;
 
 /**
@@ -39,11 +39,11 @@ typedef struct LBAMTTdevice{
  * @param hPistone altezza pistone
  * @param dPistone diametro pistone
  * @param angle angolo in gradi della manovella, preimpostato a 0 (punto morto superiore)
- * @param verse orientazione pistone, preimpostata a N
+ * @param verse orientazione pistone, preimpostata a S
  * @return puntatore a device; 
  *      in caso di errore: NULL (errore nell'allocazione o nei parametri passati)
 */
-LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle = 0, LBAMTTorientation verse = N);
+LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle = 0, LBAMTTorientation verse = S);
 
 /**
  * Controlla che le misure date siano compatibili con l'integrità strutturale del device.

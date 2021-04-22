@@ -127,7 +127,7 @@ string LBAMTTtoStringSVG (LBAMTTdevice * device){
     double cxPistone, cyPistone; //coordinate cetro coppia biella-pistone
     double L1 = device->stroke/2; //lunghezza manovella
     double L2 = device->lenBiella;  
-    double q = device->angle * PI / 180; //angolo manovella in radianti
+    double q = PI/2 - device->angle * PI / 180; //angolo manovella in radianti
     double theta = atan2(-L1 * cos(q) / L2, sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) / L2);
 
     cxShaft = 400;
@@ -154,7 +154,7 @@ string LBAMTTtoStringSVG (LBAMTTdevice * device){
     deviceSVG += "r=\"" + to_string(device->dShaft*7/10) +"\" fill=\"green\" />\n\n"; //def raggio e colore
         //cerchio coppia biella-manovella
     deviceSVG += "\t<circle cx=\"" + to_string(cxBiella) + "\" cy=\"" + to_string(cyBiella) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" fill=\"green\" />\n\n"; //def raggio e colore
+    deviceSVG += "r=\"" + to_string(device->wBiella*7/10) +"\" fill=\"green\" />\n\n"; //def raggio e colore
         //rettangolo che collega i due cerchi
     deviceSVG += "\t<rect x=\"" + to_string(cxShaft) + "\" y=\"" + to_string(cyShaft - device->wBiella*7/10) + "\" "; //def punto creazione 
     deviceSVG += "width=\"" + to_string(L1) + "\" height=\"" + to_string(device->wBiella*7/5) + "\" "; //def dimensioni 
