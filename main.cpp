@@ -15,7 +15,8 @@ int main(int, char**) {
 
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
-    cout << LBAMTTtoStringSVG(device);
+    //cout << LBAMTTtoStringSVG(device);
+    LBAMTTsaveToFile(LBAMTTtoStringSVG(device),"prova-biella-manovella.svg");
     
     return 0;
 } 

@@ -122,56 +122,56 @@ int LBAMTTdelete (LBAMTTdevice * device){
 
 string LBAMTTtoStringSVG (LBAMTTdevice * device){
     string deviceSVG = "";
-    double xcShaft, ycShaft; //cooridnate centro del centro dell'albero
-    double xcBiella, ycBiella; //coordinate centro coppia biella-manovella
-    double xcPistone, ycPistone; //coordinate cetro coppia biella-pistone
+    double cxShaft, cyShaft; //cooridnate centro del centro dell'albero
+    double cxBiella, cyBiella; //coordinate centro coppia biella-manovella
+    double cxPistone, cyPistone; //coordinate cetro coppia biella-pistone
     double L1 = device->stroke/2; //lunghezza manovella
     double L2 = device->lenBiella;  
     double q = device->angle * PI / 180; //angolo manovella in radianti
     double theta = atan2(-L1 * cos(q) / L2, sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) / L2);
 
-    xcShaft = 400;
-    ycShaft = 100;
-    xcBiella = xcShaft + L1 * cos(q);
-    ycBiella = ycShaft + L1 * sin(q);
-    xcPistone = xcShaft;
-    ycPistone = ycShaft + sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) + L1 * sin(q);
+    cxShaft = 400;
+    cyShaft = 100;
+    cxBiella = cxShaft + L1 * cos(q);
+    cyBiella = cyShaft + L1 * sin(q);
+    cxPistone = cxShaft;
+    cyPistone = cyShaft + sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) + L1 * sin(q);
 
     //biella
-    deviceSVG += "\t<rect x=\"" + to_string(xcBiella) + "\" y=\"" + to_string(ycBiella - device->wBiella/2) + "\" "; //def punto creazione 
-    deviceSVG += "width=\"" + to_string(L2) + "\" height\"" + to_string(device->wBiella) + "\" "; //def dimensioni 
-    deviceSVG += "style=\"fill:blue\" "; //def colore
-    deviceSVG += "transform=\"rotate(" + to_string(theta * 180 / PI) + ")\" />\n\n"; //def rotazione 
+    deviceSVG += "\t<rect x=\"" + to_string(cxBiella) + "\" y=\"" + to_string(cyBiella - device->wBiella/2) + "\" "; //def punto creazione 
+    deviceSVG += "width=\"" + to_string(L2) + "\" height=\"" + to_string(device->wBiella) + "\" "; //def dimensioni 
+    deviceSVG += "fill=\"blue\" "; //def colore
+    deviceSVG += "transform=\"rotate(" + to_string(90 - theta * 180 / PI) + "," + to_string(cxBiella) + "," + to_string(cyBiella) + ")\" />\n\n"; //def rotazione 
 
     //pistone
-    deviceSVG += "\t<rect x=\"" + to_string(xcPistone - device->wBiella*7/10) + "\" y=\"" + to_string(ycPistone - device->wBiella*7/10) + "\" "; //def punto creazione 
-    deviceSVG += "width=\"" + to_string(device->dPistone) + "\" height\"" + to_string(device->hPistone) + "\" "; //def dimensioni 
-    deviceSVG += "style=\"fill:red\" />\n\n"; //def colore
+    deviceSVG += "\t<rect x=\"" + to_string(cxPistone - device->dPistone/2) + "\" y=\"" + to_string(cyPistone - device->wBiella*7/10) + "\" "; //def punto creazione 
+    deviceSVG += "width=\"" + to_string(device->dPistone) + "\" height=\"" + to_string(device->hPistone) + "\" "; //def dimensioni 
+    deviceSVG += "fill=\"red\" />\n\n"; //def colore
 
     //manovella
         //cerchio albero
-    deviceSVG += "\t<circle xc=\"" + to_string(xcShaft) + "\" yc=\"" + to_string(ycShaft) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->dShaft*7/10) +"\" style=\"fill:green\" />\n\n"; //def raggio e colore
+    deviceSVG += "\t<circle cx=\"" + to_string(cxShaft) + "\" cy=\"" + to_string(cyShaft) + "\" "; // def punto creazione
+    deviceSVG += "r=\"" + to_string(device->dShaft*7/10) +"\" fill=\"green\" />\n\n"; //def raggio e colore
         //cerchio coppia biella-manovella
-    deviceSVG += "\t<circle xc=\"" + to_string(xcBiella) + "\" yc=\"" + to_string(ycBiella) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" style=\"fill:green\" />\n\n"; //def raggio e colore
+    deviceSVG += "\t<circle cx=\"" + to_string(cxBiella) + "\" cy=\"" + to_string(cyBiella) + "\" "; // def punto creazione
+    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" fill=\"green\" />\n\n"; //def raggio e colore
         //rettangolo che collega i due cerchi
-    deviceSVG += "\t<rect x=\"" + to_string(xcShaft) + "\" y=\"" + to_string(ycShaft - device->wBiella*7/10) + "\" "; //def punto creazione 
-    deviceSVG += "width=\"" + to_string(L1) + "\" height\"" + to_string(device->wBiella*7/5) + "\" "; //def dimensioni 
-    deviceSVG += "style=\"fill:green\" "; //def colore
-    deviceSVG += "transform=\"rotate(" + to_string(q * 180 / PI) + ")\" />\n\n"; //def rotazione 
+    deviceSVG += "\t<rect x=\"" + to_string(cxShaft) + "\" y=\"" + to_string(cyShaft - device->wBiella*7/10) + "\" "; //def punto creazione 
+    deviceSVG += "width=\"" + to_string(L1) + "\" height=\"" + to_string(device->wBiella*7/5) + "\" "; //def dimensioni 
+    deviceSVG += "fill=\"green\" "; //def colore
+    deviceSVG += "transform=\"rotate(" + to_string(q * 180 / PI) + "," + to_string(cxShaft) + "," + to_string(cyShaft) + ")\" />\n\n"; //def rotazione 
 
     //albero
-    deviceSVG += "\t<circle xc=\"" + to_string(xcShaft) + "\" yc=\"" + to_string(ycShaft) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->dShaft/2) +"\" style=\"fill:gray\" />\n\n"; //def raggio e colore
+    deviceSVG += "\t<circle cx=\"" + to_string(cxShaft) + "\" cy=\"" + to_string(cyShaft) + "\" "; // def punto creazione
+    deviceSVG += "r=\"" + to_string(device->dShaft/2) +"\" fill=\"gray\" />\n\n"; //def raggio e colore
 
     //coppie biella
         //manovella
-    deviceSVG += "\t<circle xc=\"" + to_string(xcBiella) + "\" yc=\"" + to_string(ycBiella) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" style=\"fill:blue\" />\n\n"; //def raggio e colore
+    deviceSVG += "\t<circle cx=\"" + to_string(cxBiella) + "\" cy=\"" + to_string(cyBiella) + "\" "; // def punto creazione
+    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" fill=\"blue\" />\n\n"; //def raggio e colore
         //pistone
-    deviceSVG += "\t<circle xc=\"" + to_string(xcPistone) + "\" yc=\"" + to_string(ycPistone) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" style=\"fill:blue\" />\n\n"; //def raggio e colore
+    deviceSVG += "\t<circle cx=\"" + to_string(cxPistone) + "\" cy=\"" + to_string(cyPistone) + "\" "; // def punto creazione
+    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" fill=\"blue\" />\n\n"; //def raggio e colore
     
     //def file e dimensioni foglio
     deviceSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"600\" >\n\n" + deviceSVG;
@@ -180,3 +180,32 @@ string LBAMTTtoStringSVG (LBAMTTdevice * device){
     
     return deviceSVG;
 };
+
+vector<string> LBAMTTsplitString (string s, string delimiter){ //stringa da splittare passata in copia
+    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    string token;
+    vector<string> res;
+
+    while ((pos_end = s.find (delimiter, pos_start)) != string::npos) {//cerca il delimitatore -> se non lo trova esce
+        token = s.substr (pos_start, pos_end - pos_start);//estrae la porzione di stringa tra l'inizio e la posizione del delimitatore; ATT: modifica la stringa
+        pos_start = pos_end + delim_len; //aggiorna il puntatore a inizio stringa
+        res.push_back (token); //salva la sottostringa estratta
+    }
+
+    res.push_back (s.substr (pos_start)); //quando non trova più il delimitatore salva la parte di stringa rimanente
+    return res;
+}
+
+int LBAMTTsaveToFile(string stringSVG, string fileName){
+    if (fileName == "") return 1;
+    //controllo se l'estensione è corretta
+    vector<string> checkFileName = LBAMTTsplitString(fileName,".");
+    if (checkFileName.size() != 2) return 1;
+    if (checkFileName.back() != "svg") return 1;
+
+    ofstream MyFile(fileName);
+    MyFile << stringSVG;
+    MyFile.close();
+
+    return 0;
+}

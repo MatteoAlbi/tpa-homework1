@@ -1,10 +1,15 @@
 #ifndef BIELLA_MANOVELLA
 #define BIELLA_MANOVELLA
 
-#include <iostream>
-#include <math.h>
-#include <new>
-#include <string.h>
+#include <iostream>     //output terminale
+#include <string>       //utilizzo string al posto di array di char
+#include <math.h>       //calcoli per creare disegno
+#include <new>          //eccezione su new in caso di memoria piena
+#include <vector>       //vettore lunghezza variabile
+
+#include <fstream>      //file
+#include <streambuf>    //file
+#include <sstream>      //file
 
 #define PI 3.14159265
 using namespace std;
@@ -134,5 +139,22 @@ int LBAMTTdelete (LBAMTTdevice * device);
  * @return string deviceSVG
 */
 string LBAMTTtoStringSVG (LBAMTTdevice * device);
+
+/**
+ * Splitta una stringa secondo una sottostringa passata
+ * @param s stringa da splittare
+ * @param delimeter sottostringa secondo la quale splittare
+ * @return stringa splittata
+*/
+vector<string> LBAMTTsplitString (string s, string delimiter);
+
+/**
+ * Salva su file la stringa passata
+ * @param stringSVG stringa da salvare
+ * @param fileName nome del file sul quale salvare la stringa, estensione deve essere .svg
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore
+*/
+int LBAMTTsaveToFile(string stringSVG, string fileName);
 
 #endif
