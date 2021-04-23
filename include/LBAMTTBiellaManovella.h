@@ -160,6 +160,20 @@ string LBAMTTcircleStringSVG(double x, double y, double r, string color);
 string LBAMTTlineStringSVG(double x1, double y1, double x2, double y2, int stroke = 2, string color = "black");
 
 /**
+ * Crea una quota di distanza tra i punti A e B
+ * @param xA coordinata x di A
+ * @param yA coordinata y di A
+ * @param xB coordinata x di B
+ * @param yB coordinata y di B
+ * @param distQuote distanza della quota da AB
+ * @param lQuote lunghezza delle linee laterali della quota
+ * @param stroke spessore linee di quota
+ * @param side flag: se vero, la quota esce in direzione theta+90, con theta=arg(AB)
+ * @return stringa SVG della quota
+*/
+string LBAMTTquoteDistString(double xA, double yA, double xB, double yB, double distQuote, double lQuote, double stroke = 2, bool side = true);
+
+/**
  * Crea una stringa in codice SVG per la rappresentazione del device
  * @param device puntatore a struttura da rappresentare
  * @param cxShaft coordinata x del centro dell'albero nell'area di disegno
