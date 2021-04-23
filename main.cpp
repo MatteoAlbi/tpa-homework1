@@ -12,14 +12,17 @@ int main(int, char**) {
     double wBiella = 60;
     double hPistone = 100;
     double dPistone = 150;
-    double angle = 180;
+    double angle = 240;
 
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone, angle);
     if(device == NULL) cout << "errore parametri" << endl;
     else{
         //cout << LBAMTTtoStringSVG(device);
-        LBAMTTsaveToFile(LBAMTTtoStringSVG(device, 400, 400),"prova-biella-manovella.svg");
+        LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true),"prova-biella-manovella1.svg");
+        LBAMTTsetAngle(device, 120);
+        LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true),"prova-biella-manovella2.svg");
+
     }
     return 0;
 } 

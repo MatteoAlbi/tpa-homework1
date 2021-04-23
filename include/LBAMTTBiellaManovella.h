@@ -36,11 +36,11 @@ typedef struct LBAMTTdevice{
  * @param wBiella larghezza biella
  * @param hPistone altezza pistone
  * @param dPistone diametro pistone
- * @param angle angolo in gradi della manovella, preimpostato a 0 (punto morto superiore)
+ * @param angle angolo in gradi della manovella (default 0.0, punto morto superiore)
  * @return puntatore a device; 
  *      in caso di errore: NULL (errore nell'allocazione o nei parametri passati)
 */
-LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle = 0);
+LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle = 0.0);
 
 /**
  * Controlla che le misure date siano compatibili con l'integrità strutturale del device.
@@ -124,21 +124,57 @@ void LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
 int LBAMTTdelete (LBAMTTdevice * device);
 
 /**
+ * Crea una stringa per la rappresentazione di un rettangolo in formato SVG
+ * @param x posizione x dell'angolo in basso a destra
+ * @param y posizione y dell'angolo in basso a destra
+ * @param w larghezza rettangolo
+ * @param h altezza rettangolo
+ * @param color colore del rettangolo (deve essere compatibile col formato SVG)
+ * @param rotation angolo del quale il rettangolo viene ruotato (default 0.0)
+ * @param xr coordinata x del punto attorno al quale si ruota (default 0.0)
+ * @param yr coordinata y del punto attorno al quale si ruota (default 0.0)
+ * @return stringa SVG del rettangolo
+*/
+string LBAMTTrectStringSVG(double x, double y, double w, double h, string color, double rotation = 0.0, double xr = 0.0, double yr = 0.0);
+
+/**
+ * Crea una stringa per la rappresentazione di un cerchio in formato SVG
+ * @param x posizione x del centro del cerchio
+ * @param y posizione y del centro del cerchio
+ * @param r raggio cerchio
+ * @param color colore del cerchio (deve essere compatibile col formato SVG)
+ * @return stringa SVG del cerchio
+*/
+string LBAMTTcircleStringSVG(double x, double y, double r, string color);
+
+/**
+ * Crea una stringa per la rappresentazione di una linea in formato SVG
+ * @param x1 posizione x del primo punto
+ * @param y1 posizione y del primo punto
+ * @param x2 posizione x del secondo punto
+ * @param y2 posizione y del secondo punto
+ * @param stroke spessore della linea (default 2)
+ * @param color colore della linea (deve essere compatibile col formato SVG) (default nero)
+ * @return stringa SVG del cerchio 
+*/
+string LBAMTTlineStringSVG(double x1, double y1, double x2, double y2, int stroke = 2, string color = "black");
+
+/**
  * Crea una stringa in codice SVG per la rappresentazione del device
  * @param device puntatore a struttura da rappresentare
  * @param cxShaft coordinata x del centro dell'albero nell'area di disegno
  * @param cyShaft coordinata y del centro dell'albero nell'area di disegno
- * @param quote flag: se vero include le quote delle misure del pezzo
- * @param header flag: se vero include l'header per il file svg
+ * @param quote flag: se vero include le quote delle misure del pezzo (default false)
+ * @param header flag: se vero include l'header per il file svg (default true)
  * @return string deviceSVG
 */
-string LBAMTTtoStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
+string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
 
 /**
  * Splitta una stringa secondo una sottostringa passata
  * @param s stringa da splittare
  * @param delimeter sottostringa secondo la quale splittare
- * @return stringa splittata
+ * @return stringa splittata inserita in un vector
 */
 vector<string> LBAMTTsplitString (string s, string delimiter);
 

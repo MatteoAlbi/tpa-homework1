@@ -115,14 +115,41 @@ int LBAMTTdelete (LBAMTTdevice * device){
     }
 }
 
-string LBAMTTtoStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote, bool header){
+string LBAMTTrectStringSVG(double x, double y, double w, double h, string color, double rotation, double xr, double yr){
+    string rect  = "";
+    rect += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" "; //def punto creazione 
+    rect += "width=\"" + to_string(w) + "\" height=\"" + to_string(h) + "\" "; //def dimensioni 
+    rect += "fill=\"" + color + "\" "; //def colore
+    if(rotation != 0.0) rect += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotazione 
+    rect += "/>\n\n";
+
+    return rect;
+}
+
+string LBAMTTcircleStringSVG(double x, double y, double r, string color){
+    string circle = "";
+    circle += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" "; // def punto creazione
+    circle += "r=\"" + to_string(r) +"\" fill=\"" + color + "\" />\n\n"; //def raggio e colore
+
+    return circle;
+}
+
+string LBAMTTlineStringSVG(double x1, double y1, double x2, double y2, int stroke, string color){
+    string line = "";
+    line += "<line x1=\"" + to_string(x1) + "\" y1=\"" + to_string(y1) + "\" x2=\"" + to_string(x2) + "\" y2=\"" + to_string(y2) + "\" "; //def linea
+    line += "style=\"stroke:" + color + ";stroke-width:" + to_string(stroke) + "\" />\n\n"; //def stile
+
+    return line;
+}
+
+string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote, bool header){
     if(device == NULL) return NULL;
 
     double cxBiella, cyBiella; //coordinate centro coppia biella-manovella
     double cxPistone, cyPistone; //coordinate cetro coppia biella-pistone
     double L1 = device->stroke/2; //lunghezza manovella
     double L2 = device->lenBiella;  
-    double q = PI/2 - device->angle * PI / 180; //angolo manovella in radianti
+    double q = PI/2 - device->angle * PI / 180.0; //angolo manovella in radianti
     double theta = atan2(-L1 * cos(q) / L2, sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) / L2); //angolo biella
     
     cxBiella = cxShaft + L1 * cos(q);
@@ -133,42 +160,97 @@ string LBAMTTtoStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft,
     string deviceSVG = "";
 
     //biella
-    deviceSVG += "<rect x=\"" + to_string(cxBiella) + "\" y=\"" + to_string(cyBiella - device->wBiella/2) + "\" "; //def punto creazione 
-    deviceSVG += "width=\"" + to_string(L2) + "\" height=\"" + to_string(device->wBiella) + "\" "; //def dimensioni 
-    deviceSVG += "fill=\"blue\" "; //def colore
-    deviceSVG += "transform=\"rotate(" + to_string(90 - theta * 180 / PI) + "," + to_string(cxBiella) + "," + to_string(cyBiella) + ")\" />\n\n"; //def rotazione 
+    deviceSVG += LBAMTTrectStringSVG(cxBiella, cyBiella - device->wBiella/2, L2, device->wBiella, "blue", 90 - theta * 180 / PI, cxBiella, cyBiella); 
 
     //pistone
-    deviceSVG += "<rect x=\"" + to_string(cxPistone - device->dPistone/2) + "\" y=\"" + to_string(cyPistone - device->wBiella*7/10) + "\" "; //def punto creazione 
-    deviceSVG += "width=\"" + to_string(device->dPistone) + "\" height=\"" + to_string(device->hPistone) + "\" "; //def dimensioni 
-    deviceSVG += "fill=\"red\" />\n\n"; //def colore
+    deviceSVG += LBAMTTrectStringSVG(cxPistone - device->dPistone/2, cyPistone - device->wBiella*7/10, device->dPistone, device->hPistone, "red");
 
     //manovella
         //cerchio albero
-    deviceSVG += "<circle cx=\"" + to_string(cxShaft) + "\" cy=\"" + to_string(cyShaft) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->dShaft*7/10) +"\" fill=\"green\" />\n\n"; //def raggio e colore
+    deviceSVG += LBAMTTcircleStringSVG(cxShaft, cyShaft, device->dShaft*7/10, "green");
         //cerchio coppia biella-manovella
-    deviceSVG += "<circle cx=\"" + to_string(cxBiella) + "\" cy=\"" + to_string(cyBiella) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->wBiella*7/10) +"\" fill=\"green\" />\n\n"; //def raggio e colore
+    deviceSVG += LBAMTTcircleStringSVG(cxBiella, cyBiella, device->wBiella*7/10, "green");
         //rettangolo che collega i due cerchi
-    deviceSVG += "<rect x=\"" + to_string(cxShaft) + "\" y=\"" + to_string(cyShaft - device->wBiella*7/10) + "\" "; //def punto creazione 
-    deviceSVG += "width=\"" + to_string(L1) + "\" height=\"" + to_string(device->wBiella*7/5) + "\" "; //def dimensioni 
-    deviceSVG += "fill=\"green\" "; //def colore
-    deviceSVG += "transform=\"rotate(" + to_string(q * 180 / PI) + "," + to_string(cxShaft) + "," + to_string(cyShaft) + ")\" />\n\n"; //def rotazione 
+    deviceSVG += LBAMTTrectStringSVG(cxShaft, cyShaft - device->wBiella*7/10, L1, device->wBiella*7/5, "green", q * 180 / PI, cxShaft, cyShaft);
 
     //albero
-    deviceSVG += "<circle cx=\"" + to_string(cxShaft) + "\" cy=\"" + to_string(cyShaft) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->dShaft/2) +"\" fill=\"gray\" />\n\n"; //def raggio e colore
+    deviceSVG += LBAMTTcircleStringSVG(cxShaft, cyShaft, device->dShaft/2, "gray");
 
     //coppie biella
         //manovella
-    deviceSVG += "<circle cx=\"" + to_string(cxBiella) + "\" cy=\"" + to_string(cyBiella) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" fill=\"blue\" />\n\n"; //def raggio e colore
+    deviceSVG += LBAMTTcircleStringSVG(cxBiella, cyBiella, device->wBiella/2, "Blue");
         //pistone
-    deviceSVG += "<circle cx=\"" + to_string(cxPistone) + "\" cy=\"" + to_string(cyPistone) + "\" "; // def punto creazione
-    deviceSVG += "r=\"" + to_string(device->wBiella/2) +"\" fill=\"blue\" />\n\n"; //def raggio e colore
+    deviceSVG += LBAMTTcircleStringSVG(cxPistone, cyPistone, device->wBiella/2, "Blue");
     
     //quote
+    if(quote){
+        double lQuote = 40; //lunghezza linee laterali di quota
+        double stroke = 2; //spessore delle linee di quota
+        double distQuote = lQuote/2; //distanza quota dal pezzo
+
+    //dShaft
+        if(fmod(device->angle, 360.0) < 180.0){ //posiziono a sinistra
+            deviceSVG += LBAMTTlineStringSVG(cxShaft - device->dShaft*7/10 - lQuote*3/2, cyShaft - device->dShaft/2, cxShaft, cyShaft - device->dShaft/2, stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxShaft - device->dShaft*7/10 - lQuote*3/2, cyShaft + device->dShaft/2, cxShaft, cyShaft + device->dShaft/2, stroke); //linea laterale inferiore
+            deviceSVG += LBAMTTlineStringSVG(cxShaft - device->dShaft*7/10 - lQuote, cyShaft - device->dShaft/2, cxShaft - device->dShaft*7/10 - lQuote, cyShaft + device->dShaft/2, stroke); //linea centrale
+            //scritta
+        }
+        else{ //posiziono a destra
+            deviceSVG += LBAMTTlineStringSVG(cxShaft + device->dShaft*7/10 + lQuote*3/2, cyShaft - device->dShaft/2, cxShaft, cyShaft - device->dShaft/2, stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxShaft + device->dShaft*7/10 + lQuote*3/2, cyShaft + device->dShaft/2, cxShaft, cyShaft + device->dShaft/2, stroke); //linea laterale inferiore
+            deviceSVG += LBAMTTlineStringSVG(cxShaft + device->dShaft*7/10 + lQuote, cyShaft - device->dShaft/2, cxShaft + device->dShaft*7/10 + lQuote, cyShaft + device->dShaft/2, stroke); //linea centrale
+            //scritta
+        }
+
+    //wBiella
+        if(fmod(device->angle, 360.0) < 180.0){ //posiziono a destra
+            deviceSVG += LBAMTTlineStringSVG(cxBiella + device->wBiella*7/10 + lQuote*3/2, cyBiella - device->wBiella/2, cxBiella, cyBiella - device->wBiella/2, stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxBiella + device->wBiella*7/10 + lQuote*3/2, cyBiella + device->wBiella/2, cxBiella, cyBiella + device->wBiella/2, stroke); //linea laterale inferiore
+            deviceSVG += LBAMTTlineStringSVG(cxBiella + device->wBiella*7/10 + lQuote, cyBiella - device->wBiella/2, cxBiella + device->wBiella*7/10 + lQuote, cyBiella + device->wBiella/2, stroke); //linea centrale
+            //scritta
+            
+        }
+        else{ //posiziono a sinistra
+            deviceSVG += LBAMTTlineStringSVG(cxBiella - device->wBiella*7/10 - lQuote*3/2, cyBiella - device->wBiella/2, cxBiella, cyBiella - device->wBiella/2, stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxBiella - device->wBiella*7/10 - lQuote*3/2, cyBiella + device->wBiella/2, cxBiella, cyBiella + device->wBiella/2, stroke); //linea laterale inferiore
+            deviceSVG += LBAMTTlineStringSVG(cxBiella - device->wBiella*7/10 - lQuote, cyBiella - device->wBiella/2, cxBiella - device->wBiella*7/10 - lQuote, cyBiella + device->wBiella/2, stroke); //linea centrale
+            //scritta
+        }
+
+    //hPistone
+        if(fmod(device->angle, 360.0) < 180.0){ //posiziono a sinistra
+            deviceSVG += LBAMTTlineStringSVG(cxPistone - device->dPistone/2 - lQuote*3/2, cyPistone - device->wBiella*7/10, cxPistone - device->dPistone/2, cyPistone - device->wBiella*7/10, stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxPistone - device->dPistone/2 - lQuote*3/2, cyPistone + device->hPistone - device->wBiella*7/10, cxPistone - device->dPistone/2, cyPistone + device->hPistone - device->wBiella*7/10, stroke); //linea laterale inferiore
+            deviceSVG += LBAMTTlineStringSVG(cxPistone - device->dPistone/2 - lQuote, cyPistone - device->wBiella*7/10, cxPistone - device->dPistone/2 - lQuote, cyPistone + device->hPistone - device->wBiella*7/10, stroke); //linea centrale
+            //scritta
+        }
+        else{ //posiziono a destra
+            deviceSVG += LBAMTTlineStringSVG(cxPistone + device->dPistone/2 + lQuote*3/2, cyPistone - device->wBiella*7/10, cxPistone + device->dPistone/2, cyPistone - device->wBiella*7/10, stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxPistone + device->dPistone/2 + lQuote*3/2, cyPistone + device->hPistone - device->wBiella*7/10, cxPistone + device->dPistone/2, cyPistone + device->hPistone - device->wBiella*7/10, stroke); //linea laterale inferiore
+            deviceSVG += LBAMTTlineStringSVG(cxPistone + device->dPistone/2 + lQuote, cyPistone - device->wBiella*7/10, cxPistone + device->dPistone/2 + lQuote, cyPistone + device->hPistone - device->wBiella*7/10, stroke); //linea centrale
+            //scritta
+        }
+
+    //dPistone
+        deviceSVG += LBAMTTlineStringSVG(cxPistone - device->dPistone/2, cyPistone + device->hPistone - device->wBiella*7/10, cxPistone - device->dPistone/2, cyPistone - device->wBiella*7/10 + device->hPistone + lQuote*3/2, stroke); //linea laterale superiore
+        deviceSVG += LBAMTTlineStringSVG(cxPistone + device->dPistone/2, cyPistone + device->hPistone - device->wBiella*7/10, cxPistone + device->dPistone/2, cyPistone - device->wBiella*7/10 + device->hPistone + lQuote*3/2, stroke); //linea laterale inferiore
+        deviceSVG += LBAMTTlineStringSVG(cxPistone - device->dPistone/2, cyPistone + device->hPistone - device->wBiella*7/10 + lQuote, cxPistone + device->dPistone/2, cyPistone + device->hPistone - device->wBiella*7/10 + lQuote, stroke); //linea centrale
+    
+    //lenBiella
+        distQuote = lQuote;
+        if(fmod(device->angle, 360.0) < 180.0){ //posiziono a sinistra
+            deviceSVG += LBAMTTlineStringSVG(cxBiella, cyBiella, cxBiella + (device->wBiella*7/10 + distQuote + lQuote) * cos(-theta), cyBiella + (device->wBiella*7/10 + distQuote + lQuote) * sin(-theta), stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxPistone, cyPistone, cxPistone + (device->wBiella*7/10 + distQuote + lQuote) * cos(-theta), cyPistone + (device->wBiella*7/10 + distQuote + lQuote) * sin(-theta), stroke); //linea laterale superiore
+            //scritta
+        }
+        else{ //posiziono a destra
+            deviceSVG += LBAMTTlineStringSVG(cxBiella, cyBiella, cxBiella + (device->wBiella*7/10 + distQuote + lQuote) * cos(-theta + PI), cyBiella + (device->wBiella*7/10 + distQuote + lQuote) * sin(-theta + PI), stroke); //linea laterale superiore
+            deviceSVG += LBAMTTlineStringSVG(cxPistone, cyPistone, cxPistone + (device->wBiella*7/10 + distQuote + lQuote) * cos(-theta + PI), cyPistone + (device->wBiella*7/10 + distQuote + lQuote) * sin(-theta + PI), stroke); //linea laterale superiore
+            //scritta
+        }
+        
+    }
+    
 
     //def file e dimensioni foglio
     if(header){
@@ -178,7 +260,7 @@ string LBAMTTtoStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft,
     }
     
     return deviceSVG;
-};
+}
 
 vector<string> LBAMTTsplitString (string s, string delimiter){ //stringa da splittare passata in copia
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
