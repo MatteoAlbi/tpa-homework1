@@ -15,7 +15,6 @@
 using namespace std;
 
 typedef const double cDbl;
-enum LBAMTTorientation {N,E,S,O}; //variabile orientazione
 
 typedef struct LBAMTTdevice{
     double dShaft; //diametro albero
@@ -25,7 +24,6 @@ typedef struct LBAMTTdevice{
     double hPistone; //altezza pistone
     double dPistone; //diametro pistone
     double angle; //angolo in gradi della biella
-    LBAMTTorientation verse; //orientazione pistone
 } LBAMTTdevice;
 
 /**
@@ -39,11 +37,10 @@ typedef struct LBAMTTdevice{
  * @param hPistone altezza pistone
  * @param dPistone diametro pistone
  * @param angle angolo in gradi della manovella, preimpostato a 0 (punto morto superiore)
- * @param verse orientazione pistone, preimpostata a N
  * @return puntatore a device; 
  *      in caso di errore: NULL (errore nell'allocazione o nei parametri passati)
 */
-LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle = 0, LBAMTTorientation verse = N);
+LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle = 0);
 
 /**
  * Controlla che le misure date siano compatibili con l'integrità strutturale del device.
@@ -119,13 +116,6 @@ int LBAMTTsetDPistone (LBAMTTdevice * device, cDbl dPistone);
 void LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
 
 /**
- * modifica il parametro verse della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param verse nuovo valore
-*/
-void LBAMTTsetVerse (LBAMTTdevice * device, LBAMTTorientation verse);
-
-/**
  * DEALLOCA la struttura puntata dal puntatore passato
  * @param device puntatore a struttura da deallocare
  * @return 0 se il procedimento è avvenuto con successo;
@@ -136,9 +126,13 @@ int LBAMTTdelete (LBAMTTdevice * device);
 /**
  * Crea una stringa in codice SVG per la rappresentazione del device
  * @param device puntatore a struttura da rappresentare
+ * @param cxShaft coordinata x del centro dell'albero nell'area di disegno
+ * @param cyShaft coordinata y del centro dell'albero nell'area di disegno
+ * @param quote flag: se vero include le quote delle misure del pezzo
+ * @param header flag: se vero include l'header per il file svg
  * @return string deviceSVG
 */
-string LBAMTTtoStringSVG (LBAMTTdevice * device);
+string LBAMTTtoStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
 
 /**
  * Splitta una stringa secondo una sottostringa passata

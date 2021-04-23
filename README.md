@@ -12,7 +12,6 @@ Si intende creare un meccanismo biella manovella per la trasmissione di moto tra
 * _hPistone_: altezza del pistone
 * _dPistone_: diametro del pistone
 * _angle_: angolo in gradi della biella
-* _verse_: orientazione pistone, può essere _N_, _E_, _S_, _O_ (Nord, Est, Sud, Ovest)
 
 #### Definizione corpi e vincoli dei parametri:
 * __ALBERO MOTORE__: organo di collegamento del moto rotatorio, definito dal suo diametro (_dShaft_).
@@ -38,7 +37,6 @@ Si intende creare un meccanismo biella manovella per la trasmissione di moto tra
     VINCOLI:
     - Diametro del pistone e altezza del pistone (rispettivamente _dPiston_ e _hPiston_) devono essere tali da rispettare il limiti per laccoppiamento biella pistone.
 * __ANGOLO__: angolo della biella per la rappresentazione del meccanismo (_angle_) in gradi.
-* __ORIENTAMENTO__: orientamento del meccanismo per la sua rappresentazione (_verse_).
 
 NB: per termine di accoppiamento si intende una porzione di materiale aggiuntivo intorno alla coppia rotoidale in termini radiali
 
