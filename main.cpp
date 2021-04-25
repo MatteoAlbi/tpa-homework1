@@ -24,5 +24,8 @@ int main(int, char**) {
         LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true),"prova-biella-manovella2.svg");
 
     }
+
+    LBAMTTdeviceFromString(LBAMTTloadFromFile("prova-biella-manovella1.svg"));
+    
     return 0;
 } 

@@ -137,6 +137,7 @@ int LBAMTTdelete (LBAMTTdevice * device);
  * @param quote flag: se vero include le quote delle misure del pezzo (default false)
  * @param header flag: se vero include l'header per il file svg (default true)
  * @return string deviceSVG
+ *      vuoto in caso di errore
 */
 string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
 
@@ -156,5 +157,21 @@ vector<string> LBAMTTsplitString (string s, string delimiter);
  *      1 in caso di errore
 */
 int LBAMTTsaveToFile(string stringSVG, string fileName);
+
+/**
+ * Legge un file e ne ritorna il contenuto come stringa.
+ * @param fileName nome del file da leggere, estensione deve essere .svg
+ * @return stringa con contenuto del file se il procedimento è avvenuto con successo;
+ *      vuoto in caso di errore su filename (estensione sbagliata o non esistente)
+ */
+string LBAMTTloadFromFile(string fileName);
+
+/**
+ * Legge una stringa SVG e ricava il device associato al disegno
+ * @param s stringa da analizzare, deve essere con lo stesso formato generato da LBAMTTdeviceToString
+ * @return puntatore a device;
+ *      NULL in caso di errore
+ */
+LBAMTTdevice * LBAMTTdeviceFromString(string s);
 
 #endif
