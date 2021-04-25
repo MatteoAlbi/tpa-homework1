@@ -2,6 +2,7 @@
 add_executable(catch2Test catch2Main.cpp) # Just this one contains BOOST_TEST_MAIN
 target_sources(catch2Test PRIVATE
         LBAMTTtestBiellaManovella.cpp
+        LBAMTTtestCadSVG.cpp
         )
 
 # Libraries used in the tests
@@ -13,6 +14,8 @@ target_include_directories(catch2Test PRIVATE
 
 # Including sources
 target_sources(catch2Test PRIVATE
-        ../src/LBAMTTBiellaManovella.cpp)
+        ../src/LBAMTTBiellaManovella.cpp
+        ../src/LBAMTTcadSVG.cpp
+        )
 
 #target_compile_options(catch2Test PRIVATE -Wa,-mbig-obj) # Solves assembler error of file too big

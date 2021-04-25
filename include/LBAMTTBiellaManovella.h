@@ -1,5 +1,5 @@
-#ifndef BIELLA_MANOVELLA
-#define BIELLA_MANOVELLA
+#ifndef LBAMTT_BIELLA_MANOVELLA
+#define LBAMTT_BIELLA_MANOVELLA
 
 #include <iostream>     //output terminale
 #include <string>       //utilizzo string al posto di array di char
@@ -11,10 +11,16 @@
 #include <streambuf>    //file
 #include <sstream>      //file
 
+#ifndef PI
 #define PI 3.14159265
-using namespace std;
+#endif
 
+#ifndef CONST_DOUBLE
+#define CONST_DOUBLE
 typedef const double cDbl;
+#endif
+
+using namespace std;
 
 typedef struct LBAMTTdevice{
     double dShaft; //diametro albero
@@ -122,56 +128,6 @@ void LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
  *      1 in caso di errore
 */
 int LBAMTTdelete (LBAMTTdevice * device);
-
-/**
- * Crea una stringa per la rappresentazione di un rettangolo in formato SVG
- * @param x posizione x dell'angolo in basso a destra
- * @param y posizione y dell'angolo in basso a destra
- * @param w larghezza rettangolo
- * @param h altezza rettangolo
- * @param color colore del rettangolo (deve essere compatibile col formato SVG)
- * @param rotation angolo del quale il rettangolo viene ruotato (default 0.0)
- * @param xr coordinata x del punto attorno al quale si ruota (default 0.0)
- * @param yr coordinata y del punto attorno al quale si ruota (default 0.0)
- * @return stringa SVG del rettangolo
-*/
-string LBAMTTrectStringSVG(double x, double y, double w, double h, string color, double rotation = 0.0, double xr = 0.0, double yr = 0.0);
-
-/**
- * Crea una stringa per la rappresentazione di un cerchio in formato SVG
- * @param x posizione x del centro del cerchio
- * @param y posizione y del centro del cerchio
- * @param r raggio cerchio
- * @param color colore del cerchio (deve essere compatibile col formato SVG)
- * @return stringa SVG del cerchio
-*/
-string LBAMTTcircleStringSVG(double x, double y, double r, string color);
-
-/**
- * Crea una stringa per la rappresentazione di una linea in formato SVG
- * @param x1 posizione x del primo punto
- * @param y1 posizione y del primo punto
- * @param x2 posizione x del secondo punto
- * @param y2 posizione y del secondo punto
- * @param stroke spessore della linea (default 2)
- * @param color colore della linea (deve essere compatibile col formato SVG) (default nero)
- * @return stringa SVG del cerchio 
-*/
-string LBAMTTlineStringSVG(double x1, double y1, double x2, double y2, int stroke = 2, string color = "black");
-
-/**
- * Crea una quota di distanza tra i punti A e B
- * @param xA coordinata x di A
- * @param yA coordinata y di A
- * @param xB coordinata x di B
- * @param yB coordinata y di B
- * @param distQuote distanza della quota da AB
- * @param lQuote lunghezza delle linee laterali della quota
- * @param stroke spessore linee di quota
- * @param side flag: se vero, la quota esce in direzione theta+90, con theta=arg(AB)
- * @return stringa SVG della quota
-*/
-string LBAMTTquoteDistString(double xA, double yA, double xB, double yB, double distQuote, double lQuote, double stroke = 2, bool side = true);
 
 /**
  * Crea una stringa in codice SVG per la rappresentazione del device
