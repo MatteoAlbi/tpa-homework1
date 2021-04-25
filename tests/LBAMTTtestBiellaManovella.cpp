@@ -21,7 +21,6 @@ TEST_CASE("test init con inizializzazione di parametri che rispettano i vincoli"
     REQUIRE( device->hPistone == hPistone );
     REQUIRE( device->dPistone == dPistone );
     REQUIRE( device->angle == 0.0 );
-    REQUIRE( device->verse == N );
 
     LBAMTTdelete(device);    
 }
@@ -43,7 +42,6 @@ TEST_CASE("test dei diversi codici di errore di checkIntegrity", "[LBAMTTBiellaM
     device->hPistone = hPistone;
     device->dPistone = dPistone;
     device->angle = 0;
-    device->verse = N;
 
     //parametro nullo/minore di zero
     device->dShaft = -5;
@@ -75,6 +73,7 @@ TEST_CASE("test dei diversi codici di errore di checkIntegrity", "[LBAMTTBiellaM
     REQUIRE( LBAMTTcheckIntegrity(device) == 5 );
     device->wBiella = 6;
     device->stroke = 12;
+    device->lenBiella = 20;
     device->dPistone = 10;
     device->hPistone = 10;
     REQUIRE( LBAMTTcheckIntegrity(device) == 5 );
@@ -94,6 +93,24 @@ TEST_CASE("test init passando valori che non rispettano i vincoli", "[LBAMTTBiel
     REQUIRE( device == NULL );
     
     LBAMTTdelete(device);    
+}
+
+TEST_CASE("test delete", "[LBAMTTBiellaManovella]") {
+    double dShaft = 5;
+    double stroke = 10;
+    double lenBiella = 10;
+    double wBiella = 2;
+    double hPistone = 4;
+    double dPistone = 4;
+
+    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+    REQUIRE( device != NULL );
+    REQUIRE( LBAMTTdelete(device) == 0 );
+
+    dShaft = 0;
+    device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone);
+    REQUIRE( device == NULL );
+    REQUIRE( LBAMTTdelete(device) == 1 );    
 }
 
 //set
