@@ -11,7 +11,7 @@ Si intende creare un meccanismo biella manovella per la trasmissione di moto tra
 * _wBiella_: larghezza della biella
 * _hPistone_: altezza del pistone
 * _dPistone_: diametro del pistone
-* _angle_: angolo in gradi della biella
+* _angle_: angolo in gradi della manovella
 
 #### Definizione corpi e vincoli dei parametri:
 * __ALBERO MOTORE__: organo di collegamento del moto rotatorio, definito dal suo diametro (_dShaft_).

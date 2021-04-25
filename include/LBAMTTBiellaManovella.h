@@ -11,6 +11,8 @@
 #include <streambuf>    //file
 #include <sstream>      //file
 
+#include "LBAMTTcadSVG.h"
+
 #ifndef PI
 #define PI 3.14159265
 #endif
@@ -29,7 +31,7 @@ typedef struct LBAMTTdevice{
     double wBiella; //larghezza biella
     double hPistone; //altezza pistone
     double dPistone; //diametro pistone
-    double angle; //angolo in gradi della biella
+    double angle; //angolo in gradi della manovella
 } LBAMTTdevice;
 
 /**
@@ -52,74 +54,14 @@ LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl 
  * Controlla che le misure date siano compatibili con l'integrità strutturale del device.
  * @param device puntatore a device di cui controllare i parametri
  * @return 0 se vengono rispettati i vincoli;
- *      1 se i parametri sono <= 0;
+ *      -1 se i parametri sono <= 0;
+ *      1 se pointer == NULL
  *      2 se non viene rispettato il vincolo sulla manovella;
  *      3 se non vengono rispettati i vincoli sul pistone;
  *      4 se non viene rispettato il vincolo sulla lunghezza della biella;
  *      5 se non vengono rispettati i vincoli sulla larghezza della biella
 */
 int LBAMTTcheckIntegrity (const LBAMTTdevice * device);
-
-/**
- * modifica il parametro dShaft della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param dShaft nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, e ripristina il valore iniziale
-*/
-int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft);
-
-/**
- * modifica il parametro stroke della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param stroke nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, e ripristina il valore iniziale
-*/
-int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke);
-
-/**
- * modifica il parametro lenBiella della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param lenBiella nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, e ripristina il valore iniziale
-*/
-int LBAMTTsetLenBiella (LBAMTTdevice * device, cDbl lenBiella);
-
-/**
- * modifica il parametro wBiella della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param wBiella nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, e ripristina il valore iniziale
-*/
-int LBAMTTsetWBiella (LBAMTTdevice * device, cDbl wBiella);
-
-/**
- * modifica il parametro hPistone della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param hPistone nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, e ripristina il valore iniziale
-*/
-int LBAMTTsetHPistone (LBAMTTdevice * device, cDbl hPistone);
-
-/**
- * modifica il parametro dPistone della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param dPistone nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, e ripristina il valore iniziale
-*/
-int LBAMTTsetDPistone (LBAMTTdevice * device, cDbl dPistone);
-
-/**
- * modifica il parametro angle della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param angle nuovo valore
-*/
-void LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
 
 /**
  * DEALLOCA la struttura puntata dal puntatore passato
@@ -130,13 +72,76 @@ void LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
 int LBAMTTdelete (LBAMTTdevice * device);
 
 /**
+ * modifica il parametro dShaft della struttura puntata dal puntatore passato
+ * @param device puntatore a struttura da modificare
+ * @param dShaft nuovo valore
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore, mantenendo valore iniziale
+*/
+int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft);
+
+/**
+ * modifica il parametro stroke della struttura puntata dal puntatore passato
+ * @param device puntatore a struttura da modificare
+ * @param stroke nuovo valore
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore, mantenendo valore iniziale
+*/
+int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke);
+
+/**
+ * modifica il parametro lenBiella della struttura puntata dal puntatore passato
+ * @param device puntatore a struttura da modificare
+ * @param lenBiella nuovo valore
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore, mantenendo valore iniziale
+*/
+int LBAMTTsetLenBiella (LBAMTTdevice * device, cDbl lenBiella);
+
+/**
+ * modifica il parametro wBiella della struttura puntata dal puntatore passato
+ * @param device puntatore a struttura da modificare
+ * @param wBiella nuovo valore
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore, mantenendo valore iniziale
+*/
+int LBAMTTsetWBiella (LBAMTTdevice * device, cDbl wBiella);
+
+/**
+ * modifica il parametro hPistone della struttura puntata dal puntatore passato
+ * @param device puntatore a struttura da modificare
+ * @param hPistone nuovo valore
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore, mantenendo valore iniziale
+*/
+int LBAMTTsetHPistone (LBAMTTdevice * device, cDbl hPistone);
+
+/**
+ * modifica il parametro dPistone della struttura puntata dal puntatore passato
+ * @param device puntatore a struttura da modificare
+ * @param dPistone nuovo valore
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore, mantenendo valore iniziale
+*/
+int LBAMTTsetDPistone (LBAMTTdevice * device, cDbl dPistone);
+
+/**
+ * modifica il parametro angle della struttura puntata dal puntatore passato
+ * @param device puntatore a struttura da modificare
+ * @param angle nuovo valore
+ * @return 0 se il procedimento è avvenuto con successo;
+ *      1 in caso di errore, mantenendo valore iniziale
+*/
+int LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
+
+/**
  * Crea una stringa in codice SVG per la rappresentazione del device
  * @param device puntatore a struttura da rappresentare
  * @param cxShaft coordinata x del centro dell'albero nell'area di disegno
  * @param cyShaft coordinata y del centro dell'albero nell'area di disegno
  * @param quote flag: se vero include le quote delle misure del pezzo (default false)
  * @param header flag: se vero include l'header per il file svg (default true)
- * @return string deviceSVG
+ * @return string deviceSVG;
  *      vuoto in caso di errore
 */
 string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
@@ -156,13 +161,13 @@ vector<string> LBAMTTsplitString (string s, string delimiter);
  * @return 0 se il procedimento è avvenuto con successo;
  *      1 in caso di errore
 */
-int LBAMTTsaveToFile(string stringSVG, string fileName);
+int LBAMTTsaveToFile(string s, string fileName);
 
 /**
  * Legge un file e ne ritorna il contenuto come stringa.
  * @param fileName nome del file da leggere, estensione deve essere .svg
  * @return stringa con contenuto del file se il procedimento è avvenuto con successo;
- *      vuoto in caso di errore su filename (estensione sbagliata o non esistente)
+ *      vuoto in caso di errore
  */
 string LBAMTTloadFromFile(string fileName);
 
@@ -172,6 +177,6 @@ string LBAMTTloadFromFile(string fileName);
  * @return puntatore a device;
  *      NULL in caso di errore
  */
-LBAMTTdevice * LBAMTTdeviceFromString(string s);
+LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s);
 
 #endif

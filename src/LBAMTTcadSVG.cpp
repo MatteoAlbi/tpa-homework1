@@ -16,16 +16,18 @@ string LBAMTTarrowMarkerSVG(){
             "</defs>\n\n";
 }
 
-string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, cDbl rotation, cDbl xr, cDbl yr){
+string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotation, cDbl xr, cDbl yr){
+
+    rotation = fmod(rotation, 360);
 
     //controllo valori passati
-    if(w < 1 || h < 1) return "";
+    if(w <= 0 || h <= 0) return "";
 
     string rect  = "";
     rect += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" "; //def punto creazione 
     rect += "width=\"" + to_string(w) + "\" height=\"" + to_string(h) + "\" "; //def dimensioni 
     rect += "fill=\"" + color + "\" "; //def colore
-    if(rotation != 0.0) rect += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotazione 
+    rect += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotazione 
     rect += "/>\n";
 
     return rect;
@@ -34,7 +36,7 @@ string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, cDbl rotation
 string LBAMTTcircleSVG(cDbl x, cDbl y, cDbl r, string color){
 
     //controllo valori passati
-    if(r < 1) return "";
+    if(r <= 0) return "";
 
     string circle = "";
     circle += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" "; // def punto creazione
@@ -56,11 +58,15 @@ string LBAMTTlineSVG(cDbl x1, cDbl y1, cDbl x2, cDbl y2, int stroke, string colo
     return line;
 }
 
-string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, cDbl startAngle, cDbl endAngle, int stroke, string color){
+string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle, int stroke, string color){
+
+    startAngle = fmod(startAngle, 360);
+    endAngle = fmod(endAngle, 360);
 
     //controllo valori passati
     if(r <= 1) return "";
     if(stroke <= 0 || stroke >= r) return "";
+    if(abs(fmod(startAngle, 360) - endAngle) == 0) return "";
 
     //4 punti per definire path dell'arco
     double rMin = r - stroke/2;
@@ -87,8 +93,10 @@ string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, cDbl startAngle, cDbl endAngle, in
     return arc;
 }
 
+string LBAMTTtextSVG(string s, cDbl x, cDbl y, double rotation, cDbl xr, cDbl yr, string color, string anchor, string opt){
 
-string LBAMTTtextSVG(string s, cDbl x, cDbl y, cDbl rotation, cDbl xr, cDbl yr, string color, string anchor, string opt){
+    rotation = fmod(rotation, 360);
+
     string text = "";
     text += "<text x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" "; //def punto creazione 
     text += "fill=\"" + color + "\" "; //def colore
@@ -99,6 +107,11 @@ string LBAMTTtextSVG(string s, cDbl x, cDbl y, cDbl rotation, cDbl xr, cDbl yr, 
 }
 
 string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cDbl lQuote, bool side){
+    
+    if(xA == xB && yA == yB) return "";
+    if(lQuote < 1) return "";
+    if(lQuote > distQuote) return "";
+
     cDbl stroke = 2;
     string arrowOpt = "marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\""; //opzione per aggiungere frecce
     string quote = "";

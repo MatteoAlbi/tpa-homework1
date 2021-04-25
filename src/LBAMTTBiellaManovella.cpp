@@ -1,5 +1,4 @@
 #include "LBAMTTBiellaManovella.h"
-#include "LBAMTTcadSVG.h"
 
 LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle){
     
@@ -22,13 +21,16 @@ LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl 
 
 int LBAMTTcheckIntegrity (const LBAMTTdevice * device){
 
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
+
     //controllo che le misure non siano nulle o minori di zero
-    if (device->dShaft <= 0) return 1;
-    else if(device->stroke <= 0) return 1;
-    else if (device->lenBiella <= 0) return 1;
-    else if (device->wBiella <= 0) return 1;
-    else if (device->hPistone <= 0) return 1;
-    else if (device->dPistone <= 0) return 1;
+    if (device->dShaft <= 0) return -1;
+    else if(device->stroke <= 0) return -1;
+    else if (device->lenBiella <= 0) return -1;
+    else if (device->wBiella <= 0) return -1;
+    else if (device->hPistone <= 0) return -1;
+    else if (device->dPistone <= 0) return -1;
 
     //controllo che la lunghezze rispettino i vincoli di costruzione (vedi README.md)
     else if (device->stroke/2  < device->dShaft/2 + device->wBiella/2) return 2; //vincolo lunghezza MANOVELLA
@@ -39,7 +41,20 @@ int LBAMTTcheckIntegrity (const LBAMTTdevice * device){
     else return 0;
 };
 
+int LBAMTTdelete (LBAMTTdevice * device){
+
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
+    
+    delete device;
+
+    return 0;
+}
+
 int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft){
+
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
 
     double tmp = device->dShaft;
     device->dShaft = dShaft;
@@ -53,6 +68,9 @@ int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft){
 
 int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke){
 
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
+
     double tmp = device->stroke;
     device->stroke = stroke;
     
@@ -64,6 +82,9 @@ int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke){
 };
 
 int LBAMTTsetLenBiella (LBAMTTdevice * device, cDbl lenBiella){
+
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
 
     double tmp = device->lenBiella;
     device->lenBiella = lenBiella;
@@ -77,6 +98,9 @@ int LBAMTTsetLenBiella (LBAMTTdevice * device, cDbl lenBiella){
 
 int LBAMTTsetWBiella (LBAMTTdevice * device, cDbl wBiella){
 
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
+
     double tmp = device->wBiella;
     device->wBiella = wBiella;
     
@@ -88,6 +112,9 @@ int LBAMTTsetWBiella (LBAMTTdevice * device, cDbl wBiella){
 };
 
 int LBAMTTsetHPistone (LBAMTTdevice * device, cDbl hPistone){
+
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
 
     double tmp = device->hPistone;
     device->hPistone = hPistone;
@@ -101,6 +128,9 @@ int LBAMTTsetHPistone (LBAMTTdevice * device, cDbl hPistone){
 
 int LBAMTTsetDPistone (LBAMTTdevice * device, cDbl dPistone){
 
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
+
     double tmp = device->dPistone;
     device->dPistone = dPistone;
     
@@ -111,19 +141,15 @@ int LBAMTTsetDPistone (LBAMTTdevice * device, cDbl dPistone){
     else return 0;
 };
 
-void LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle){
+int LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle){
+
+    //controllo sia stato passato un device
+    if (device == NULL) return 1;
 
     device->angle = angle;
+
+    return 0;
 };
-
-int LBAMTTdelete (LBAMTTdevice * device){
-
-    if(device == NULL) return 1;
-    else {
-        delete device;
-        return 0;
-    }
-}
 
 string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote, bool header){
 
@@ -299,18 +325,18 @@ vector<string> LBAMTTsplitString (string s, string delimiter){ //stringa da spli
     return res;
 }
 
-int LBAMTTsaveToFile(string stringSVG, string fileName){
+int LBAMTTsaveToFile(string s, string fileName){
 
     //controllo sia stato passato un nome
     if (fileName == "") return 1;
 
     //controllo se l'estensione è corretta
     vector<string> checkFileName = LBAMTTsplitString(fileName,".");
-    if (checkFileName.size() != 2) return 1;
+    if (checkFileName.front() == "") return 1;
     if (checkFileName.back() != "svg") return 1;
 
     ofstream fout(fileName);
-    fout << stringSVG;
+    fout << s;
     fout.close();
 
     return 0;
@@ -323,7 +349,7 @@ string LBAMTTloadFromFile(string fileName){
 
     //controllo se l'estensione è corretta
     vector<string> checkFileName = LBAMTTsplitString(fileName,".");
-    if (checkFileName.size() != 2) return "";
+    if (checkFileName.front() == "") return "";
     if (checkFileName.back() != "svg") return "";
 
     ifstream fin(fileName);
@@ -338,7 +364,7 @@ string LBAMTTloadFromFile(string fileName){
     return s;
 }
 
-LBAMTTdevice * LBAMTTdeviceFromString(string s){
+LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s){
 
     //splitto per ottenere stringhe contenti le singole figure
     vector<string> vTot = LBAMTTsplitString(s, ">\n\n<");
