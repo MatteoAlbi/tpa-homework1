@@ -16,6 +16,13 @@ typedef const double cDbl;
 using namespace std;
 
 /**
+ * Modifica il valore dell'angolo così che sia compreso tra 0 e 360
+ * @param angle angolo da modificare
+ * @return angolo modificato
+ */
+double LBAMTTnormAng(double angle);
+
+/**
  * Aggiunge l'header per i file SVG
  * @param s stringa a cui aggiungere header SVG
  * @return stringa passata con header aggiunto
@@ -114,5 +121,19 @@ string LBAMTTtextSVG(string s, cDbl x, cDbl y, double rotation = 0.0, cDbl xr = 
  *      vuoto in caso di errore
  */
 string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cDbl lQuote, bool side = true);
+
+/**
+ * Crea una quota di angolo, 
+ * i due angoli che definiscono la quota devono essere diversi.
+ * @param cx coordinata x del centro dell'angolo
+ * @param cy coordinata y del centro dell'angolo
+ * @param startAngle angolo dal quale parte la quota in gradi
+ * @param endAngle angolo dove finisce la quota in gradi
+ * @param distQuote distanza della quota dal centro (deve essere maggiore di lQuote)
+ * @param lQuote lunghezza delle linee laterali della quota (deve essere maggiore uguale a 1)
+* @return stringa SVG della quota;
+ *      vuoto in caso di errore
+ */
+string LBAMTTquoteAngleSVG(cDbl cx, cDbl cy, cDbl startAngle, cDbl endAngle, cDbl distQuote, cDbl lQuote);
 
 #endif

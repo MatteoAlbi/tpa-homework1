@@ -12,19 +12,21 @@ int main(int, char**) {
     double wBiella = 60;
     double hPistone = 100;
     double dPistone = 150;
-    double angle = 240;
+    double angle = 90;
 
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone, angle);
     if(device == NULL) cout << "errore parametri" << endl;
-    else{
-        //cout << LBAMTTtoStringSVG(device);
-        LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true),"prova-biella-manovella1.svg");
-        LBAMTTsetAngle(device, 120);
-        LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true),"prova-biella-manovella2.svg");
-    }
-
-    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(LBAMTTdeviceFromStringSVG(LBAMTTloadFromFile("prova-biella-manovella1.svg")), 400, 200, true), "copia-biella-manovella1.svg");
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), "prova-biella-manovella.svg");
+    
+    //test multiplo con angle da 0 a 330, passo 30
+    // else{
+    //     for(int i=0;i<12;i++){
+    //         string s = "prova-biella-manovella" + to_string(i) + ".svg";
+    //         LBAMTTsetAngle(device, i*30);
+    //         LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), s);
+    //     }
+    // }
     
     return 0;
 } 

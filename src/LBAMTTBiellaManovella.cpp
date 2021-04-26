@@ -297,7 +297,14 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
                                             cxPistone, cyPistone, 
                                             distQuote, lQuote, true);
         }
-        deviceSVG += "\n";    
+        deviceSVG += "\n";   
+
+    //angle
+        distQuote = device->dShaft *6/10;
+        deviceSVG += LBAMTTquoteAngleSVG(cxShaft, cyShaft, 
+                                         q * 180 / PI, 90, 
+                                         distQuote, lQuote);
+        deviceSVG += "\n";
     }
     
 
