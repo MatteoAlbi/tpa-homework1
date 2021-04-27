@@ -168,7 +168,7 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
     cxPistone = cxShaft;
     cyPistone = cyShaft + sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) + L1 * sin(q);
 
-    string deviceSVG = "";
+    string deviceSVG = "\n\n";
 
     //definizione marker arrow
     deviceSVG += LBAMTTarrowMarkerSVG(); 

@@ -10,6 +10,7 @@
 #include <fstream>      //file
 #include <streambuf>    //file
 #include <sstream>      //file
+#include <cstdio>
 
 #include "LBAMTTcadSVG.h"
 

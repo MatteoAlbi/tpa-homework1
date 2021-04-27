@@ -268,6 +268,8 @@ TEST_CASE("test saveToFile in caso di errori", "[LBAMTTBiellaManovella]"){
     REQUIRE(LBAMTTsaveToFile("test", "test.copia.svg") == 0); //nome valido
     REQUIRE(LBAMTTsaveToFile("test", "test.txt") == 1);
     REQUIRE(LBAMTTsaveToFile("test", ".svg") == 1);
+
+    remove("test.copia.svg");
 }
 
 TEST_CASE("test saveToFile in caso di processo avvenuto con successo", "[LBAMTTBiellaManovella]"){
@@ -282,6 +284,7 @@ TEST_CASE("test saveToFile in caso di processo avvenuto con successo", "[LBAMTTB
     REQUIRE(buffer.str() == "test");
 
     fin.close();
+    remove("test.svg");
 }
 
 TEST_CASE("test loadFromFile in caso di errori", "[LBAMTTBiellaManovella]"){
@@ -297,23 +300,33 @@ TEST_CASE("test loadFromFile in caso di processo avvenuto con successo", "[LBAMT
     fout.close();
 
     REQUIRE(LBAMTTloadFromFile("test.svg") == "test");
+
+    remove("test.svg");
 }
 
 TEST_CASE("test deviceFromStringSVG in caso di errori", "[LBAMTTBiellaManovella]"){
-    string test = "";
-    test += LBAMTTrectSVG(0, 0, 10, 10, "black");
-    test += LBAMTTrectSVG(0, 0, 10, 10, "black");
-    test += LBAMTTcircleSVG(0, 0, 10, "black");
-    test += LBAMTTcircleSVG(0, 0, 10, "black");
+    double dShaft = 120;
+    double stroke = 300;
+    double lenBiella = 300;
+    double wBiella = 60;
+    double hPistone = 100;
+    double dPistone = 150;
+    double angle = 90;
+
+    string test = ">\n\n";
+    test += LBAMTTrectSVG(0, 0, lenBiella, wBiella, "black") + "\n";
+    test += LBAMTTrectSVG(0, 0, dPistone, hPistone, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
     REQUIRE(LBAMTTdeviceFromStringSVG(test) == NULL);
 
-    test += LBAMTTrectSVG(0, 0, 10, 10, "black");
-    test += LBAMTTrectSVG(0, 0, 10, 10, "black");
-    test += LBAMTTcircleSVG(0, 0, 10, "black");
-    test += LBAMTTcircleSVG(0, 0, 10, "black");
-    REQUIRE(LBAMTTdeviceFromStringSVG(test) == NULL);
+    test += LBAMTTrectSVG(0, 0, stroke/2, 10, "black", angle, 0, 0) + "\n";
+    test += LBAMTTcircleSVG(0, 0, dShaft/2, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
+    REQUIRE(LBAMTTdeviceFromStringSVG(test) != NULL); //funziona
 
-    test += LBAMTTcircleSVG(0, 0, 10, "black");
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
     REQUIRE(LBAMTTdeviceFromStringSVG(test) == NULL);
 }
 
@@ -326,16 +339,25 @@ TEST_CASE("test deviceFromStringSVG in caso di processo avvenuto con successo", 
     double dPistone = 150;
     double angle = 90;
 
-    LBAMTTdevice * device1 = LBAMTTinitDevice(dShaft, stroke, lenBiella, wBiella, hPistone, dPistone, angle);
-    LBAMTTdevice * device2 = LBAMTTdeviceFromStringSVG(LBAMTTdeviceToStringSVG(device1, 400, 200, true, false));
+    string test = ">\n\n";
+    test += LBAMTTrectSVG(0, 0, lenBiella, wBiella, "black") + "\n";
+    test += LBAMTTrectSVG(0, 0, dPistone, hPistone, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
+    test += LBAMTTrectSVG(0, 0, stroke/2, 10, "black", 90-angle, 0, 0) + "\n";
+    test += LBAMTTcircleSVG(0, 0, dShaft/2, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
+    test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
     
-    REQUIRE(device2->dShaft == dShaft);
-    REQUIRE(device2->stroke == stroke);
-    REQUIRE(device2->lenBiella == lenBiella);
-    REQUIRE(device2->wBiella == wBiella);
-    REQUIRE(device2->hPistone == hPistone);
-    REQUIRE(device2->dPistone == dPistone);
-    REQUIRE(device2->angle == angle);
+    LBAMTTdevice * device = LBAMTTdeviceFromStringSVG(test);
+    REQUIRE(device != NULL);
+    REQUIRE(device->dShaft == dShaft);
+    REQUIRE(device->stroke == stroke);
+    REQUIRE(device->lenBiella == lenBiella);
+    REQUIRE(device->wBiella == wBiella);
+    REQUIRE(device->hPistone == hPistone);
+    REQUIRE(device->dPistone == dPistone);
+    REQUIRE(device->angle == angle);
 }
 
 

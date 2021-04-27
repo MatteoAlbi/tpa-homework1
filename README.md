@@ -40,3 +40,7 @@ Si intende creare un meccanismo biella manovella per la trasmissione di moto tra
 
 NB: per termine di accoppiamento si intende una porzione di materiale aggiuntivo intorno alla coppia rotoidale in termini radiali
 
+Immagine di esempio: 
+
+![](biella-manovella.svg)
+
