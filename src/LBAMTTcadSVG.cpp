@@ -1,7 +1,6 @@
 # include "LBAMTTcadSVG.h"
 
 double LBAMTTnormAng(double angle){
-
     if(angle >= 360) while(angle >= 360) angle -= 360;
     else if(angle < 0) while(angle < 0) angle += 360;
 
@@ -28,14 +27,14 @@ string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotati
 
     rotation = LBAMTTnormAng(rotation);
 
-    //controllo valori passati
+    //check values
     if(w <= 0 || h <= 0) return "";
 
     string rect  = "";
-    rect += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" "; //def punto creazione 
-    rect += "width=\"" + to_string(w) + "\" height=\"" + to_string(h) + "\" "; //def dimensioni 
-    rect += "fill=\"" + color + "\" "; //def colore
-    rect += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotazione 
+    rect += "<rect x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" "; //def creation point
+    rect += "width=\"" + to_string(w) + "\" height=\"" + to_string(h) + "\" "; //def dimensions 
+    rect += "fill=\"" + color + "\" "; //def color
+    rect += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotation
     rect += "/>\n";
 
     return rect;
@@ -43,25 +42,25 @@ string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotati
 
 string LBAMTTcircleSVG(cDbl x, cDbl y, cDbl r, string color){
 
-    //controllo valori passati
+    //check values
     if(r <= 0) return "";
 
     string circle = "";
-    circle += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" "; // def punto creazione
-    circle += "r=\"" + to_string(r) +"\" fill=\"" + color + "\" />\n"; //def raggio e colore
+    circle += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" "; //def creation point
+    circle += "r=\"" + to_string(r) +"\" fill=\"" + color + "\" />\n"; //def radius and color
 
     return circle;
 }
 
 string LBAMTTlineSVG(cDbl x1, cDbl y1, cDbl x2, cDbl y2, int stroke, string color, string opt){
 
-    //controllo valori passati
+    //check values
     if(stroke <= 0) return "";
     if(x1 == x2 && y1 == y2) return "";
 
     string line = "";
-    line += "<line x1=\"" + to_string(x1) + "\" y1=\"" + to_string(y1) + "\" x2=\"" + to_string(x2) + "\" y2=\"" + to_string(y2) + "\" "; //def linea
-    line += "style=\"stroke:" + color + ";stroke-width:" + to_string(stroke) + "\" " + opt + " />\n"; //def stile + option
+    line += "<line x1=\"" + to_string(x1) + "\" y1=\"" + to_string(y1) + "\" x2=\"" + to_string(x2) + "\" y2=\"" + to_string(y2) + "\" "; //def line
+    line += "style=\"stroke:" + color + ";stroke-width:" + to_string(stroke) + "\" " + opt + " />\n"; //def style + option
 
     return line;
 }
@@ -74,12 +73,12 @@ string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle
     if(angle < 0) angle += 360;
     bool largeArcFlag = angle >= 180;
 
-    //controllo valori passati
+    //check values
     if(r <= 1) return "";
     if(stroke <= 0 || stroke >= r) return "";
     if(abs( LBAMTTnormAng(startAngle) - endAngle) == 0) return "";
 
-    //4 punti per definire path dell'arco
+    //4 points to define the arc (as arc of ring)
     double rMin = r - stroke/2;
     double rMax = r + stroke/2;
     double x1start = cx + (rMin) * cos(startAngle * PI/180);
@@ -91,7 +90,7 @@ string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle
     double x2end = cx + (rMax) * cos(endAngle * PI/180);
     double y2end = cy + (rMax) * sin(endAngle * PI/180);
 
-    //definisco l'arco
+    //define arc's path
     string arc = "";
     arc += "<path d=\"\n";
     arc += "M " + to_string(x2start) + " " + to_string(y2start) + "\n";
@@ -113,10 +112,10 @@ string LBAMTTtextSVG(string s, cDbl x, cDbl y, double rotation, cDbl xr, cDbl yr
     rotation = LBAMTTnormAng(rotation);
 
     string text = "";
-    text += "<text x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" "; //def punto creazione 
-    text += "fill=\"" + color + "\" "; //def colore
-    if(rotation != 0.0) text += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotazione
-    text += "text-anchor=\"" + anchor + "\" " + opt + " >" + s + "</text>\n"; //def anchor + opt + testo
+    text += "<text x=\"" + to_string(x) + "\" y=\"" + to_string(y) + "\" "; //def creation point
+    text += "fill=\"" + color + "\" "; //def color
+    if(rotation != 0.0) text += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotation
+    text += "text-anchor=\"" + anchor + "\" " + opt + " >" + s + "</text>\n"; //def anchor + opt + text
 
     return text;
 }
@@ -128,31 +127,31 @@ string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cD
     if(lQuote > distQuote) return "";
 
     cDbl stroke = 2;
-    string arrowOpt = "marker-start=\"url(#arrowDist)\" marker-end=\"url(#arrowDist)\""; //opzione per aggiungere frecce
+    string arrowOpt = "marker-start=\"url(#arrowDist)\" marker-end=\"url(#arrowDist)\""; //option to add arrow markers
     string quote = "";
-    double theta = atan2(yB-yA, xB-xA); //inclinazione del segmento AB
-    string val = to_string(sqrt(pow(yB - yA, 2) + pow(xB - xA, 2))); //valore della quota
-    val.erase(val.length() - 5, 6); //tronco alla prima cifra decimale
+    double theta = atan2(yB-yA, xB-xA); //angle of segment AB
+    string val = to_string(sqrt(pow(yB - yA, 2) + pow(xB - xA, 2))); //quote val
+    val.erase(val.length() - 5, 6); //keep only the first decimal digit
 
-    //valori per posizionamento quota
+    //values to place the quote
     double x2Alat, y2Alat, x2Blat, y2Blat, x1cent, y1cent, x2cent, y2cent, xText, yText, angleText;
 
     if(side){
-        //coordinate punto 2 della linea laterale su A
+        //coordinates of point 2 of side line on A
         x2Alat = xA + (distQuote + lQuote) * cos(theta + PI/2);
         y2Alat = yA + (distQuote + lQuote) * sin(theta + PI/2);
-        //coordinate punto 2 della linea laterale su B
+        //coordinates of point 2 of side line on B
         x2Blat = xB + (distQuote + lQuote) * cos(theta + PI/2);
         y2Blat = yB + (distQuote + lQuote) * sin(theta + PI/2);
-        //coordinate punto 1 della linea centrale
+        //coordinates of point 1 of central line
         x1cent = xA + distQuote * cos(theta + PI/2) + 9 * cos(theta); 
         y1cent = yA + distQuote * sin(theta + PI/2) + 9 * sin(theta);
-        //coordinate punto 2 della linea centrale
+        //coordinates of point 2 of central line
         x2cent = xB + distQuote * cos(theta + PI/2) - 9 * cos(theta);
         y2cent = yB + distQuote * sin(theta + PI/2) - 9 * sin(theta);
-        //coordinate testo
-        xText = (x1cent + x2cent)/2;// - 3 * cos(theta + PI/2);
-        yText = (y1cent + y2cent)/2;// - 3 * sin(theta + PI/2);
+        //coordinates of text
+        xText = (x1cent + x2cent)/2;
+        yText = (y1cent + y2cent)/2;
         angleText = LBAMTTnormAng(theta * 180 / PI);
         if (angleText > 90 && angleText <= 270){
             angleText += 180;
@@ -165,21 +164,21 @@ string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cD
         }
     }
     else{
-        //coordinate punto 2 della linea laterale su A
+        //coordinates of point 2 of side line on A
         x2Alat = xA - (distQuote + lQuote) * cos(theta + PI/2);
         y2Alat = yA - (distQuote + lQuote) * sin(theta + PI/2);
-        //coordinate punto 2 della linea laterale su B
+        //coordinates of point 2 of side line on B
         x2Blat = xB - (distQuote + lQuote) * cos(theta + PI/2);
         y2Blat = yB - (distQuote + lQuote) * sin(theta + PI/2);
-        //coordinate punto 1 della linea centrale
+        //coordinates of point 1 of central line
         x1cent = xA - distQuote * cos(theta + PI/2) + 9 * cos(theta); 
         y1cent = yA - distQuote * sin(theta + PI/2) + 9 * sin(theta);
-        //coordinate punto 2 della linea centrale
+        //coordinates of point 2 of central line
         x2cent = xB - distQuote * cos(theta + PI/2) - 9 * cos(theta);
         y2cent = yB - distQuote * sin(theta + PI/2) - 9 * sin(theta);
-        //coordinate testo
-        xText = (x1cent + x2cent)/2;// + 3 * cos(theta + PI/2);
-        yText = (y1cent + y2cent)/2;// + 3 * sin(theta + PI/2);
+        //coordinates of text
+        xText = (x1cent + x2cent)/2;
+        yText = (y1cent + y2cent)/2;
         angleText = LBAMTTnormAng(theta * 180 / PI);
         if (angleText > 90 && angleText <= 270){
             angleText += 180;
@@ -192,10 +191,10 @@ string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cD
         }
     }
 
-    quote += LBAMTTlineSVG(xA, yA, x2Alat, y2Alat, stroke); //linea laterale su A
-    quote += LBAMTTlineSVG(xB, yB, x2Blat, y2Blat, stroke); //linea laterale su B
-    quote += LBAMTTlineSVG(x1cent, y1cent, x2cent, y2cent, stroke, "black", arrowOpt); //linea centrale
-    quote += LBAMTTtextSVG(val, xText, yText, angleText, xText, yText);
+    quote += LBAMTTlineSVG(xA, yA, x2Alat, y2Alat, stroke); //side line on A
+    quote += LBAMTTlineSVG(xB, yB, x2Blat, y2Blat, stroke); //side line on B
+    quote += LBAMTTlineSVG(x1cent, y1cent, x2cent, y2cent, stroke, "black", arrowOpt); //central line
+    quote += LBAMTTtextSVG(val, xText, yText, angleText, xText, yText);//text
 
     return quote;
 }
@@ -206,19 +205,19 @@ string LBAMTTquoteAngleSVG(cDbl cx, cDbl cy, cDbl startAngle, cDbl endAngle, cDb
     if(lQuote < 1) return "";
     if(lQuote > distQuote) return "";
 
-    //offset su arco per frecce
-    double arrowOffest = 6.45; //spazio per aggiungere le frecce della quota
-    double angleOffset = acos(1 - pow(arrowOffest, 2) / pow(distQuote, 2)) * 180 / PI; //offset dell'angolo della quota per aggiungere le frecce
+    //offset on arc for arrow markers
+    double arrowOffest = 6.45; //distance to add the arrow markers
+    double angleOffset = acos(1 - pow(arrowOffest, 2) / pow(distQuote, 2)) * 180 / PI; //offset on quote's angle to add markers
     double arcStartAngle = LBAMTTnormAng(startAngle) + angleOffset;
     double arcEndAngle = LBAMTTnormAng(endAngle) - angleOffset;
     
-    //flag su arco per posizionamento frecce
+    //parameters of arc to add markers
     double angle = LBAMTTnormAng(endAngle - startAngle);
     bool largeArcFlag = angle >= 180;
 
     //coordinate per text
-    double xText = cx + distQuote * cos((startAngle + endAngle) * PI / 360);// - 3 * cos(theta + PI/2);
-    double yText = cy + distQuote * sin((startAngle + endAngle) * PI / 360);// - 3 * sin(theta + PI/2);
+    double xText = cx + distQuote * cos((startAngle + endAngle) * PI / 360);
+    double yText = cy + distQuote * sin((startAngle + endAngle) * PI / 360);
     double angleText = LBAMTTnormAng((startAngle + endAngle)/2);
     if (angleText > 180 && angleText <= 360){
         xText += 4 * cos(angleText * PI / 180);
@@ -232,17 +231,17 @@ string LBAMTTquoteAngleSVG(cDbl cx, cDbl cy, cDbl startAngle, cDbl endAngle, cDb
         angleText -= 90;
     }
 
-    string arrowOpt = "marker-start=\"url(#arrowDist)\" marker-end=\"url(#arrowDist)\""; //opzione per aggiungere frecce
-    string val = to_string(angle); //valore della quota
-    val.erase(val.length() - 5, 6); //tronco alla prima cifra decimale
+    string arrowOpt = "marker-start=\"url(#arrowDist)\" marker-end=\"url(#arrowDist)\""; //option to add markers
+    string val = to_string(angle); //quote val
+    val.erase(val.length() - 5, 6); ////keep only the first decimal digit
 
     string quote;
     quote += LBAMTTlineSVG(cx, cy, cx + (distQuote + lQuote) * cos(startAngle * PI / 180), cy + (distQuote + lQuote) * sin(startAngle * PI / 180));
     quote += LBAMTTlineSVG(cx, cy, cx + (distQuote + lQuote) * cos(endAngle * PI / 180), cy + (distQuote + lQuote) * sin(endAngle * PI / 180));
     quote += LBAMTTarcSVG(cx, cy, distQuote, arcStartAngle, arcEndAngle);
     
-    //aggiunta frecce
-    quote += "<path d=\"\n"; //arco per posizionamento frecce
+    //add arrow markers
+    quote += "<path d=\"\n"; //arc to add markers
     quote += "M " + to_string(cx + distQuote * cos(arcStartAngle * PI / 180)) + 
               " " + to_string(cy + distQuote * sin(arcStartAngle * PI / 180)) + "\n";
     quote += "A " + to_string(distQuote) + " " + to_string(distQuote) + 

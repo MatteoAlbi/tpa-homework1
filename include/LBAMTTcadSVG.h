@@ -1,8 +1,8 @@
 #ifndef LBAMTT_SVG
 #define LBAMTT_SVG
 
-#include <string>       //utilizzo string al posto di array di char
-#include <math.h>       //calcoli per creare disegno
+#include <string>       
+#include <math.h>      
 
 #ifndef PI
 #define PI 3.14159265
@@ -16,123 +16,124 @@ typedef const double cDbl;
 using namespace std;
 
 /**
- * Modifica il valore dell'angolo così che sia compreso tra 0 e 360
- * @param angle angolo da modificare
- * @return angolo modificato
+ * Modifies the angle value so that is inlcuded between 0 and 360.
+ * @param angle angolo to be modified
+ * @return modified angle
  */
 double LBAMTTnormAng(double angle);
 
 /**
- * Aggiunge l'header per i file SVG
- * @param s stringa a cui aggiungere header SVG
- * @return stringa passata con header aggiunto
+ * Adds the SVG file header.
+ * @param s stringa where add the header
+ * @return string with the header added
  */
 string LBAMTTheaderSVG(string s);
 
 /**
- * Crea una stringa che definisce un marker a forma di freccia, necessario per le quote
- * @return stringa che definisce il marker
+ * Create a string to define an arrow marker, needed for quotes.
+ * @return string that define the marker
  */
 string LBAMTTarrowMarkerSVG();
 
 /**
- * Crea una stringa per la rappresentazione di un rettangolo in formato SVG
- * @param x coordinata x dell'angolo in basso a destra
- * @param y coordinata y dell'angolo in basso a destra
- * @param w larghezza rettangolo (deve essere maggiore di 0)
- * @param h altezza rettangolo (deve essere maggiore di 0)
- * @param color colore del rettangolo (deve essere compatibile col formato SVG)
- * @param rotation angolo del quale il rettangolo viene ruotato (default 0.0)
- * @param xr coordinata x del punto di rotazione (default 0.0)
- * @param yr coordinata y del punto di rotazione (default 0.0)
- * @return stringa SVG del rettangolo;
- *      vuoto in caso di errore
+ * Create a string to represent an SVG rectangle.
+ * @param x x coordinate of the right-lower vertix
+ * @param y y coordinate of the right-lower vertix
+ * @param w rectangle's width (must be greater than 0)
+ * @param h rectangle's height (must be greater than 0)
+ * @param color rectangle's color (must be in SVG format)
+ * @param rotation rectangle's rotation angle (default 0.0)
+ * @param xr x coordinate of the center rotation point (default 0.0)
+ * @param yr y coordinate of the center rotation point (default 0.0)
+ * @return SVG rectangle string;
+ *      EMPTY if error occures
  */
 string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotation = 0.0, cDbl xr = 0.0, cDbl yr = 0.0);
 
 /**
- * Crea una stringa per la rappresentazione di un cerchio in formato SVG
- * @param x coordinata x del centro del cerchio
- * @param y coordinata y del centro del cerchio
- * @param r raggio cerchio (deve essere maggiore di 0)
- * @param color colore del cerchio (deve essere compatibile col formato SVG)
- * @return stringa SVG del cerchio;
- *      vuoto in caso di errore
+ * Create a string to represent an SVG circle.
+ * @param x x coordinate of the circle's center
+ * @param y y coordinate of the circle's center
+ * @param r circle's radius (must be greater than 0)
+ * @param color circle's color (must be in SVG format)
+ * @return SVG circle string;
+ *      EMPTY if error occures
  */
 string LBAMTTcircleSVG(cDbl x, cDbl y, cDbl r, string color);
 
 /**
- * Crea una stringa per la rappresentazione di una linea in formato SVG, 
- * i due punti che definiscono la linea devono essere diversi
- * @param x1 coordinata x del primo punto
- * @param y1 coordinata y del primo punto
- * @param x2 coordinata x del secondo punto
- * @param y2 coordinata y del secondo punto
- * @param stroke spessore della linea (default 2) (deve essere maggiore di 0)
- * @param color colore della linea (deve essere compatibile col formato SVG) (default nero)
- * @param opt opzioni aggiuntive di visualizzazione, non vi è controllo sulla formattazione (default vuoto) 
- * @return stringa SVG della linea;
- *      vuoto in caso di errore
+ * Create a string to represent an SVG line,
+ * start and end point must be different.
+ * @param x1 x coordinate of the start point
+ * @param y1 y coordinate of the start point
+ * @param x2 x coordinate of the end point
+ * @param y2 y coordinate of the end point
+ * @param stroke line thickness (default 2) (must be greater than 0)
+ * @param color line's color (must be in SVG format) (default black)
+ * @param opt additional options (default empty) (no format check)
+ * @return SVG line string;
+ *      EMPTY if error occures
  */
 string LBAMTTlineSVG(cDbl x1, cDbl y1, cDbl x2, cDbl y2, int stroke = 2, string color = "black", string opt = "");
 
 /**
- * Crea una stringa per la rappresentazione di un arco in formato SVG, 
- * deve avere un angolo maggiore di 0
- * @param cx coordinata x del centro dell'arco
- * @param cy coordinata y del centro dell'arco
- * @param r raggio dell'arco (deve essere maggiore di 1)
- * @param startAngle angolo dal quale parte l'arco in gradi
- * @param endAngle angolo dove finisce l'arco in gradi
- * @param stroke spessore arco (deve essere maggiore di 0 e minore di r)
- * @param color colore arco
- * @return stringa SVG dell'arco;
- *      vuoto in caso di errore
+ * Create a string to represent an SVG arc.
+ * the arc's angle must be grater than zero
+ * @param cx x coordinate of the arc's center
+ * @param cy x coordinate of the arc's center
+ * @param r arc's radius (must be greater than 1)
+ * @param startAngle arc's start angle (in degrees)
+ * @param endAngle arc's end angle (in degrees)
+ * @param stroke arc's thickness (must be greater 0 and lower than r)
+ * @param color arc's color (must be in SVG format) (default black)
+ * @return SVG arc string;
+ *      EMPTY if error occures
  */
 string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle, int stroke = 2, string color = "black");
 
 /**
- * Crea una stringa per la rappresentazione di un testo in formato SVG
- * @param s stringa da inserire
- * @param x coordinata x del testo
- * @param y coordinata y del testo
- * @param rotation angolo del quale il testo viene ruotato (default 0.0)
- * @param xr coordinata x del punto di rotazione (default 0.0)
- * @param yr coordinata y del punto di rotazione (default 0.0)
- * @param color colore del testo (deve essere compatibile col formato SVG) (default nero)
- * @param anchor posizione relativa tra testo e punto dato (start, middle, end), non vi è controllo sulla formattazione (default middle) 
- * @param opt opzioni aggiuntive di visualizzazione, non vi è controllo sulla formattazione (default vuoto)
- * @return stringa SVG del testo
+ * Create a string to add an SVG text.
+ * @param s text to be written
+ * @param x x coordinate of the text
+ * @param y y coordinate of the text
+ * @param rotation text's rotation angle (default 0.0)
+ * @param xr x coordinate of the center rotation point (default 0.0)
+ * @param yr r coordinate of the center rotation point (default 0.0)
+ * @param color text's color (must be in SVG format) (default black)
+ * @param anchor relative position of the text respect to the given point  (start, middle, end) (default middle) (no format check)
+ * @param opt additional options (default empty) (no format check)
+ * @return SVG text string
  */
 string LBAMTTtextSVG(string s, cDbl x, cDbl y, double rotation = 0.0, cDbl xr = 0.0, cDbl yr = 0.0, string color = "black", string anchor = "middle", string opt = "");
 
 /**
- * Crea una quota di distanza tra i punti A e B, 
- * i due punti che definiscono la quota devono essere diversi. 
- * NECESSARIO creare un marker freccia con la funzione LBAMTTarrowMarkerSVG a inizio file.
- * @param xA coordinata x di A
- * @param yA coordinata y di A
- * @param xB coordinata x di B
- * @param yB coordinata y di B
- * @param distQuote distanza della quota da AB (deve essere maggiore di lQuote)
- * @param lQuote lunghezza delle linee laterali della quota (deve essere maggiore uguale a 1)
- * @param side flag: se vero, la quota esce in direzione theta+90, con theta=arg(AB), altrimenti sull'altro lato
- * @return stringa SVG della quota;
- *      vuoto in caso di errore
+ * Create a string to represent a distance quote between the points A and B, 
+ * the two points cant be the same.
+ * REQUIRED create an arrow marker with LBAMTTarrowMarkerSVG at file's start.
+ * @param xA x coordinate of point A
+ * @param yA y coordinate of point A
+ * @param xB x coordinate of point B
+ * @param yB y coordinate of point B
+ * @param distQuote quote's distance from AB (must be greater than lQuote)
+ * @param lQuote additional lenght of the quot's side lines (can't be lower than 1)
+ * @param side flag: if true, the quote has direction theta+90, with theta=arg(AB), otherways on the opposite side
+ * @return SVG quote string;
+ *      EMPTY if error occures
  */
 string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cDbl lQuote, bool side = true);
 
 /**
- * Crea una quota di angolo, 
- * i due angoli che definiscono la quota devono essere diversi.
- * @param cx coordinata x del centro dell'angolo
- * @param cy coordinata y del centro dell'angolo
- * @param startAngle angolo dal quale parte la quota in gradi
- * @param endAngle angolo dove finisce la quota in gradi
- * @param distQuote distanza della quota dal centro (deve essere maggiore di lQuote)
- * @param lQuote lunghezza delle linee laterali della quota (deve essere maggiore uguale a 1)
-* @return stringa SVG della quota;
- *      vuoto in caso di errore
+ * Create a string to represent aan angle quote between the two given angles, 
+ * the two angles cant be the same.
+ * REQUIRED create an arrow marker with LBAMTTarrowMarkerSVG at file's start.
+ * @param cx x coordinate of the angle's center
+ * @param cy y coordinate of the angle's center
+ * @param startAngle quote's start angle (in degrees)
+ * @param endAngle quote's end angle (in degrees)
+ * @param distQuote quote's distance from the angle's center (must be greater than lQuote)
+ * @param lQuote additional lenght of the quot's side lines (can't be lower than 1)
+ * @return SVG quote string;
+ *      EMPTY if error occures
  */
 string LBAMTTquoteAngleSVG(cDbl cx, cDbl cy, cDbl startAngle, cDbl endAngle, cDbl distQuote, cDbl lQuote);
 

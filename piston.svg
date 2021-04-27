@@ -35,17 +35,17 @@ orient="auto-start-reverse">
 <line x1="550.000000" y1="170.000000" x2="652.000000" y2="170.000000" style="stroke:black;stroke-width:2"  />
 <line x1="550.000000" y1="230.000000" x2="652.000000" y2="230.000000" style="stroke:black;stroke-width:2"  />
 <line x1="632.000000" y1="179.000000" x2="632.000000" y2="221.000000" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="629.000000" y="200.000000" fill="black" transform="rotate(270.000000,629.000000,200.000000)" text-anchor="middle"  >wBiella</text>
+<text x="629.000000" y="200.000000" fill="black" transform="rotate(270.000000,629.000000,200.000000)" text-anchor="middle"  >wRod</text>
 
 <line x1="325.000000" y1="417.807621" x2="265.000000" y2="417.807621" style="stroke:black;stroke-width:2"  />
 <line x1="325.000000" y1="517.807621" x2="265.000000" y2="517.807621" style="stroke:black;stroke-width:2"  />
 <line x1="285.000000" y1="426.807621" x2="285.000000" y2="508.807621" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="282.000000" y="467.807621" fill="black" transform="rotate(270.000000,282.000000,467.807621)" text-anchor="middle"  >hPistone</text>
+<text x="282.000000" y="467.807621" fill="black" transform="rotate(270.000000,282.000000,467.807621)" text-anchor="middle"  >hPiston</text>
 
 <line x1="325.000000" y1="517.807621" x2="325.000000" y2="577.807621" style="stroke:black;stroke-width:2"  />
 <line x1="475.000000" y1="517.807621" x2="475.000000" y2="577.807621" style="stroke:black;stroke-width:2"  />
 <line x1="334.000000" y1="557.807621" x2="466.000000" y2="557.807621" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="400.000000" y="554.807621" fill="black" text-anchor="middle"  >dPistone</text>
+<text x="400.000000" y="554.807621" fill="black" text-anchor="middle"  >dPiston</text>
 
 <line x1="550.000000" y1="200.000000" x2="550.000000" y2="56.000000" style="stroke:black;stroke-width:2"  />
 <line x1="400.000000" y1="200.000000" x2="400.000000" y2="56.000000" style="stroke:black;stroke-width:2"  />
@@ -55,7 +55,7 @@ orient="auto-start-reverse">
 <line x1="400.000000" y1="459.807621" x2="521.243557" y2="529.807621" style="stroke:black;stroke-width:2"  />
 <line x1="550.000000" y1="200.000000" x2="671.243557" y2="270.000000" style="stroke:black;stroke-width:2"  />
 <line x1="508.423049" y1="512.013392" x2="649.423049" y2="267.794228" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="576.324972" y="388.403810" fill="black" transform="rotate(300.000000,576.324972,388.403810)" text-anchor="middle"  >lenBiella</text>
+<text x="576.324972" y="388.403810" fill="black" transform="rotate(300.000000,576.324972,388.403810)" text-anchor="middle"  >lRod</text>
 
 <line x1="400.000000" y1="200.000000" x2="492.000000" y2="200.000000" style="stroke:black;stroke-width:2"  />
 <line x1="400.000000" y1="200.000000" x2="400.000000" y2="292.000000" style="stroke:black;stroke-width:2"  />

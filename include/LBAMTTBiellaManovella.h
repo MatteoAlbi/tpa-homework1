@@ -1,15 +1,15 @@
-#ifndef LBAMTT_BIELLA_MANOVELLA
-#define LBAMTT_BIELLA_MANOVELLA
+#ifndef LBAMTT_PISTON
+#define LBAMTT_PISTON
 
-#include <iostream>     //output terminale
-#include <string>       //utilizzo string al posto di array di char
-#include <math.h>       //calcoli per creare disegno
-#include <new>          //eccezione su new in caso di memoria piena
-#include <vector>       //vettore lunghezza variabile
+#include <iostream>
+#include <string>
+#include <math.h>
+#include <new>
+#include <vector>
 
-#include <fstream>      //file
-#include <streambuf>    //file
-#include <sstream>      //file
+#include <fstream>      
+#include <streambuf>    
+#include <sstream>     
 #include <cstdio>
 
 #include "LBAMTTcadSVG.h"
@@ -26,157 +26,162 @@ typedef const double cDbl;
 using namespace std;
 
 typedef struct LBAMTTdevice{
-    double dShaft; //diametro albero
-    double stroke; //corsa pistone
-    double lenBiella; //lunghezza biella
-    double wBiella; //larghezza biella
-    double hPistone; //altezza pistone
-    double dPistone; //diametro pistone
-    double angle; //angolo in gradi della manovella
+    double dShaft; //shaft's diameter
+    double stroke; //piston's stroke
+    double lRod; //connecting rod's lenght
+    double wRod; //connecting rod's width
+    double hPiston; //piston's height
+    double dPiston; //piston's diameter
+    double angle; //crank rotation's angle
 } LBAMTTdevice;
 
 /**
- * ALLOCA dinamicamente una struttura LBAMTTdevice.
- * Controlla che le misure rispettino le condizioni di integrità del device.
- * Se i valori non rispettano i vincoli di costruzione il puntatore viene DEALLOCATO.
- * @param dShaft diametro albero
- * @param stroke corsa pistone
- * @param lenBiella lunghezza biella
- * @param wBiella larghezza biella
- * @param hPistone altezza pistone
- * @param dPistone diametro pistone
- * @param angle angolo in gradi della manovella (default 0.0, punto morto superiore)
- * @return puntatore a device; 
- *      in caso di errore: NULL (errore nell'allocazione o nei parametri passati)
+ * ALLOCATE an LBAMTTdevice structure.
+ * It checks ith the parameters follow the constraints given to the device (see README.md)
+ * If the parameters violet the constraints, the structure is DEALLOCATED.
+ * @param dShaft shaft's diameter
+ * @param stroke piston's stroke
+ * @param lRod connecting rod's lenght
+ * @param wRod connecting rod's width
+ * @param hPiston piston's height
+ * @param dPiston piston's diameter
+ * @param angle crank rotation's angle (default 0.0, higher dead point)
+ * @return pointer to initialized device structure; 
+ *      NULL if error occures
 */
-LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lenBiella, cDbl wBiella, cDbl hPistone, cDbl dPistone, cDbl angle = 0.0);
+LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lRod, cDbl wRod, cDbl hPiston, cDbl dPiston, cDbl angle = 0.0);
 
 /**
- * Controlla che le misure date siano compatibili con l'integrità strutturale del device.
- * @param device puntatore a device di cui controllare i parametri
- * @return 0 se vengono rispettati i vincoli;
- *      -1 se i parametri sono <= 0;
- *      1 se pointer == NULL
- *      2 se non viene rispettato il vincolo sulla manovella;
- *      3 se non vengono rispettati i vincoli sul pistone;
- *      4 se non viene rispettato il vincolo sulla lunghezza della biella;
- *      5 se non vengono rispettati i vincoli sulla larghezza della biella
+ * Checks if the parameters follow the given constraints.
+ * @param device pointer to device of wich check the parameters
+ * @return 0 if the constraints aren't violated;
+ *      -1 if a parameter is <= 0;
+ *      1 if pointer == NULL
+ *      2 if the crank's constraint is violated;
+ *      3 if the piston's constraints are violated;
+ *      4 if the connecting rod's lenght constraint is violated;
+ *      5 if the connecting rod's width constraints are violated;
 */
 int LBAMTTcheckIntegrity (const LBAMTTdevice * device);
 
 /**
- * DEALLOCA la struttura puntata dal puntatore passato
- * @param device puntatore a struttura da deallocare
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore
+ * DEALLOCATE the structure pointed by the given pointer
+ * @param device pointer to structure to be deallocated
+ * @return 0 if the function succeed;
+ *      1 if error occures
 */
 int LBAMTTdelete (LBAMTTdevice * device);
 
 /**
- * modifica il parametro dShaft della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param dShaft nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, mantenendo valore iniziale
+ * Ritorna il parametro 
+ */
+
+
+/**
+ * Modify dShaft of the structure pointed by the given pointer
+ * @param device pointer to structure to be modified
+ * @param dShaft new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
 */
 int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft);
 
 /**
- * modifica il parametro stroke della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param stroke nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, mantenendo valore iniziale
+ * Modify stroke of the structure pointed by the given pointer
+ * @param device pointer to structure to be modified
+ * @param stroke new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
 */
 int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke);
 
 /**
- * modifica il parametro lenBiella della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param lenBiella nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, mantenendo valore iniziale
+ * Modify lRod of the structure pointed by the given pointer
+ * @param device pointer to structure to be modified
+ * @param lRod new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetLenBiella (LBAMTTdevice * device, cDbl lenBiella);
+int LBAMTTsetlRod (LBAMTTdevice * device, cDbl lRod);
 
 /**
- * modifica il parametro wBiella della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param wBiella nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, mantenendo valore iniziale
+ Modify wRod of the structure pointed by the given pointer
+ * @param device pointer to structure to be modified
+ * @param wRod new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetWBiella (LBAMTTdevice * device, cDbl wBiella);
+int LBAMTTsetwRod (LBAMTTdevice * device, cDbl wRod);
 
 /**
- * modifica il parametro hPistone della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param hPistone nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, mantenendo valore iniziale
+ * Modify hPiston of the structure pointed by the given pointer
+ * @param device pointer to structure to be modified
+ * @param hPiston new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetHPistone (LBAMTTdevice * device, cDbl hPistone);
+int LBAMTTsethPiston (LBAMTTdevice * device, cDbl hPiston);
 
 /**
- * modifica il parametro dPistone della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param dPistone nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, mantenendo valore iniziale
+ * Modify dPiston of the structure pointed by the given pointer
+ * @param device pointer to structure to be modified
+ * @param dPiston new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetDPistone (LBAMTTdevice * device, cDbl dPistone);
+int LBAMTTsetdPiston (LBAMTTdevice * device, cDbl dPiston);
 
 /**
- * modifica il parametro angle della struttura puntata dal puntatore passato
- * @param device puntatore a struttura da modificare
- * @param angle nuovo valore
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore, mantenendo valore iniziale
+ * Modify angle of the structure pointed by the given pointer
+ * @param device pointer to structure to be modified
+ * @param angle new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
 */
 int LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
 
 /**
- * Crea una stringa in codice SVG per la rappresentazione del device
- * @param device puntatore a struttura da rappresentare
- * @param cxShaft coordinata x del centro dell'albero nell'area di disegno
- * @param cyShaft coordinata y del centro dell'albero nell'area di disegno
- * @param quote flag: se vero include le quote delle misure del pezzo (default false)
- * @param header flag: se vero include l'header per il file svg (default true)
+ * Create an SVG string to represent the device
+ * @param device pointer to structure to be represented
+ * @param cxShaft x coordinate of the shaft's axis within the drawing area
+ * @param cyShaft y coordinate of the shaft's axis within the drawing area
+ * @param quote flag: if true quotes the device (default false)
+ * @param header flag: if trueadd the SVG header (default true)
  * @return string deviceSVG;
- *      vuoto in caso di errore
+ *      EMPTY if error occures
 */
 string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
 
 /**
- * Splitta una stringa secondo una sottostringa passata
- * @param s stringa da splittare
- * @param delimeter sottostringa secondo la quale splittare
- * @return stringa splittata inserita in un vector
+ * Split a string relying on a given substring
+ * @param s string to be splitted
+ * @param delimeter substring
+ * @return vector of the splitted string
 */
 vector<string> LBAMTTsplitString (string s, string delimiter);
 
 /**
- * Salva su file la stringa passata
- * @param stringSVG stringa da salvare
- * @param fileName nome del file sul quale salvare la stringa, estensione deve essere .svg
- * @return 0 se il procedimento è avvenuto con successo;
- *      1 in caso di errore
+ * Write on file the given string
+ * @param stringSVG string to be written
+ * @param fileName file where write the string, must be .svg extension
+ * @return 0 if the function succeed;
+ *      1 if error occures
 */
 int LBAMTTsaveToFile(string s, string fileName);
 
 /**
- * Legge un file e ne ritorna il contenuto come stringa.
- * @param fileName nome del file da leggere, estensione deve essere .svg
- * @return stringa con contenuto del file se il procedimento è avvenuto con successo;
- *      vuoto in caso di errore
+ * Read a file and return its content
+ * @param fileName file to be red, must be .svg extension
+ * @return string with the file content if the function succeed;
+ *      EMPTY if error occures
  */
 string LBAMTTloadFromFile(string fileName);
 
 /**
- * Legge una stringa SVG e ricava il device associato al disegno
- * @param s stringa da analizzare, deve essere con lo stesso formato generato da LBAMTTdeviceToString
- * @return puntatore a device;
- *      NULL in caso di errore
+ * Read an SVG string and return the device associated to the drawing
+ * @param s string to be analized, must have the same format of the one created by LBAMTTdeviceToString
+ * @return pointer to device device if the function succeed;
+ *      NULL if error occures
  */
 LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s);
 

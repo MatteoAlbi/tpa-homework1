@@ -1,46 +1,49 @@
 # Homework 1:  Incredible Machines
-## Biella Manovella
+## Piston
+This is a piston like device, to convert a rotation motion into a translation one
 
-### Definizione del device
-Si intende creare un meccanismo biella manovella per la trasmissione di moto traslatorio in moto rotatorio o viceversa.
+### Device definition
 
-#### Parametri:
-* _dShaft_: diametro dell'albero motore
-* _stroke_: corsa del pistone
-* _lenBiella_: lunghezza della biella
-* _wBiella_: larghezza della biella
-* _hPistone_: altezza del pistone
-* _dPistone_: diametro del pistone
-* _angle_: angolo in gradi della manovella
+#### Parameters:
+* _dShaft_: shaft's diameter 
+* _stroke_: distance covered by the movement of the piston
+* _lRod_: connecting rod's lenght
+* _wRod_: connecting rod's width
+* _hPiston_: piston's hight
+* _dPiston_: piston's diameter
+* _angle_: crank's rotation angle 
 
 #### Definizione corpi e vincoli dei parametri:
-* __ALBERO MOTORE__: organo di collegamento del moto rotatorio, definito dal suo diametro (_dShaft_).
-* __MANOVELLA__: collega l'albero alla biella.
-    - La corsa del pistone (_stroke_) è la distanza tra asse dell'albero e asse della coppia biella-manovella. 
-    - La coppia biella-manovella ha diametro pari alla larghezza della biella.
-    - La lunghezza totale dipende da: _stroke_, _dShaft_, _wBiella_. Sarà pari alla loro somma più dei termini aggiuntivi per l'accoppiamento con l'albero e con la biella.
-    - Termine aggiuntivo per accoppiamento biella-manovella è pari a 1/5 della larghezza della biella.
-    - Termine aggiuntivo per accoppiamento manovella-albero è pari a 1/5 del diametro dell'albero.
+* __SHAFT__: connection element to the rotation motion, defined by its diameter (_dShaft_).
+* __MANOVELLA__: connects the crank to the connecting rod
+    - Half the piston stroke (_stroke_) is defined as the crank's lenght. It's the distance between the shaft's axis and crank-connecting rod joint's axis.
+    - The crank-connecting rod joint's diameter is equal to the connecting _wRod_.
+    - The total crank's lenght depends on: _stroke_, _dShaft_, _wRod_. It's equal their sum plus two addition coupling terms for the joints with the shaft and the connecting rod.
+    - The additional term for the connecting rod's joint is 1/5 _wRod_.
+    - The additional term for the shaft's joint is 1/5 the _dShaft_.
 
-    VINCOLI:
-    - La metà della corsa deve essere maggiore dei raggi delle due coppie.
-* __BIELLA__: collega biella e pistone.
-    - La lunghezza della biella (_lenBiella_) è la distanza tra gli assi degli accoppiamenti biella-manovella e biella-pistone.
-    - La coppia manovella-pistone è interna al pistone, con un termine per l'accoppiamento biella-pistone pari a 1/5 della larghezza della biella.
+    CONSTRAINTS:
+    - The crank's lenght must be greater the sums of the two joints' radius.
+* __CONNECTING ROD__: Connects crank and piston.
+    - The connecting rod's lenght (_lRod_) is the distance between the axis of the crank and the piston joint.
+    - The piston-connecting rod's joint is inside the piston, with an additional coupling term equal to 1/5 _wRod_.
 
-    VINCOLI:
-    - La lunghezza minima deve essere tale da evitare interferenza tra biella e pistone nella posizione di punto morto inferiore (_angle_ pari a 180°), quindi dovrà essere maggiore della distanza tra asse della coppia biella-manovella e di tutto il corpo di accoppiamento manovella-albero (considerando le condizioni di accoppiamento biella-pistone).
-    - La larghezza della biella non può essere inferiore ad 1/6 della sua lunghezza
-    - La larghezza della biella non può essere superiore al diametro dell'albero motore
-* __PISTONE__: organo di collegamento per moto traslatorio.
+    CONSTRAINTS:
+    - _lRod_ must avoid interference between crank and piston in the lower dead point (_angle_ equal to 180°). 
+    - _wRod_ can't be lower than 1/6 _lRod_.
+    - _wRod_ can't be greater than _dShaft_.
+* __PISTON__: connection element to the translation motion.
 
-    VINCOLI:
-    - Diametro del pistone e altezza del pistone (rispettivamente _dPiston_ e _hPiston_) devono essere tali da rispettare il limiti per laccoppiamento biella pistone.
-* __ANGOLO__: angolo della biella per la rappresentazione del meccanismo (_angle_) in gradi.
+    CONSTRAINTS:
+    - Piston's diameter and lenght (_dPiston_ e _hPiston_) must ensure the additional coupling term for the connecting rod joint, so they cant be lower than 7/5 _wRod_.
+* __ANGOLO__: crank's rotation angle (_angle_) in degrees.
 
-NB: per termine di accoppiamento si intende una porzione di materiale aggiuntivo intorno alla coppia rotoidale in termini radiali
+P.S. The coupling term is an additional portion of material around the whole joint edge.
 
-Immagine di esempio: 
+Example image: 
 
-![](biella-manovella.svg)
+![](piston.svg)
+
+### Command line parameters
+* -h 
 
