@@ -1,4 +1,4 @@
-#include "LBAMTTBiellaManovella.h"
+#include "LBAMTTdevice.h"
 
 LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lRod, cDbl wRod, cDbl hPiston, cDbl dPiston, cDbl angle){
     LBAMTTdevice * device = new(nothrow) LBAMTTdevice;
@@ -11,14 +11,14 @@ LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lRod, cDbl wRod,
     device->dPiston = dPiston;
     device->angle = angle;
 
-    if(LBAMTTcheckIntegrity(device)){
+    if(LBAMTTcheckDeviceIntegrity(device)){
         delete device;
         return NULL;
     }
     else return device;
 };
 
-int LBAMTTcheckIntegrity (const LBAMTTdevice * device){
+int LBAMTTcheckDeviceIntegrity (const LBAMTTdevice * device){
     if (device == NULL) return 1;
 
     if (device->dShaft <= 0) return -1;
@@ -37,7 +37,7 @@ int LBAMTTcheckIntegrity (const LBAMTTdevice * device){
     else return 0;
 };
 
-int LBAMTTdelete (LBAMTTdevice * device){
+int LBAMTTdeviceDelete (LBAMTTdevice * device){
     if (device == NULL) return 1;
     
     delete device;
@@ -45,85 +45,85 @@ int LBAMTTdelete (LBAMTTdevice * device){
     return 0;
 }
 
-int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft){
+int LBAMTTdeviceSetDShaft (LBAMTTdevice * device, cDbl dShaft){
     if (device == NULL) return 1;
 
     double tmp = device->dShaft;
     device->dShaft = dShaft;
     
-    if(LBAMTTcheckIntegrity(device)){
+    if(LBAMTTcheckDeviceIntegrity(device)){
         device->dShaft = tmp;
         return 1;
     }
     else return 0;
 };
 
-int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke){
+int LBAMTTdeviceSetStroke (LBAMTTdevice * device, cDbl stroke){
     if (device == NULL) return 1;
 
     double tmp = device->stroke;
     device->stroke = stroke;
     
-    if(LBAMTTcheckIntegrity(device)){
+    if(LBAMTTcheckDeviceIntegrity(device)){
         device->stroke = tmp;
         return 1;
     }
     else return 0;
 };
 
-int LBAMTTsetlRod (LBAMTTdevice * device, cDbl lRod){
+int LBAMTTdeviceSetLRod (LBAMTTdevice * device, cDbl lRod){
     if (device == NULL) return 1;
 
     double tmp = device->lRod;
     device->lRod = lRod;
     
-    if(LBAMTTcheckIntegrity(device)){
+    if(LBAMTTcheckDeviceIntegrity(device)){
         device->lRod = tmp;
         return 1;
     }
     else return 0;
 };
 
-int LBAMTTsetwRod (LBAMTTdevice * device, cDbl wRod){
+int LBAMTTdeviceSetWRod (LBAMTTdevice * device, cDbl wRod){
     if (device == NULL) return 1;
 
     double tmp = device->wRod;
     device->wRod = wRod;
     
-    if(LBAMTTcheckIntegrity(device)){
+    if(LBAMTTcheckDeviceIntegrity(device)){
         device->wRod = tmp;
         return 1;
     }
     else return 0;
 };
 
-int LBAMTTsethPiston (LBAMTTdevice * device, cDbl hPiston){
+int LBAMTTdeviceSetHPiston (LBAMTTdevice * device, cDbl hPiston){
     if (device == NULL) return 1;
 
     double tmp = device->hPiston;
     device->hPiston = hPiston;
     
-    if(LBAMTTcheckIntegrity(device)){
+    if(LBAMTTcheckDeviceIntegrity(device)){
         device->hPiston = tmp;
         return 1;
     }
     else return 0;
 };
 
-int LBAMTTsetdPiston (LBAMTTdevice * device, cDbl dPiston){
+int LBAMTTdeviceSetDPiston (LBAMTTdevice * device, cDbl dPiston){
     if (device == NULL) return 1;
 
     double tmp = device->dPiston;
     device->dPiston = dPiston;
     
-    if(LBAMTTcheckIntegrity(device)){
+    if(LBAMTTcheckDeviceIntegrity(device)){
         device->dPiston = tmp;
         return 1;
     }
     else return 0;
 };
 
-int LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle){
+int LBAMTTdeviceSetAngle (LBAMTTdevice * device, cDbl angle){
     if (device == NULL) return 1;
 
     device->angle = angle;

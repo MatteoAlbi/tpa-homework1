@@ -42,7 +42,7 @@ P.S. The coupling term is an additional portion of material around the whole joi
 
 Example image: 
 
-![](piston.svg)
+![](device.svg)
 
 ### Command line parameters
 * -h 

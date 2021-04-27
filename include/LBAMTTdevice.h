@@ -62,7 +62,7 @@ LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lRod, cDbl wRod,
  *      4 if the connecting rod's lenght constraint is violated;
  *      5 if the connecting rod's width constraints are violated;
 */
-int LBAMTTcheckIntegrity (const LBAMTTdevice * device);
+int LBAMTTcheckDeviceIntegrity (const LBAMTTdevice * device);
 
 /**
  * DEALLOCATE the structure pointed by the given pointer
@@ -70,12 +70,7 @@ int LBAMTTcheckIntegrity (const LBAMTTdevice * device);
  * @return 0 if the function succeed;
  *      1 if error occures
 */
-int LBAMTTdelete (LBAMTTdevice * device);
-
-/**
- * Ritorna il parametro 
- */
-
+int LBAMTTdeviceDelete (LBAMTTdevice * device);
 
 /**
  * Modify dShaft of the structure pointed by the given pointer
@@ -84,7 +79,7 @@ int LBAMTTdelete (LBAMTTdevice * device);
  * @return 0 if the function succeed;
  *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft);
+int LBAMTTdeviceSetDShaft (LBAMTTdevice * device, cDbl dShaft);
 
 /**
  * Modify stroke of the structure pointed by the given pointer
@@ -93,7 +88,7 @@ int LBAMTTsetDShaft (LBAMTTdevice * device, cDbl dShaft);
  * @return 0 if the function succeed;
  *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke);
+int LBAMTTdeviceSetStroke (LBAMTTdevice * device, cDbl stroke);
 
 /**
  * Modify lRod of the structure pointed by the given pointer
@@ -102,7 +97,7 @@ int LBAMTTsetStroke (LBAMTTdevice * device, cDbl stroke);
  * @return 0 if the function succeed;
  *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetlRod (LBAMTTdevice * device, cDbl lRod);
+int LBAMTTdeviceSetLRod (LBAMTTdevice * device, cDbl lRod);
 
 /**
  Modify wRod of the structure pointed by the given pointer
@@ -111,7 +106,7 @@ int LBAMTTsetlRod (LBAMTTdevice * device, cDbl lRod);
  * @return 0 if the function succeed;
  *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetwRod (LBAMTTdevice * device, cDbl wRod);
+int LBAMTTdeviceSetWRod (LBAMTTdevice * device, cDbl wRod);
 
 /**
  * Modify hPiston of the structure pointed by the given pointer
@@ -120,7 +115,7 @@ int LBAMTTsetwRod (LBAMTTdevice * device, cDbl wRod);
  * @return 0 if the function succeed;
  *      1 if error occures, and keeps the original value
 */
-int LBAMTTsethPiston (LBAMTTdevice * device, cDbl hPiston);
+int LBAMTTdeviceSetHPiston (LBAMTTdevice * device, cDbl hPiston);
 
 /**
  * Modify dPiston of the structure pointed by the given pointer
@@ -129,7 +124,7 @@ int LBAMTTsethPiston (LBAMTTdevice * device, cDbl hPiston);
  * @return 0 if the function succeed;
  *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetdPiston (LBAMTTdevice * device, cDbl dPiston);
+int LBAMTTdeviceSetDPiston (LBAMTTdevice * device, cDbl dPiston);
 
 /**
  * Modify angle of the structure pointed by the given pointer
@@ -138,7 +133,7 @@ int LBAMTTsetdPiston (LBAMTTdevice * device, cDbl dPiston);
  * @return 0 if the function succeed;
  *      1 if error occures, and keeps the original value
 */
-int LBAMTTsetAngle (LBAMTTdevice * device, cDbl angle);
+int LBAMTTdeviceSetAngle (LBAMTTdevice * device, cDbl angle);
 
 /**
  * Create an SVG string to represent the device

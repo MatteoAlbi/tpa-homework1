@@ -1,6 +1,6 @@
 
 #include "catch2/catch2.hpp"
-#include "LBAMTTBiellaManovella.h"
+#include "LBAMTTdevice.h"
 
 //init, check, delete
 TEST_CASE("test init when parameters follow constraints", "[LBAMTTBiellaManovella]") {
@@ -22,11 +22,11 @@ TEST_CASE("test init when parameters follow constraints", "[LBAMTTBiellaManovell
     REQUIRE( device->dPiston == dPiston );
     REQUIRE( device->angle == 0.0 );
 
-    LBAMTTdelete(device);    
+    LBAMTTdeviceDelete(device);    
 }
 
 TEST_CASE("test error codes of checkIntegrity", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTcheckIntegrity(NULL) == 1);
+    REQUIRE(LBAMTTcheckDeviceIntegrity(NULL) == 1);
     
     double dShaft = 5;
     double stroke = 10;
@@ -47,40 +47,40 @@ TEST_CASE("test error codes of checkIntegrity", "[LBAMTTBiellaManovella]") {
 
     //parameter <= 0
     device->dShaft = -5;
-    REQUIRE( LBAMTTcheckIntegrity(device) == -1 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == -1 );
     device->dShaft = 0;
-    REQUIRE( LBAMTTcheckIntegrity(device) == -1 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == -1 );
     device->dShaft = dShaft;
 
     //crank lenght constraint
     device->stroke = 6;
-    REQUIRE( LBAMTTcheckIntegrity(device) == 2 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == 2 );
     device->stroke = stroke;
 
     //piston constraints
     device->hPiston = 2;
-    REQUIRE( LBAMTTcheckIntegrity(device) == 3 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == 3 );
     device->hPiston = hPiston;
     device->dPiston = 2;
-    REQUIRE( LBAMTTcheckIntegrity(device) == 3 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == 3 );
     device->dPiston = dPiston;
     
     //lRod cosntraints
     device->lRod = 7;
-    REQUIRE( LBAMTTcheckIntegrity(device) == 4 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == 4 );
     device->lRod = lRod;
 
     //wRod constraints
     device->wRod = 1;
-    REQUIRE( LBAMTTcheckIntegrity(device) == 5 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == 5 );
     device->wRod = 6;
     device->stroke = 12;
     device->lRod = 20;
     device->dPiston = 10;
     device->hPiston = 10;
-    REQUIRE( LBAMTTcheckIntegrity(device) == 5 );
+    REQUIRE( LBAMTTcheckDeviceIntegrity(device) == 5 );
 
-    LBAMTTdelete(device);    
+    LBAMTTdeviceDelete(device);    
 }
 
 TEST_CASE("test init when parameters violate constraints", "[LBAMTTBiellaManovella]") {
@@ -105,17 +105,17 @@ TEST_CASE("test delete", "[LBAMTTBiellaManovella]") {
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
     REQUIRE( device != NULL );
-    REQUIRE( LBAMTTdelete(device) == 0 );
+    REQUIRE( LBAMTTdeviceDelete(device) == 0 );
 
     dShaft = 0;
     device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
     REQUIRE( device == NULL );
-    REQUIRE( LBAMTTdelete(device) == 1 );    
+    REQUIRE( LBAMTTdeviceDelete(device) == 1 );    
 }
 
 //set
 TEST_CASE("test setDShaft when succeed and error occures", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTsetDShaft(NULL, 10) == 1);
+    REQUIRE(LBAMTTdeviceSetDShaft(NULL, 10) == 1);
     
     double dShaft = 80;
     double stroke = 200;
@@ -126,17 +126,17 @@ TEST_CASE("test setDShaft when succeed and error occures", "[LBAMTTBiellaManovel
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
 
-    REQUIRE( LBAMTTsetDShaft(device,81) == 0 );
+    REQUIRE( LBAMTTdeviceSetDShaft(device,81) == 0 );
     REQUIRE( device->dShaft == 81 );
 
-    REQUIRE( LBAMTTsetDShaft(device,50) == 1 );
+    REQUIRE( LBAMTTdeviceSetDShaft(device,50) == 1 );
     REQUIRE( device->dShaft == 81 );
 
-    LBAMTTdelete(device);  
+    LBAMTTdeviceDelete(device);  
 }
 
 TEST_CASE("test setStroke when succeed and error occures", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTsetStroke(NULL, 10) == 1);
+    REQUIRE(LBAMTTdeviceSetStroke(NULL, 10) == 1);
     
     double dShaft = 80;
     double stroke = 200;
@@ -147,17 +147,17 @@ TEST_CASE("test setStroke when succeed and error occures", "[LBAMTTBiellaManovel
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
 
-    REQUIRE( LBAMTTsetStroke(device,201) == 0 );
+    REQUIRE( LBAMTTdeviceSetStroke(device,201) == 0 );
     REQUIRE( device->stroke == 201 );
 
-    REQUIRE( LBAMTTsetStroke(device,50) == 1 );
+    REQUIRE( LBAMTTdeviceSetStroke(device,50) == 1 );
     REQUIRE( device->stroke == 201 );
 
-    LBAMTTdelete(device);  
+    LBAMTTdeviceDelete(device);  
 }
 
 TEST_CASE("test setlRod when succeed and error occures", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTsetlRod(NULL, 10) == 1);
+    REQUIRE(LBAMTTdeviceSetLRod(NULL, 10) == 1);
     
     double dShaft = 80;
     double stroke = 200;
@@ -168,17 +168,17 @@ TEST_CASE("test setlRod when succeed and error occures", "[LBAMTTBiellaManovella
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
 
-    REQUIRE( LBAMTTsetlRod(device,301) == 0 );
+    REQUIRE( LBAMTTdeviceSetLRod(device,301) == 0 );
     REQUIRE( device->lRod == 301 );
 
-    REQUIRE( LBAMTTsetlRod(device,50) == 1 );
+    REQUIRE( LBAMTTdeviceSetLRod(device,50) == 1 );
     REQUIRE( device->lRod == 301 );
 
-    LBAMTTdelete(device);  
+    LBAMTTdeviceDelete(device);  
 }
 
 TEST_CASE("test setwRod when succeed and error occures", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTsetwRod(NULL, 10) == 1);
+    REQUIRE(LBAMTTdeviceSetWRod(NULL, 10) == 1);
     
     double dShaft = 80;
     double stroke = 200;
@@ -189,17 +189,17 @@ TEST_CASE("test setwRod when succeed and error occures", "[LBAMTTBiellaManovella
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
 
-    REQUIRE( LBAMTTsetwRod(device,61) == 0 );
+    REQUIRE( LBAMTTdeviceSetWRod(device,61) == 0 );
     REQUIRE( device->wRod == 61 );
 
-    REQUIRE( LBAMTTsetwRod(device,100) == 1 );
+    REQUIRE( LBAMTTdeviceSetWRod(device,100) == 1 );
     REQUIRE( device->wRod == 61 );
 
-    LBAMTTdelete(device);  
+    LBAMTTdeviceDelete(device);  
 }
 
 TEST_CASE("test sethPiston when succeed and error occures", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTsethPiston(NULL, 10) == 1);
+    REQUIRE(LBAMTTdeviceSetHPiston(NULL, 10) == 1);
     
     double dShaft = 80;
     double stroke = 200;
@@ -210,17 +210,17 @@ TEST_CASE("test sethPiston when succeed and error occures", "[LBAMTTBiellaManove
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
  
-    REQUIRE( LBAMTTsethPiston(device,101) == 0 );
+    REQUIRE( LBAMTTdeviceSetHPiston(device,101) == 0 );
     REQUIRE( device->hPiston == 101 );
 
-    REQUIRE( LBAMTTsethPiston(device,50) == 1 );
+    REQUIRE( LBAMTTdeviceSetHPiston(device,50) == 1 );
     REQUIRE( device->hPiston == 101 );
 
-    LBAMTTdelete(device);  
+    LBAMTTdeviceDelete(device);  
 }
 
 TEST_CASE("test setdPiston when succeed and error occures", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTsetdPiston(NULL, 10) == 1);
+    REQUIRE(LBAMTTdeviceSetDPiston(NULL, 10) == 1);
     
     double dShaft = 80;
     double stroke = 200;
@@ -231,17 +231,17 @@ TEST_CASE("test setdPiston when succeed and error occures", "[LBAMTTBiellaManove
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
 
-    REQUIRE( LBAMTTsetdPiston(device,101) == 0 );
+    REQUIRE( LBAMTTdeviceSetDPiston(device,101) == 0 );
     REQUIRE( device->dPiston == 101 );
 
-    REQUIRE( LBAMTTsetdPiston(device,50) == 1 );
+    REQUIRE( LBAMTTdeviceSetDPiston(device,50) == 1 );
     REQUIRE( device->dPiston == 101 );
 
-    LBAMTTdelete(device);  
+    LBAMTTdeviceDelete(device);  
 }
 
 TEST_CASE("test setAngle when succeed and error occures", "[LBAMTTBiellaManovella]") {
-    REQUIRE(LBAMTTsetAngle(NULL, 10) == 1);
+    REQUIRE(LBAMTTdeviceSetAngle(NULL, 10) == 1);
     
     double dShaft = 80;
     double stroke = 200;
@@ -252,10 +252,10 @@ TEST_CASE("test setAngle when succeed and error occures", "[LBAMTTBiellaManovell
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston);
 
-    REQUIRE( LBAMTTsetAngle(device,90) == 0 );
+    REQUIRE( LBAMTTdeviceSetAngle(device,90) == 0 );
     REQUIRE( device->angle == 90 );
 
-    LBAMTTdelete(device);  
+    LBAMTTdeviceDelete(device);  
 }
 
 //file e stringhe

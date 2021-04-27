@@ -1,7 +1,7 @@
 # Sources that contain the tests
 add_executable(catch2Test catch2Main.cpp) # Just this one contains BOOST_TEST_MAIN
 target_sources(catch2Test PRIVATE
-        LBAMTTtestBiellaManovella.cpp
+        LBAMTTtestDevice.cpp
         LBAMTTtestCadSVG.cpp
         )
 
@@ -14,7 +14,7 @@ target_include_directories(catch2Test PRIVATE
 
 # Including sources
 target_sources(catch2Test PRIVATE
-        ../src/LBAMTTBiellaManovella.cpp
+        ../src/LBAMTTdevice.cpp
         ../src/LBAMTTcadSVG.cpp
         )
 

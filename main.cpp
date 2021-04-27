@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "include/LBAMTTBiellaManovella.h"
+#include "include/LBAMTTdevice.h"
 
 using namespace std;
 
@@ -18,18 +18,18 @@ int main(int argc, char * argv[]) {
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
     if(device == NULL) cout << "parameters error" << endl;
-    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), "piston_test.svg");
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), "device_example.svg");
     
-    //test multiplo con angle da 0 a 330, passo 30
+    //multiple test with angle from 0 a 330, step 30
     // else{
     //     for(int i=0;i<12;i++){
-    //         string s = "piston_test" + to_string(i) + ".svg";
-    //         LBAMTTsetAngle(device, i*30);
+    //         string s = "device_example" + to_string(i) + ".svg";
+    //         LBAMTTdeviceSetAngle(device, i*30);
     //         LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), s);
     //     }
     // }
 
-    LBAMTTdelete(device);
+    LBAMTTdeviceDelete(device);
     
     return 0;
 } 
