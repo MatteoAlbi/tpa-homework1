@@ -5,7 +5,9 @@
 using namespace std;
 
 
-int main(int argc, char * argv[]) {
+int main(int argc, char ** argv) {
+
+    LBAMTTcommandLineParam(argc, argv);
 
     double dShaft = 120;
     double stroke = 300;

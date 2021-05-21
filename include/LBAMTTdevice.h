@@ -6,6 +6,7 @@
 #include <math.h>
 #include <new>
 #include <vector>
+#include <cstdlib>
 
 #include <fstream>      
 #include <streambuf>    
@@ -179,5 +180,14 @@ string LBAMTTloadFromFile(string fileName);
  *      NULL if error occures
  */
 LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s);
+
+/**
+ * Manage the params red by command line
+ * @param argc number of params passed
+ * @param argv array where the params are stored as char arrays
+ * @return pointer to device if from command line is requested a creation
+ *      NULL if error occurs or no creation is requested
+ */
+LBAMTTdevice * LBAMTTcommandLineParam(int argc, char** argv);
 
 #endif

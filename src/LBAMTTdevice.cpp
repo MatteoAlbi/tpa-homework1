@@ -398,3 +398,12 @@ LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s){
 
     return LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
 }
+
+LBAMTTdevice * LBAMTTcommandLineParam(int argc, char** argv){
+    for(int i=0;i<argc;i++) cout << string(argv[i]) << endl;
+    // ./mainentry -i /path_da_cui_importare -eq /path_dove_esportare <param>
+    if(argc == 1) return NULL;
+    if(argc > 6) return NULL;
+    
+    return NULL;
+}
