@@ -359,9 +359,3 @@ TEST_CASE("test deviceFromStringSVG when succeed", "[LBAMTTBiellaManovella]"){
     REQUIRE(device->dPiston == dPiston);
     REQUIRE(device->angle == angle);
 }
-
-
-
-
-
-

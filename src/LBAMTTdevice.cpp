@@ -400,10 +400,79 @@ LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s){
 }
 
 LBAMTTdevice * LBAMTTcommandLineParam(int argc, char** argv){
-    for(int i=0;i<argc;i++) cout << string(argv[i]) << endl;
-    // ./mainentry -i /path_da_cui_importare -eq /path_dove_esportare <param>
-    if(argc == 1) return NULL;
-    if(argc > 6) return NULL;
-    
+    string sargv[argc];
+    for(int i=0;i<argc;i++) sargv[i] = string(argv[i]);
+    // ./mainentry -i /path_da_cui_importare -eq cx cy /path_dove_esportare -p <param>
+    if(argc == 1) return NULL; //no params
+    if(sargv[1] == "-h"){//help
+        string help =   "--HELP\n"
+                        "Command format: ./mainentry -i importPath -e/-eq cxShaft cyShaft esportPath -p params...\n"
+                        "-i import a device from the file with path importPath\n"
+                        "-e export a device (-eq export with quotes) on the file with path exportPath.\n"
+                        "   The device is taken from:\n"
+                        "       an imported file called with the option -i (prioritized action)\n"
+                        "       the one crated with the params passed after the option -p (ignoerd if -i is called)\n"
+                        "   cxShaft cyShaft are the coordinates of the shaft's center on the SVG draw\n"
+                        "-eq export a device with quotes on the file with path exportPath (options as before)\n"
+                        "-p followed by the params of the device to be exported (can't be called if -e or -eq isn't called before)\n"
+                        "   Params: dShaft stroke lRod wRod hPiston dPiston angle(defult value 0) (for details see README)\n"
+                        "More following params will be ignored";
+        cout << help << endl;
+    }
+    if(argc >= 3){
+        if(sargv[1] == "-i"){ //import
+        cout << "Importing device from " << sargv[2] << endl;
+            string file = LBAMTTloadFromFile(sargv[2]);
+            if(file == "") { //file not found
+                cout << "File not found" << endl;
+                return NULL;
+            } 
+            LBAMTTdevice * device = LBAMTTdeviceFromStringSVG(file);
+            if(device == NULL) {  //string isn't a device
+                cout << "Can't export device from file " << sargv[2] <<", wrong format" << endl;
+                return NULL;
+            }
+            cout << "Import successful" << endl;
+
+            if(argc >= 7){ //requested export
+                if(sargv[3] == "-e"){ //export
+                    cout << "Exporting on file " << sargv[6] << endl;
+                    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, stod(sargv[4]), stod(sargv[5])), sargv[6]);
+                }
+                else if(sargv[3] == "-eq"){ //export with quotes
+                    cout << "Exporting with quotes on file " << sargv[6] << endl;
+                    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, stod(sargv[4]), stod(sargv[5]), true), sargv[6]);
+                }
+                cout << "Export successful" << endl;
+            }
+            else if(argc >= 4){ //more than 3 arguments but not enough to export
+                cout << "Missing arguments for export" << endl;
+            }
+            return device;
+        }
+        else if(argc >= 12){
+            if(sargv[1] == "-e" || sargv[1] == "-eq"){ //export with params
+                cout << "Exporting with params..." << endl;
+                if(sargv[5] != "-p"){ //params not found
+                    cout << "Params not found" << endl;
+                    return NULL;
+                } 
+                LBAMTTdevice * device;
+                if(argc == 12) device = LBAMTTinitDevice(stod(sargv[6]), stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]), stod(sargv[11]));
+                else device = LBAMTTinitDevice(stod(sargv[6]), stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]));
+
+                if(device == NULL) { //params don't match constraints
+                    cout << "Unable to init device with the given params, see README and check the constraints" << endl;
+                    return NULL;
+                } 
+                if(sargv[1] == "-e") LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, stod(sargv[2]), stod(sargv[3])), sargv[4]);
+                else LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, stod(sargv[2]), stod(sargv[3]), true), sargv[4]);
+                cout << "Export successful" << endl;
+                
+                return device;
+            }
+        }
+        else cout << "command not found or too few arguments, type -h to display the helper" << endl;
+    }
     return NULL;
 }
