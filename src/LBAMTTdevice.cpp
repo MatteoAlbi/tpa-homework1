@@ -419,10 +419,9 @@ LBAMTTdevice * LBAMTTcommandLineParam(int argc, char** argv){
     if(argc == 1) return NULL; //no params
     if(sargv[1] == "-h"){//help
         string help =   "--HELP\n"
-                        "Command format: ./mainentry -i importPath -e/-eq cxShaft cyShaft esportPath -p params...\n"
+                        "Command format: ./mainentry -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}\n"
                         "-i import a device from the file with path importPath\n"
-                        "-e export a device (-eq export with quotes) on the file with path exportPath.\n"
-                        "   The device is taken from:\n"
+                        "-e export a device on the file with path exportPath. The device is taken from:\n"
                         "       an imported file called with the option -i (prioritized action)\n"
                         "       the one crated with the params passed after the option -p (ignoerd if -i is called)\n"
                         "   cxShaft cyShaft are the coordinates of the shaft's center on the SVG draw\n"
