@@ -66,6 +66,15 @@ LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lRod, cDbl wRod,
 int LBAMTTcheckDeviceIntegrity (const LBAMTTdevice * device);
 
 /**
+ * Checks if two devices are the same
+ * @param device1 first device to compare
+ * @param device2 second device to compare
+ * @return true if the devices are the same
+ *         false otherwise
+ */
+bool LBAMTTdeviceCompare (const LBAMTTdevice * device1, const LBAMTTdevice * device2);
+
+/**
  * DEALLOCATE the structure pointed by the given pointer
  * @param device pointer to structure to be deallocated
  * @return 0 if the function succeed;

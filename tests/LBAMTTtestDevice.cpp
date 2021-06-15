@@ -1,6 +1,9 @@
 
 #include "catch2/catch2.hpp"
 #include "LBAMTTdevice.h"
+#include <cstring>
+
+using std::string;
 
 //init, check, delete
 TEST_CASE("test init when parameters follow constraints", "[LBAMTTBiellaManovella]") {
@@ -358,4 +361,102 @@ TEST_CASE("test deviceFromStringSVG when succeed", "[LBAMTTBiellaManovella]"){
     REQUIRE(device->hPiston == hPiston);
     REQUIRE(device->dPiston == dPiston);
     REQUIRE(device->angle == angle);
+}
+
+char** s_arr2c_arr(string * s_arr, int n){
+    char ** c_arr = new char*[n];
+    for(int i=0; i<n; i++){
+        c_arr[i] = new char[s_arr[i].length()+1];
+        strcpy(c_arr[i], s_arr[i].c_str());
+    }    
+    return c_arr;
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, helper"){
+    int argc = 3;
+    string s_arr[] = {"./mainentry", "-h", "test.svg"};
+    char **argv = s_arr2c_arr(s_arr, argc);
+    
+    cout << "\nhelper display:\n";
+    LBAMTTcommandLineParam(argc, argv);
+    cout << "\n";
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, import request"){
+    LBAMTTdevice *device_in = LBAMTTinitDevice(80, 200, 300, 60, 100, 100);
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device_in, 400, 200, true, true), "test.svg");
+
+    char **argv;
+    LBAMTTdevice *device_out;
+    int argc = 3;
+    string s_arr[] = {"./mainentry", "-i", "test.svg"};
+    argv = s_arr2c_arr(s_arr, argc);
+    
+    device_out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(device_out != NULL); //import successful
+    REQUIRE(LBAMTTdeviceCompare(device_out, device_in));
+
+    LBAMTTsaveToFile("test", "test.svg");
+    device_out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(device_out == NULL); //not a device
+
+    remove("test.svg");
+    device_out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(device_out == NULL); //file not found   
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, export with params request"){
+    double dShaft = 120;
+    double stroke = 300;
+    double lRod = 300;
+    double wRod = 60;
+    double hPiston = 100;
+    double dPiston = 150;
+    double angle = 90;
+    LBAMTTdevice *device_in = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
+    char **argv; 
+    LBAMTTdevice *device_out;
+    string s_arr[] = {"./mainentry", "-eq", "400", "200", "test.svg", "-p", to_string(dShaft), to_string(stroke), to_string(lRod), 
+                                                                            to_string(wRod), to_string(hPiston), to_string(dPiston), 
+                                                                            to_string(angle)};
+
+    int argc = 13;
+    argv = s_arr2c_arr(s_arr, argc);
+    device_out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(device_out != NULL);
+    REQUIRE(LBAMTTdeviceCompare(device_out, device_in));
+    REQUIRE(device_out->dShaft == dShaft);
+
+    s_arr[9] = "600";
+    argv = s_arr2c_arr(s_arr, argc);
+    device_out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(device_out == NULL); //constraints not respected
+
+    argc = 11;
+    argv = s_arr2c_arr(s_arr, argc);
+    device_out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(device_out == NULL); //missing param
+
+    remove("test.svg");
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, import and export request"){
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(LBAMTTinitDevice(80, 200, 300, 60, 100, 100), 400, 200, true, true), "test.svg");
+
+    int argc = 14;
+    string s_arr[] = {"./mainentry", "-i", "test.svg", "-eq", "400", "200", "test_copy.svg", "-p", "80", "200", "300", "60", "100", "80"};
+    char **argv = s_arr2c_arr(s_arr, argc);
+    LBAMTTdevice * device_out = LBAMTTcommandLineParam(argc, argv);
+
+    REQUIRE(LBAMTTloadFromFile("test.svg") == LBAMTTloadFromFile("test_copy.svg"));
+
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(LBAMTTinitDevice(80, 200, 300, 60, 100, 100), 400, 200), "test.svg");
+    s_arr[3] = "-e";
+    argv = s_arr2c_arr(s_arr, argc);
+    device_out = LBAMTTcommandLineParam(argc, argv);
+
+    REQUIRE(LBAMTTloadFromFile("test.svg") == LBAMTTloadFromFile("test_copy.svg"));
+
+    remove("test.svg");
+    remove("test_copy.svg");
 }
