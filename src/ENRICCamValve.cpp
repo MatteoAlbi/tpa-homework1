@@ -70,6 +70,17 @@ int ENRICsetlenValve (ENRICdevice * device, double newlenValve){
     else return 0;
 };
 
+int ENRICsetAlpha (ENRICdevice * device, double alpha){
+    double var = device->Alpha;
+    device->Alpha = alpha;
+    
+    if(ENRICcheckIntegrity(device)){
+        device->Alpha = var;
+        return 1;
+    }
+    else return 0;
+};
+
 int ENRICdelete (ENRICdevice * device){
     if(device == NULL) return 1;
     else {

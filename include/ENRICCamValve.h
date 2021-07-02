@@ -66,7 +66,7 @@ int ENRICsetrMin (ENRICdevice * device, double rMin);
  * @param device pointer to the struct
  * @param rMax new value
  * @return 0 if the change was succesfull
- *      1 in case of error, and sets rMin back to the original value
+ *      1 in case of error, and sets rMax back to the original value
 */
 int ENRICsetrMax (ENRICdevice * device, double rMax);
 
@@ -75,9 +75,18 @@ int ENRICsetrMax (ENRICdevice * device, double rMax);
  * @param device pointer to the struct
  * @param lenValve new value
  * @return 0 if the change was succesfull
- *      1 in case of error, and sets rMin back to the original value
+ *      1 in case of error, and sets lenValve back to the original value
 */
 int ENRICsetlenValve (ENRICdevice * device, double lenValve);
+
+/**
+ * Changes the parameter Alpha of the struct pointed by device
+ * @param device pointer to the struct
+ * @param alpha new value
+ * @return 0 if the change was succesfull
+ *      1 in case of error, and sets Alpha back to the original value
+*/
+int ENRICsetAlpha (ENRICdevice * device, double alpha);
 
 /**
  * Creates a string to rapresent a line in SVG, 
@@ -123,21 +132,6 @@ string ENRICarcSVG(double cx, double cy, double r, double startAngle, double end
  *      empty in case of error
  */
 string ENRICAnimationarcSVG(double cx, double cy, double r, double startAngle, double endAngle, int stroke = 2, string color = "black");
-
-/**
- * Creates a string to rapresent a text in SVG format
- * @param s string to insert
- * @param x coordinate x of the text
- * @param y coordinate y of the text
- * @param rotation angle of rotation of the text (default 0.0)
- * @param xr coordinate x of the point of rotation (default 0.0)
- * @param yr coordinate y of the point of rotation (default 0.0)
- * @param color text color (default black)
- * @param anchor relative position between text and given point (start, middle, end) 
- * @param opt more visual option (default empty)
- * @return SVG string of the text
- */
-string LBAMTTtextSVG(string s, double x, double y, double rotation = 0.0, double xr = 0.0, double yr = 0.0, string color = "black", string anchor = "middle", string opt = "");
 
 /**
  * Creates a distance quote between point A and B 

@@ -23,12 +23,11 @@ int main(int argc, char ** argv) {
     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), "device_example.svg");
     
     //multiple test with angle from 0 a 330, step 30
-    // else{
-    //     for(int i=0;i<12;i++){
-    //         string s = "device_example" + to_string(i) + ".svg";
-    //         LBAMTTdeviceSetAngle(device, i*30);
-    //         LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), s);
-    //     }
+
+    // for(int i=0;i<24;i++){
+    //     string s = "device_example" + to_string(i) + ".svg";
+    //     LBAMTTdeviceSetAngle(device, i*15);
+    //     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), s);
     // }
 
     LBAMTTdeviceDelete(device);
