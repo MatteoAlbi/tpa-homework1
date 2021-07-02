@@ -153,12 +153,12 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
     double L1 = device->stroke/2; //crank lenght
     double L2 = device->lRod;  
     double q = PI/2 - device->angle * PI / 180.0; //crank angle in radiants
-    double theta = atan2(-L1 * cos(q) / L2, sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) / L2); //connecting rod angle in radiants
+    double theta = atan2(L1 * cos(q) / L2, - sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) / L2); //connecting rod angle in radiants
     
     cxBiella = cxShaft + L1 * cos(q);
     cyBiella = cyShaft + L1 * sin(q);
     cxPistone = cxShaft;
-    cyPistone = cyShaft + sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) + L1 * sin(q);
+    cyPistone = cyShaft - sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) + L1 * sin(q);
 
     string deviceSVG = "\n\n";
 
@@ -169,11 +169,11 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
     deviceSVG += LBAMTTrectSVG(cxBiella, cyBiella - device->wRod/2, 
                                L2, device->wRod, 
                                "blue", 
-                               90 - theta * 180 / PI, cxBiella, cyBiella);
+                               90 + theta * 180 / PI, cxBiella, cyBiella);
     deviceSVG += "\n"; 
 
     //piston
-    deviceSVG += LBAMTTrectSVG(cxPistone - device->dPiston/2, cyPistone - device->wRod*7/10, 
+    deviceSVG += LBAMTTrectSVG(cxPistone - device->dPiston/2, cyPistone + device->wRod*7/10 - device->hPiston , 
                                device->dPiston, device->hPiston, 
                                "red");
     deviceSVG += "\n"; 
@@ -247,33 +247,33 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
 
     //hPiston
         if(fmod(device->angle, 360.0) < 180.0){ //quote on left
-            deviceSVG += LBAMTTquoteDistSVG(cxPistone - device->dPiston/2, cyPistone - device->wRod*7/10, 
-                                            cxPistone - device->dPiston/2, cyPistone + device->hPiston - device->wRod*7/10, 
+            deviceSVG += LBAMTTquoteDistSVG(cxPistone - device->dPiston/2, cyPistone + device->wRod*7/10 - device->hPiston, 
+                                            cxPistone - device->dPiston/2, cyPistone + device->wRod*7/10, 
                                             distQuote, lQuote, true);
         }
         else{ //quote on right
-            deviceSVG += LBAMTTquoteDistSVG(cxPistone + device->dPiston/2, cyPistone - device->wRod*7/10, 
-                                            cxPistone + device->dPiston/2, cyPistone + device->hPiston - device->wRod*7/10, 
+            deviceSVG += LBAMTTquoteDistSVG(cxPistone + device->dPiston/2, cyPistone + device->wRod*7/10 - device->hPiston, 
+                                            cxPistone + device->dPiston/2, cyPistone + device->wRod*7/10, 
                                             distQuote, lQuote, false);
         }
         deviceSVG += "\n"; 
 
     //dPiston
-        deviceSVG += LBAMTTquoteDistSVG(cxPistone - device->dPiston/2, cyPistone + device->hPiston - device->wRod*7/10, 
-                                        cxPistone + device->dPiston/2, cyPistone + device->hPiston - device->wRod*7/10, 
-                                        distQuote, lQuote, true);
+        deviceSVG += LBAMTTquoteDistSVG(cxPistone - device->dPiston/2, cyPistone - device->hPiston + device->wRod*7/10, 
+                                        cxPistone + device->dPiston/2, cyPistone - device->hPiston + device->wRod*7/10, 
+                                        distQuote, lQuote, false);
         deviceSVG += "\n"; 
 
     //stroke
         if(fmod(device->angle, 360.0) < 180.0){ //quote on left
             deviceSVG += LBAMTTquoteDistSVG(cxBiella, cyBiella, 
                                             cxShaft, cyShaft, 
-                                            device->dShaft*7/10 + distQuote, lQuote, true);
+                                            device->dShaft*7/10 + distQuote, lQuote, false);
         }
         else{ //quote on right
             deviceSVG += LBAMTTquoteDistSVG(cxBiella, cyBiella, 
                                             cxShaft, cyShaft, 
-                                            device->dShaft*7/10 + distQuote, lQuote, false);
+                                            device->dShaft*7/10 + distQuote, lQuote, true);
         }
         deviceSVG += "\n"; 
 
@@ -282,12 +282,12 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
         if(fmod(device->angle, 360.0) < 180.0){ //quote on left
             deviceSVG += LBAMTTquoteDistSVG(cxPistone, cyPistone, 
                                             cxBiella, cyBiella, 
-                                            distQuote, lQuote, true);
+                                            distQuote, lQuote, false);
         }
         else{ //quote on right
             deviceSVG += LBAMTTquoteDistSVG(cxBiella, cyBiella, 
                                             cxPistone, cyPistone, 
-                                            distQuote, lQuote, true);
+                                            distQuote, lQuote, false);
         }
         deviceSVG += "\n";   
 
