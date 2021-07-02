@@ -1,9 +1,4 @@
 #include "ENRICCamValve.h"
-#include <math.h>
-
-#ifndef PI
-#define PI 3.14159265358979323846
-#endif
 
 ENRICdevice * ENRICinitDevice (double rMin, double rMax, double lenValve, double diamValve, double Alpha, double Gamma){
     
