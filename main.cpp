@@ -16,7 +16,7 @@ int main(int argc, char ** argv) {
     double wRod = 60;
     double hPiston = 100;
     double dPiston = 150;
-    double angle = 90;
+    double angle = 30;
 
     double rMin = 50;
     double rMax = 70;
@@ -28,23 +28,12 @@ int main(int argc, char ** argv) {
 
     ENRICdevice * deviceE = ENRICinitDevice (rMin, rMax, lenValve, diamValve, Alpha, Gamma);
 
-    ENRICsaveToFile(ENRICtoStringSVG(deviceE, 400, 200, true, false), "CamValveOriginal.svg");
+    ENRICsaveToFile(ENRICtoStringSVG(deviceE, 400, 200, true, true), "CamValveOriginal.svg");
 
 
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
     if(device == NULL) cout << "parameters error" << endl;
-<<<<<<< HEAD
-    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 400, true), "device_example.svg");
-    
-    //multiple test with angle from 0 a 330, step 30
-    // else{
-        for(int i=0;i<12;i++){
-            string s = "device_example" + to_string(i) + ".svg";
-            LBAMTTdeviceSetAngle(device, i*30);
-            LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 400, true), s);
-        }
-=======
-    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true, false), "device_example.svg");
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 400, true, true), "device_example.svg");
     
     //multiple test with angle from 0 a 330, step 30
 
@@ -52,7 +41,6 @@ int main(int argc, char ** argv) {
     //     string s = "device_example" + to_string(i) + ".svg";
     //     LBAMTTdeviceSetAngle(device, i*15);
     //     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), s);
->>>>>>> fix13
     // }
 
     LBAMTTdeviceDelete(device);
