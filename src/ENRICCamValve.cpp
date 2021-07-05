@@ -281,10 +281,6 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
     double PCint2x = device->rMin*cos(-device->Alpha-PI/2)+xC;
     double PCint2y = yC-device->rMin*sin(-device->Alpha-PI/2);
 
-    //Making the arrows for the quotes of the device
-    deviceSVG += ENRICarrowMarkerSVG(); 
-    deviceSVG += "\n"; 
-
     //Building the cam
         //Internal circle of the cam: I just need a section of the circle, so I just draw an arc
     deviceSVG += ENRICarcSVG(xC, yC, device->rMin, device->Alpha*180/PI+90, device->Alpha*180/PI+270, device->rMin-1, "grey");
@@ -332,6 +328,7 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
     if(quote){
         double lQuote = device->diamValve / 4 ;//length lateral line of the quote
         double distQuote = lQuote*2; //distance of the quote from the device
+        deviceSVG = ENRICarrowMarkerSVG() + "\n" + deviceSVG; //marker arrow def
         // Quote of the length of the valve
         if((fmod(device->Alpha, PI) > PI/2)||(fmod(device->Alpha, PI) < 3*PI/2)){ // the quote is on the right side
             deviceSVG += ENRICquoteDistSVG(xC+device->lenValve/20,ValveStartY,xC+device->lenValve/20 , ValveStartY+device->lenValve, device->lenValve/10+distQuote, lQuote, false);
@@ -362,7 +359,8 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
     //defining file and sheet dimension
     if (header){
         deviceSVG = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n\n"
-        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"600\" >\n\n" + deviceSVG + "</svg>\n";
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"600\" >\n\n" + 
+        deviceSVG + "\n" + "</svg>\n";
     }
     return deviceSVG;
 }
