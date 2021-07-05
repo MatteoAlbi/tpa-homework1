@@ -12,6 +12,7 @@ target_include_directories(mainEntry PRIVATE include)
 # Class A is not a library: its source file needs to be included in the target sources
 target_sources(mainEntry PRIVATE src/LBAMTTdevice.cpp
                                  src/LBAMTTcadSVG.cpp
+                                 src/ENRICCamValve.cpp
                                  )
 target_link_libraries(mainEntry)
 
