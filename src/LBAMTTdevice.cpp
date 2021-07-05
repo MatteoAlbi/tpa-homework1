@@ -215,7 +215,7 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
     if(quote){
         double lQuote = device->wRod / 3;
         double distQuote = lQuote*2;
-        deviceSVG = LBAMTTarrowMarkerSVG() + "\n" + deviceSVG; //marker arrow def
+        deviceSVG = LBAMTTarrowMarkerSVG() + deviceSVG; //marker arrow def
 
     //dShaft
         if(fmod(device->angle, 360.0) < 180.0){ //quote on left

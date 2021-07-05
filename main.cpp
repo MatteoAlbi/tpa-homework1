@@ -35,11 +35,11 @@ int main(int argc, char ** argv) {
     if(device == NULL) cout << "parameters error" << endl;
     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 400, true, true), "device_example.svg");
     
-    //multiple test with angle from 0 a 330, step 30
-
-    // for(int i=0;i<24;i++){
+    //multiple test with angle from 0 a 330, step 15
+    // int n = 24
+    // for(int i=0;i<n;i++){
     //     string s = "device_example" + to_string(i) + ".svg";
-    //     LBAMTTdeviceSetAngle(device, i*15);
+    //     LBAMTTdeviceSetAngle(device, i*360/n);
     //     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), s);
     // }
 
