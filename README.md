@@ -45,17 +45,18 @@ Example image:
 ![](device.svg)
 
 ### Command line parameters
--h: show the helper as follow:
-    Command format: `./mainentry -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
-    * `-i` import a device from the file with path `importPath`.
-    * `-e` export a device on the file with path `exportPath`. The device is taken from:
-        - an imported file called with the option `-i` (prioritized action).
-        - the one crated with the params passed after the option `-p` (ignoerd if `-i` is called).
-        `cxShaft`, `cyShaft` are the coordinates of the shaft's center on the SVG draw.
-    * `-eq` export a device with quotes on the file with path `exportPath` (options as before).
-    * `-p` followed by the params of the device to be exported (can't be called if `-e` or `-eq` isn't called before).
-        Params: `dShaft stroke lRod wRod hPiston dPiston angle`(defult value 0) (for details see README).
-    More following params will be ignored 
+`-h`: show the helper as follow:
+
+Command format: `./mainentry -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
+* `-i` import a device from the file with path `importPath`.
+* `-e` export a device on the file with path `exportPath`. The device is taken from:
+    - an imported file called with the option `-i` (prioritized action).
+    - the one crated with the params passed after the option `-p` (ignoerd if `-i` is called).
+    `cxShaft`, `cyShaft` are the coordinates of the shaft's center on the SVG draw.
+* `-eq` export a device with quotes on the file with path `exportPath` (options as before).
+* `-p` followed by the params of the device to be exported (can't be called if `-e` or `-eq` isn't called before).
+    Params: `dShaft stroke lRod wRod hPiston dPiston angle`(defult value 0) (for details see README).
+More following params will be ignored 
 
 ------
 

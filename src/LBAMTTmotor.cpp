@@ -75,6 +75,7 @@ LBAMTTmotor * LBAMTTinitMotor(int n, cDbl bore, cDbl displacement, cDbl angle){
     bool error = false;
     double ratio = bore/stroke;
     if(stroke > 160) error = true;
+    else if(bore < 60) error = true;
     else if(ratio < 0.7 || ratio > 2.4) error = true;
     else switch (ret->n){
         case 1:
