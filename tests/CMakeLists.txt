@@ -4,6 +4,7 @@ target_sources(catch2Test PRIVATE
         LBAMTTtestDevice.cpp
         LBAMTTtestCadSVG.cpp
         ENRICtestCamValve.cpp
+        LBAMTTtestMotor.cpp
         )
 
 # Libraries used in the tests
@@ -18,6 +19,7 @@ target_sources(catch2Test PRIVATE
         ../src/LBAMTTdevice.cpp
         ../src/LBAMTTcadSVG.cpp
         ../src/ENRICCamValve.cpp
+        ../src/LBAMTTmotor.cpp
         )
 
 #target_compile_options(catch2Test PRIVATE -Wa,-mbig-obj) # Solves assembler error of file too big

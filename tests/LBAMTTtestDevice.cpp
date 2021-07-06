@@ -6,7 +6,7 @@
 using std::string;
 
 //init, check, delete
-TEST_CASE("test init when parameters follow constraints", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTinitDevice when succeed", "[LBAMTTdevice]") {
     double dShaft = 5;
     double stroke = 10;
     double lRod = 10;
@@ -28,7 +28,7 @@ TEST_CASE("test init when parameters follow constraints", "[LBAMTTBiellaManovell
     LBAMTTdeviceDelete(device);    
 }
 
-TEST_CASE("test error codes of checkIntegrity", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test error codes of LBAMTTcheckDeviceIntegrity", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTcheckDeviceIntegrity(NULL) == 1);
     
     double dShaft = 5;
@@ -86,7 +86,7 @@ TEST_CASE("test error codes of checkIntegrity", "[LBAMTTBiellaManovella]") {
     LBAMTTdeviceDelete(device);    
 }
 
-TEST_CASE("test init when parameters violate constraints", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTinitDevice when error occures", "[LBAMTTdevice]") {
     double dShaft = 5;
     double stroke = 10;
     double lRod = 7;
@@ -98,7 +98,7 @@ TEST_CASE("test init when parameters violate constraints", "[LBAMTTBiellaManovel
     REQUIRE( device == NULL );
 }
 
-TEST_CASE("test delete", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LABMTTdeviceDelete  when succeed and error occures", "[LBAMTTdevice]") {
     double dShaft = 5;
     double stroke = 10;
     double lRod = 10;
@@ -117,7 +117,7 @@ TEST_CASE("test delete", "[LBAMTTBiellaManovella]") {
 }
 
 //set
-TEST_CASE("test setDShaft when succeed and error occures", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTsetDShaft when succeed and error occures", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTdeviceSetDShaft(NULL, 10) == 1);
     
     double dShaft = 80;
@@ -138,7 +138,7 @@ TEST_CASE("test setDShaft when succeed and error occures", "[LBAMTTBiellaManovel
     LBAMTTdeviceDelete(device);  
 }
 
-TEST_CASE("test setStroke when succeed and error occures", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTsetStroke when succeed and error occures", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTdeviceSetStroke(NULL, 10) == 1);
     
     double dShaft = 80;
@@ -159,7 +159,7 @@ TEST_CASE("test setStroke when succeed and error occures", "[LBAMTTBiellaManovel
     LBAMTTdeviceDelete(device);  
 }
 
-TEST_CASE("test setlRod when succeed and error occures", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTsetlRod when succeed and error occures", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTdeviceSetLRod(NULL, 10) == 1);
     
     double dShaft = 80;
@@ -180,7 +180,7 @@ TEST_CASE("test setlRod when succeed and error occures", "[LBAMTTBiellaManovella
     LBAMTTdeviceDelete(device);  
 }
 
-TEST_CASE("test setwRod when succeed and error occures", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTsetwRod when succeed and error occures", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTdeviceSetWRod(NULL, 10) == 1);
     
     double dShaft = 80;
@@ -201,7 +201,7 @@ TEST_CASE("test setwRod when succeed and error occures", "[LBAMTTBiellaManovella
     LBAMTTdeviceDelete(device);  
 }
 
-TEST_CASE("test sethPiston when succeed and error occures", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTsethPiston when succeed and error occures", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTdeviceSetHPiston(NULL, 10) == 1);
     
     double dShaft = 80;
@@ -222,7 +222,7 @@ TEST_CASE("test sethPiston when succeed and error occures", "[LBAMTTBiellaManove
     LBAMTTdeviceDelete(device);  
 }
 
-TEST_CASE("test setdPiston when succeed and error occures", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTsetdPiston when succeed and error occures", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTdeviceSetDPiston(NULL, 10) == 1);
     
     double dShaft = 80;
@@ -243,7 +243,7 @@ TEST_CASE("test setdPiston when succeed and error occures", "[LBAMTTBiellaManove
     LBAMTTdeviceDelete(device);  
 }
 
-TEST_CASE("test setAngle when succeed and error occures", "[LBAMTTBiellaManovella]") {
+TEST_CASE("test LBAMTTsetAngle when succeed and error occures", "[LBAMTTdevice]") {
     REQUIRE(LBAMTTdeviceSetAngle(NULL, 10) == 1);
     
     double dShaft = 80;
@@ -262,11 +262,11 @@ TEST_CASE("test setAngle when succeed and error occures", "[LBAMTTBiellaManovell
 }
 
 //file e stringhe
-TEST_CASE("test deviceToStringSVG when error occures", "[LBAMTTBiellaManovella]"){
+TEST_CASE("test LBAMTTdeviceToStringSVG when error occures", "[LBAMTTdevice]"){
     REQUIRE(LBAMTTdeviceToStringSVG(NULL,0,0) == "");
 }
 
-TEST_CASE("test saveToFile when error occures", "[LBAMTTBiellaManovella]"){
+TEST_CASE("test LBAMTTsaveToFile when error occures", "[LBAMTTdevice]"){
     REQUIRE(LBAMTTsaveToFile("test", "") == 1);
     REQUIRE(LBAMTTsaveToFile("test", "test.copia.svg") == 0); //valid name, works
     REQUIRE(LBAMTTsaveToFile("test", "test.txt") == 1);
@@ -275,7 +275,7 @@ TEST_CASE("test saveToFile when error occures", "[LBAMTTBiellaManovella]"){
     remove("test.copia.svg");
 }
 
-TEST_CASE("test saveToFile when succeed", "[LBAMTTBiellaManovella]"){
+TEST_CASE("test LBAMTTsaveToFile when succeed", "[LBAMTTdevice]"){
     REQUIRE(LBAMTTsaveToFile("test", "test.svg") == 0);
 
     LBAMTTsaveToFile("test", "test.svg");
@@ -290,14 +290,14 @@ TEST_CASE("test saveToFile when succeed", "[LBAMTTBiellaManovella]"){
     remove("test.svg");
 }
 
-TEST_CASE("test loadFromFile when error occures", "[LBAMTTBiellaManovella]"){
+TEST_CASE("test LBAMTTloadFromFile when error occures", "[LBAMTTdevice]"){
     REQUIRE(LBAMTTloadFromFile("") == "");
     REQUIRE(LBAMTTloadFromFile("test.txt") == "");
     REQUIRE(LBAMTTloadFromFile(".svg") == "");
     REQUIRE(LBAMTTloadFromFile("FILE_INESISTENTE.svg") == "");
 }
 
-TEST_CASE("test loadFromFile when succeed", "[LBAMTTBiellaManovella]"){
+TEST_CASE("test LBAMTTloadFromFile when succeed", "[LBAMTTdevice]"){
     ofstream fout("test.svg");
     fout << "test";
     fout.close();
@@ -307,7 +307,7 @@ TEST_CASE("test loadFromFile when succeed", "[LBAMTTBiellaManovella]"){
     remove("test.svg");
 }
 
-TEST_CASE("test deviceFromStringSVG when error occures", "[LBAMTTBiellaManovella]"){
+TEST_CASE("test LBAMTTdeviceFromStringSVG when error occures", "[LBAMTTdevice]"){
     double dShaft = 120;
     double stroke = 300;
     double lRod = 300;
@@ -333,7 +333,7 @@ TEST_CASE("test deviceFromStringSVG when error occures", "[LBAMTTBiellaManovella
     REQUIRE(LBAMTTdeviceFromStringSVG(test) == NULL);
 }
 
-TEST_CASE("test deviceFromStringSVG when succeed", "[LBAMTTBiellaManovella]"){
+TEST_CASE("test LBAMTTdeviceFromStringSVG when succeed", "[LBAMTTdevice]"){
     double dShaft = 120;
     double stroke = 300;
     double lRod = 300;
@@ -372,7 +372,7 @@ char** s_arr2c_arr(string * s_arr, int n){
     return c_arr;
 }
 
-TEST_CASE("test LBAMTTcommandLineParam, helper"){
+TEST_CASE("test LBAMTTcommandLineParam, helper", "[LBAMTTdevice]"){
     int argc = 3;
     string s_arr[] = {"./mainentry", "-h", "test.svg"};
     char **argv = s_arr2c_arr(s_arr, argc);
@@ -382,7 +382,7 @@ TEST_CASE("test LBAMTTcommandLineParam, helper"){
     cout << "\n";
 }
 
-TEST_CASE("test LBAMTTcommandLineParam, import request"){
+TEST_CASE("test LBAMTTcommandLineParam, import request", "[LBAMTTdevice]"){
     LBAMTTdevice *device_in = LBAMTTinitDevice(80, 200, 300, 60, 100, 100);
     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device_in, 400, 200, true, true), "test.svg");
 
@@ -405,7 +405,7 @@ TEST_CASE("test LBAMTTcommandLineParam, import request"){
     REQUIRE(device_out == NULL); //file not found   
 }
 
-TEST_CASE("test LBAMTTcommandLineParam, export with params request"){
+TEST_CASE("test LBAMTTcommandLineParam, export with params request", "[LBAMTTdevice]"){
     double dShaft = 120;
     double stroke = 300;
     double lRod = 300;
@@ -440,7 +440,7 @@ TEST_CASE("test LBAMTTcommandLineParam, export with params request"){
     remove("test.svg");
 }
 
-TEST_CASE("test LBAMTTcommandLineParam, import and export request"){
+TEST_CASE("test LBAMTTcommandLineParam, import and export request", "[LBAMTTdevice]"){
     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(LBAMTTinitDevice(80, 200, 300, 60, 100, 100), 400, 200, true, true), "test.svg");
 
     int argc = 14;

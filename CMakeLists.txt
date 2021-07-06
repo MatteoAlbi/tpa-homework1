@@ -13,6 +13,7 @@ target_include_directories(mainEntry PRIVATE include)
 target_sources(mainEntry PRIVATE src/LBAMTTdevice.cpp
                                  src/LBAMTTcadSVG.cpp
                                  src/ENRICCamValve.cpp
+                                 src/LBAMTTmotor.cpp
                                  )
 target_link_libraries(mainEntry)
 
