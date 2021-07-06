@@ -9,31 +9,29 @@ using namespace std;
 int main(int argc, char ** argv) {
 
     LBAMTTcommandLineParam(argc, argv);
+    int N = 10;
+    double dPiston = 15*N;
+    double dShaft = dPiston/15*10;
+    double stroke = dPiston/15*20;
+    double lRod = dPiston/15*22;
+    double wRod = lRod/4.5;
+    double hPiston = dPiston/15*10;
+    double angle = 180;
 
-    double dShaft = 120;
-    double stroke = 300;
-    double lRod = 300;
-    double wRod = 60;
-    double hPiston = 100;
-    double dPiston = 150;
-    double angle = 30;
-
-    double rMin = 50;
-    double rMax = 70;
-    double lenValve = 200;
-    double diamValve = 80;
-    double Alpha = 0*PI;
-    double Gamma = PI /5;
+    
+    double rMax = stroke/6;
+    double rMin = rMax*5/7;
+    double diamValve = dPiston*2/5;
+    double lenValve = stroke/3;
+    double Alpha = PI*3/4;
+    double Gamma = PI /8;
     
 
     ENRICdevice * deviceE = ENRICinitDevice (rMin, rMax, lenValve, diamValve, Alpha, Gamma);
-
-    ENRICsaveToFile(ENRICtoStringSVG(deviceE, 400, 200, true, true), "CamValveOriginal.svg");
-
-
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
+
     if(device == NULL) cout << "parameters error" << endl;
-    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 400, true, true), "device_example.svg");
+    LBAMTTsaveToFile(LBAMTTheaderSVG(LBAMTTdeviceToStringSVG(device, 400, 480, false, false)+ENRICtoStringSVG(deviceE, 400, 80, false, false)), "device_example.svg");
     
     //multiple test with angle from 0 a 330, step 15
     // int n = 24
@@ -44,6 +42,6 @@ int main(int argc, char ** argv) {
     // }
 
     LBAMTTdeviceDelete(device);
-    
+
     return 0;
 } 
