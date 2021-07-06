@@ -5,38 +5,38 @@ This is a piston like device, to convert a rotation motion into a translation on
 ### Device definition
 
 #### Parameters:
-* _dShaft_: shaft's diameter 
-* _stroke_: distance covered by the movement of the piston
-* _lRod_: connecting rod's lenght
-* _wRod_: connecting rod's width
-* _hPiston_: piston's hight
-* _dPiston_: piston's diameter
-* _angle_: crank's rotation angle 
+* `dShaft`: shaft's diameter 
+* `stroke`: distance covered by the movement of the piston
+* `lRod`: connecting rod's lenght
+* `wRod`: connecting rod's width
+* `hPiston`: piston's hight
+* `dPiston`: piston's diameter
+* `angle`: crank's rotation angle 
 
-#### Parts and constraints definition:
-* __SHAFT__: connection element to the rotation motion, defined by its diameter (_dShaft_).
+#### Definizione corpi e vincoli dei parametri:
+* __SHAFT__: connection element to the rotation motion, defined by its diameter (`dShaft`).
 * __CRANK__: connects the crank to the connecting rod
-    - Half the piston stroke (_stroke_) is defined as the crank's lenght. It's the distance between the shaft's axis and crank-connecting rod joint's axis.
-    - The crank-connecting rod joint's diameter is equal to the connecting _wRod_.
-    - The total crank's lenght depends on: _stroke_, _dShaft_, _wRod_. It's equal their sum plus two addition coupling terms for the joints with the shaft and the connecting rod.
-    - The additional term for the connecting rod's joint is 1/5 _wRod_.
-    - The additional term for the shaft's joint is 1/5 the _dShaft_.
+    - Half the piston stroke (`stroke`) is defined as the crank's lenght. It's the distance between the shaft's axis and crank-connecting rod joint's axis.
+    - The crank-connecting rod joint's diameter is equal to the connecting `wRod`.
+    - The total crank's lenght depends on: `stroke`, `dShaft`, `wRod`. It's equal their sum plus two addition coupling terms for the joints with the shaft and the connecting rod.
+    - The additional term for the connecting rod's joint is 1/5 `wRod`.
+    - The additional term for the shaft's joint is 1/5 the `dShaft`.
 
     CONSTRAINTS:
     - The crank's lenght must be greater the sums of the two joints' radius.
 * __CONNECTING ROD__: Connects crank and piston.
-    - The connecting rod's lenght (_lRod_) is the distance between the axis of the crank and the piston joint.
-    - The piston-connecting rod's joint is inside the piston, with an additional coupling term equal to 1/5 _wRod_.
+    - The connecting rod's lenght (`lRod`) is the distance between the axis of the crank and the piston joint.
+    - The piston-connecting rod's joint is inside the piston, with an additional coupling term equal to 1/5 `wRod`.
 
     CONSTRAINTS:
-    - _lRod_ must avoid interference between crank and piston in the lower dead point (_angle_ equal to 180°). 
-    - _wRod_ can't be lower than 1/6 _lRod_.
-    - _wRod_ can't be greater than _dShaft_.
+    - `lRod` must avoid interference between crank and piston in the lower dead point (`angle` equal to 180°). 
+    - `wRod` can't be lower than 1/6 `lRod`.
+    - `wRod` can't be greater than `dShaft`.
 * __PISTON__: connection element to the translation motion.
 
     CONSTRAINTS:
-    - Piston's diameter and lenght (_dPiston_ e _hPiston_) must ensure the additional coupling term for the connecting rod joint, so they cant be lower than 7/5 _wRod_.
-* __ANGLE__: crank's rotation angle (_angle_) in degrees.
+    - Piston's diameter and lenght (`dPiston` e `hPiston`) must ensure the additional coupling term for the connecting rod joint, so they cant be lower than 7/5 `wRod`.
+* __ANGLE__: crank's rotation angle (`angle`) in degrees.
 
 P.S. The coupling term is an additional portion of material around the whole joint edge.
 
@@ -45,19 +45,17 @@ Example image:
 ![](device.svg)
 
 ### Command line parameters
--h: show the helper as follow
-
-    Command format: ./mainentry -i importPath -e/-eq cxShaft cyShaft esportPath -p params...
-    -i import a device from the file with path importPath
-    -e export a device (-eq export with quotes) on the file with path exportPath.
-        The device is taken from:
-            an imported file called with the option -i (prioritized action)
-            the one crated with the params passed after the option -p (ignoerd if -i is called)
-        cxShaft cyShaft are the coordinates of the shaft's center on the SVG draw
-    -eq export a device with quotes on the file with path exportPath (options as before)
-    -p followed by the params of the device to be exported (can't be called if -e or -eq isn't called before)
-        Params: dShaft stroke lRod wRod hPiston dPiston angle(defult value 0) (for details see README)
-    More following params will be ignored
+-h: show the helper as follow:
+    Command format: `./mainentry -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
+    * `-i` import a device from the file with path `importPath`.
+    * `-e` export a device on the file with path `exportPath`. The device is taken from:
+        - an imported file called with the option `-i` (prioritized action).
+        - the one crated with the params passed after the option `-p` (ignoerd if `-i` is called).
+        `cxShaft`, `cyShaft` are the coordinates of the shaft's center on the SVG draw.
+    * `-eq` export a device with quotes on the file with path `exportPath` (options as before).
+    * `-p` followed by the params of the device to be exported (can't be called if `-e` or `-eq` isn't called before).
+        Params: `dShaft stroke lRod wRod hPiston dPiston angle`(defult value 0) (for details see README).
+    More following params will be ignored 
 
 ------
 
@@ -68,29 +66,29 @@ The objective is to implement a simple representation of a motor.
 The motor is made by multiple structs called cylinder. Each cylinder is made by one piston and two camValve.
 
 #### Cylinder struct:
-* _piston_: pointer to piston (LBAMTTdevice).
-* _valveSx_: pointer to camValve, it's the left valve.
-* _valveDx_: pointer to camValve, it's the right valve.
+* `piston`: pointer to piston (LBAMTTdevice).
+* `valveSx`: pointer to camValve, it's the left valve.
+* `valveDx`: pointer to camValve, it's the right valve.
 
 #### Motor struct:
-* _n_: number of cylinders.
-* _cylinders_: array of pointers to cylinders.
-* _angle_: motor shaft's angle.
-* _offset_: array of double, angle offset of each cylinder with respect to the motor's shaft
+* `n`: number of cylinders.
+* `cylinders`: array of pointers to cylinders.
+* `angle`: motor shaft's angle.
+* `offset`: array of double, angle offset of each cylinder with respect to the motor's shaft
 
 #### Parameters:
 Using these parameters, multiple Cylinders are intialized and stored into the array of the struct motor:
-* _n_: number of cylinders of the motor
-* _bore_: cylinder's bore
-* _displacement_: motor's total displacement
-* _angle_: motor shaft's angle
-Depending on _n_, the array _offset_ is created with different values. 
+* `n`: number of cylinders of the motor
+* `bore`: cylinder's bore
+* `displacement`: motor's total displacement
+* `angle`: motor shaft's angle
+Depending on `n`, the array `offset` is created with different values. 
 
 #### Constraints:
-* __n__: can't be grater than four (to define _offset_ easier)
-* __bore__: It's equal the _dPiston_. Considering a car's motor, the _bore_ /_stroke_ ratio must be between 0.7 and 2.4 ([Stroke ratio](https://en.wikipedia.org/wiki/Stroke_ratio)); this set a limit to the _stroke_. The lower bound for the _bore_ is set to 60.
+* __n__: can't be grater than four (to define `offset` easier)
+* __bore__: It's equal the `dPiston`. Considering a car's motor, the `bore` /`stroke` ratio must be between 0.7 and 2.4 ([Stroke ratio](https://en.wikipedia.org/wiki/Stroke_ratio)); this set a limit to the `stroke`. The lower bound for the `bore` is set to 60.
   
-  Depending on _n_, there is a cap on the _bore_ value to allow the image to fit in the bounds. The caps are:
+  Depending on `n`, there is a cap on the `bore` value to allow the image to fit in the bounds. The caps are:
 
 | n  | cap |
 |---|---|
@@ -99,14 +97,14 @@ Depending on _n_, the array _offset_ is created with different values.
 | 3  | 200  |
 | 4  | 150  |
 
-* __displacement__: from the displacement is possible to get the _stroke_ of the single piston knowing that: 
+* __displacement__: from the displacement is possible to get the `stroke` of the single piston knowing that: 
   
         _displacement_ = _bore_<sup>2</sup> * PI * _stroke_ * _n_
 
-    To assure that the image fits in the bounds, the maximum value of the _stroke_ is 160, turning into a cap on the displacement.
+    To assure that the image fits in the bounds, the maximum value of the `stroke` is 160, turning into a cap on the displacement.
 
 #### Offset and valve angle
-Depending on _n_, the offset are set as follow:
+Depending on `n`, the offset are set as follow:
 
 | n  | offset | link |
 |---|---|---|
@@ -120,4 +118,4 @@ The cylinder's angle is defined from 0 to 720 degrees for a four-stroke engine. 
 * pistonAngle = 180 -> explosion: both valve closed
 * pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed
 * pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed
-To follow this scheme, the left valve has an offset of PI*3/4 between the piston (starting to close) and the right valve has an additional offset of PI/4, so it starts earlier to open.
+To follow this scheme, the left valve has an offset of PI*3/4 between the piston (starting to close) and the right valve has an additional offset of PI/4, so it starts to open earlier.
