@@ -100,7 +100,7 @@ Depending on `n`, the array `offset` is created with different values.
 
 * __displacement__: from the displacement is possible to get the `stroke` of the single piston knowing that: 
   
-        _displacement_ = _bore_<sup>2</sup> * PI * _stroke_ * _n_
+        displacement = PI * (bore/2)^2 * stroke * n
 
     To assure that the image fits in the bounds, the maximum value of the `stroke` is 160, turning into a cap on the displacement.
 

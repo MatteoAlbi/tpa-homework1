@@ -1,6 +1,8 @@
 #ifndef LBAMTT_MOTOR
 #define LBAMTT_MOTOR
 
+#define PRECISION 0.001
+
 #include "ENRICCamValve.h"
 #include "LBAMTTdevice.h"
 
@@ -15,6 +17,16 @@ typedef struct LBAMTTmotor{
     double angle; //motor shaft's angle
     double * offset; //offset between motor's shaft and cylinders
 } LBAMTTmotor;
+
+/**
+ * Compare two double variables. 
+ * @param a first double to compare
+ * @param b second double to compare
+ * @param precision precision of compare 
+ * @return true If their difference is lower than precision
+ *      false otherways
+ */
+bool dblCompare(cDbl a, cDbl b, cDbl precision = PRECISION);
 
 /**
  * Given the motor struct, set the offset for each cylinder
@@ -44,7 +56,7 @@ LBAMTTcylinder * LBAMTTinitCylinder (cDbl bore, cDbl stroke, cDbl angle);
  * @return pointer to initialized motor structure; 
  *      NULL if error occures
 */
-LBAMTTmotor * LBAMTTinitMotor (int n, cDbl bore, cDbl displacement, cDbl angle);
+LBAMTTmotor * LBAMTTinitMotor (const int n, cDbl bore, cDbl displacement, cDbl angle);
 
 /**
  * DEALLOCATE the structure pointed by the given pointer
@@ -53,5 +65,51 @@ LBAMTTmotor * LBAMTTinitMotor (int n, cDbl bore, cDbl displacement, cDbl angle);
  *      1 if error occures
 */
 int LBAMTTdeleteMotor(LBAMTTmotor * motor);
+
+/**
+ * Sets the angles at the correct values of the piston and valves of 
+ * each cylinder of the struct pointed by the given pointer.
+ * The modifies are based on angle and offsets of the given struct
+ * @param motor pointer to struct to be modified
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+ */
+int LBAMTTrotateMotor(LBAMTTmotor * motor);
+
+/**
+ * Modify n of the struct pointed by the given pointer
+ * @param motor pointer to structure to be modified
+ * @param n new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+ */
+int LBAMTTsetMotorN(LBAMTTmotor * motor, const int n);
+
+/**
+ * Modify bore of the struct pointed by the given pointer
+ * @param motor pointer to structure to be modified
+ * @param bore new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+ */
+int LBAMTTsetMotorBore(LBAMTTmotor * motor, cDbl bore);
+
+/**
+ * Modify displacement of the struct pointed by the given pointer
+ * @param motor pointer to structure to be modified
+ * @param displacement new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+ */
+int LBAMTTsetMotorDisplacement(LBAMTTmotor * motor, cDbl displacement);
+
+/**
+ * Modify angle of the struct pointed by the given pointer
+ * @param motor pointer to structure to be modified
+ * @param angle new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+ */
+int LBAMTTsetMotorAngle(LBAMTTmotor* motor, cDbl angle);
 
 #endif
