@@ -194,3 +194,36 @@ TEST_CASE("test LBAMTTsetMotorAngle when succceed and error occures","[LBAMTTmot
     REQUIRE(motor->angle == 180);
     REQUIRE(motor->cylinders[0]->piston->angle == 180);
 }
+
+TEST_CASE("test LBAMTTmotorsCompare","[LBAMTTmotor]"){
+    int nA = 2;
+    double boreA = 150;
+    double strokeA = 100;
+    double displacementA = pow(boreA/2,2)*PI * strokeA * nA;
+    LBAMTTmotor * a = LBAMTTinitMotor(nA, boreA, displacementA, 0);
+    REQUIRE(LBAMTTmotorsCompare(a, a));
+
+    REQUIRE(! LBAMTTmotorsCompare(a, NULL));
+    REQUIRE(! LBAMTTmotorsCompare(NULL, a));
+
+    int nB = 3;
+    double boreB = 180;
+    double strokeB = 120;
+    double displacementB = pow(boreB/2,2)*PI * strokeB * nB;
+    LBAMTTmotor * b = LBAMTTinitMotor(nB, boreB, displacementB, 0);
+    REQUIRE(LBAMTTmotorsCompare(b, b));
+
+    REQUIRE(! LBAMTTmotorsCompare(b, a));
+
+    LBAMTTsetMotorBore(b, boreA);
+    REQUIRE(! LBAMTTmotorsCompare(b, a));
+
+    LBAMTTsetMotorN(b, nA);
+    REQUIRE(! LBAMTTmotorsCompare(b, a));
+
+    LBAMTTsetMotorDisplacement(b, displacementA);
+    REQUIRE(LBAMTTmotorsCompare(b, a));
+
+    LBAMTTsetMotorAngle(b, 180);
+    REQUIRE(! LBAMTTmotorsCompare(b, a));
+}

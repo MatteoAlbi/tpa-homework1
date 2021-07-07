@@ -151,7 +151,7 @@ int LBAMTTdeviceSetAngle (LBAMTTdevice * device, cDbl angle);
  * @param cxShaft x coordinate of the shaft's axis within the drawing area
  * @param cyShaft y coordinate of the shaft's axis within the drawing area
  * @param quote flag: if true quotes the device (default false)
- * @param header flag: if trueadd the SVG header (default true)
+ * @param header flag: if true add the SVG header (default true)
  * @return string deviceSVG;
  *      EMPTY if error occures
 */

@@ -112,4 +112,23 @@ int LBAMTTsetMotorDisplacement(LBAMTTmotor * motor, cDbl displacement);
  */
 int LBAMTTsetMotorAngle(LBAMTTmotor* motor, cDbl angle);
 
+/**
+ * Compare two motor structes. 
+ * @param a first struct to compare
+ * @param b second struct to compare
+ * @return true if the structs have the same values
+ *      false otherways (also if one pointer is NULL)
+ */
+bool LBAMTTmotorsCompare(LBAMTTmotor * a, LBAMTTmotor * b);
+
+/**
+ * Create an SVG string to represent the motor
+ * @param motor pointer to structure to be represented
+ * @param quote flag: if true quotes the motor (default false)
+ * @param header flag: if true add the SVG header (default true)
+ * @return string motorSVG;
+ *      EMPTY if error occures
+*/
+string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote = false, bool header = true);
+
 #endif

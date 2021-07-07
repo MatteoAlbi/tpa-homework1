@@ -254,3 +254,14 @@ int LBAMTTsetMotorAngle(LBAMTTmotor* motor, cDbl angle){
 
     return 0;
 }
+
+bool LBAMTTmotorsCompare(LBAMTTmotor * a, LBAMTTmotor * b){
+    if(a == b) return true;
+    if(a == NULL || b == NULL) return false;
+    if(a->n != b->n) return false;
+    if(a->angle != b->angle) return false;
+    if(a->cylinders[0]->piston->dPiston != b->cylinders[0]->piston->dPiston) return false;
+    if(! dblCompare(a->cylinders[0]->piston->stroke, b->cylinders[0]->piston->stroke)) return false;
+    return true;
+}
+
