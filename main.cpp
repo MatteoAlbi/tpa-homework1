@@ -1,7 +1,8 @@
 #include <iostream>
 
-#include "include/LBAMTTdevice.h"
+#include "LBAMTTdevice.h"
 #include "ENRICCamValve.h"
+#include "LBAMTTmotor.h"
 
 using namespace std;
 
@@ -31,8 +32,17 @@ int main(int argc, char ** argv) {
     LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
 
     if(device == NULL) cout << "parameters error" << endl;
-    LBAMTTsaveToFile(LBAMTTheaderSVG(LBAMTTdeviceToStringSVG(device, 400, 480, false, false)+ENRICtoStringSVG(deviceE, 400, 80, false, false)), "device_example.svg");
+    LBAMTTsaveToFile(LBAMTTheaderSVG(LBAMTTdeviceToStringSVG(device, 400, 480, false, false) + ENRICtoStringSVG(deviceE, 400, 80, false, false)), "device_example.svg");
     
+    int n = 3;
+    double bore = dPiston;
+    double displacement = PI * pow(bore/2,2) * 100 * n;
+    LBAMTTmotor * motor = LBAMTTinitMotor(n, bore, displacement, 630);
+    cout << motor->cylinders[0]->piston->dPiston << endl;
+
+    LBAMTTsaveToFile(LBAMTTcylinderToStringSVG(motor->cylinders[0], 400, 480, false, true), "cylinder.svg");
+    cout << motor->cylinders[0]->piston->dPiston << endl;
+
     //multiple test with angle from 0 a 330, step 15
     // int n = 24
     // for(int i=0;i<n;i++){

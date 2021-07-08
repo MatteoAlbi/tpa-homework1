@@ -122,6 +122,18 @@ int LBAMTTsetMotorAngle(LBAMTTmotor* motor, cDbl angle);
 bool LBAMTTmotorsCompare(LBAMTTmotor * a, LBAMTTmotor * b);
 
 /**
+ * Create an SVG string to represent the cylinder
+ * @param cylinder pointer to structure to be represented
+ * @param cxShaft x coordinate of the shaft's axis within the drawing area
+ * @param cyShaft y coordinate of the shaft's axis within the drawing area
+ * @param quote flag: if true quotes the cylinder (default false)
+ * @param header flag: if true add the SVG header (default false)
+ * @return string cylinderSVG;
+ *      EMPTY if error occures
+*/
+string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, double cyShaft, bool quote = false, bool header = false);
+
+/**
  * Create an SVG string to represent the motor
  * @param motor pointer to structure to be represented
  * @param quote flag: if true quotes the motor (default false)
