@@ -10,39 +10,19 @@ using namespace std;
 int main(int argc, char ** argv) {
 
     LBAMTTcommandLineParam(argc, argv);
-    int N = 10;
-    double dPiston = 15*N;
-    double dShaft = dPiston/15*10;
-    double stroke = dPiston/15*20;
-    double lRod = dPiston/15*22;
-    double wRod = lRod/4.5;
-    double hPiston = dPiston/15*10;
-    double angle = 180;
 
-    
-    double rMax = stroke/6;
-    double rMin = rMax*5/7;
-    double diamValve = dPiston*2/5;
-    double lenValve = stroke/3;
-    double Alpha = PI*3/4;
-    double Gamma = PI /8;
-    
+    int n = 4;
+    double bore = 150;
+    double stroke = 140;
+    double displacement = PI * pow(bore/2,2) * stroke * n;
+    LBAMTTmotor * motor = LBAMTTinitMotor(n, bore, displacement, 90);
 
-    ENRICdevice * deviceE = ENRICinitDevice (rMin, rMax, lenValve, diamValve, Alpha, Gamma);
-    LBAMTTdevice * device = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
-
-    if(device == NULL) cout << "parameters error" << endl;
-    LBAMTTsaveToFile(LBAMTTheaderSVG(LBAMTTdeviceToStringSVG(device, 400, 480, false, false) + ENRICtoStringSVG(deviceE, 400, 80, false, false)), "device_example.svg");
-    
-    int n = 3;
-    double bore = dPiston;
-    double displacement = PI * pow(bore/2,2) * 100 * n;
-    LBAMTTmotor * motor = LBAMTTinitMotor(n, bore, displacement, 630);
-    cout << motor->cylinders[0]->piston->dPiston << endl;
-
-    LBAMTTsaveToFile(LBAMTTcylinderToStringSVG(motor->cylinders[0], 400, 480, false, true), "cylinder.svg");
-    cout << motor->cylinders[0]->piston->dPiston << endl;
-
+    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor, false, true), "motor1.svg");
+    LBAMTTsetMotorAngle(motor, 630);
+    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor, false, true), "motor2.svg");
+    for(int i=0;i<motor->n;i++){
+        cout << motor->cylinders[i]->valveDx->Alpha << ", " << motor->cylinders[i]->valveSx->Alpha << endl;
+    }
     //multiple test with angle from 0 a 330, step 15
     // int n = 24
     // for(int i=0;i<n;i++){
@@ -51,7 +31,7 @@ int main(int argc, char ** argv) {
     //     LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device, 400, 200, true), s);
     // }
 
-    LBAMTTdeviceDelete(device);
+    LBAMTTdelete(motor);
 
     return 0;
 } 

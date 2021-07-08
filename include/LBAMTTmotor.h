@@ -60,11 +60,19 @@ LBAMTTmotor * LBAMTTinitMotor (const int n, cDbl bore, cDbl displacement, cDbl a
 
 /**
  * DEALLOCATE the structure pointed by the given pointer
+ * @param cylinder pointer to structure to be deallocated
+ * @return 0 if the function succeed;
+ *      1 if error occures
+*/
+int LBAMTTdelete(LBAMTTmotor * cylinder);
+
+/**
+ * DEALLOCATE the structure pointed by the given pointer
  * @param motor pointer to structure to be deallocated
  * @return 0 if the function succeed;
  *      1 if error occures
 */
-int LBAMTTdeleteMotor(LBAMTTmotor * motor);
+int LBAMTTdelete(LBAMTTmotor * motor);
 
 /**
  * Sets the angles at the correct values of the piston and valves of 

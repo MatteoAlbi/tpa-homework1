@@ -102,7 +102,7 @@ Depending on `n`, the array `offset` is created with different values.
   
         displacement = PI * (bore/2)^2 * stroke * n
 
-    To assure that the image fits in the bounds, the maximum value of the `stroke` is 160, turning into a cap on the displacement.
+    To assure that the image fits in the bounds, the maximum value of the `stroke` is 140, turning into a cap on the displacement.
 
 #### Offset and valve angle
 Depending on `n`, the offset are set as follow:

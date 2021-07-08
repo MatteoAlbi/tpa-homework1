@@ -50,7 +50,7 @@ bool LBAMTTdeviceCompare (const LBAMTTdevice * device1, const LBAMTTdevice * dev
     return ret;
 }
 
-int LBAMTTdeviceDelete (LBAMTTdevice * device){
+int LBAMTTdelete (LBAMTTdevice * device){
     if (device == NULL) return 1;
     
     delete device;

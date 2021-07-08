@@ -67,16 +67,16 @@ TEST_CASE("test LBAMTTinitMotor, LBAMTTinitCylinder when succeed","[LBAMTTmotor]
     REQUIRE(motor->cylinders[2]->valveDx->Gamma == PI/8);
 }
 
-TEST_CASE("test LBAMTTdeleteMotor when succeed and error occures","[LBAMTTmotor]"){
+TEST_CASE("test LBAMTTdelete when succeed and error occures","[LBAMTTmotor]"){
     LBAMTTmotor * motor = NULL;
-    REQUIRE(LBAMTTdeleteMotor(motor) == 1);
+    REQUIRE(LBAMTTdelete(motor) == 1);
 
     int n = 3;
     double bore = 150;
     double stroke = 120;
     double cylinderDisplacement = pow(bore/2,2)*PI * stroke;
     motor = LBAMTTinitMotor(n, bore, cylinderDisplacement*n, 0); 
-    REQUIRE(LBAMTTdeleteMotor(motor) == 0);
+    REQUIRE(LBAMTTdelete(motor) == 0);
 }
 
 TEST_CASE("test LBAMTTrotateMotor when succceed and error occures","[LBAMTTmotor]"){

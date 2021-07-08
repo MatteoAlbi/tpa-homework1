@@ -80,7 +80,7 @@ bool LBAMTTdeviceCompare (const LBAMTTdevice * device1, const LBAMTTdevice * dev
  * @return 0 if the function succeed;
  *      1 if error occures
 */
-int LBAMTTdeviceDelete (LBAMTTdevice * device);
+int LBAMTTdelete (LBAMTTdevice * device);
 
 /**
  * Modify dShaft of the structure pointed by the given pointer

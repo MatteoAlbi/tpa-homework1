@@ -55,8 +55,10 @@ LBAMTTcylinder * LBAMTTinitCylinder(cDbl bore, cDbl stroke, cDbl angle){
      * pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed
      * pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed
     */
-    double angleValveSx = PI*3/4 + (pistonAngle * PI/180 / 2);
-    double angleValveDx = angleValveSx + PI/2;
+    double angleValveSx = fmod(PI*3/4 + (pistonAngle * PI/180 / 2), 2*PI);
+    //if(angleValveSx >= 2*PI) angleValveSx -= 2*PI;
+    double angleValveDx = fmod(angleValveSx + PI/2, 2*PI);
+    //if(angleValveDx >= 2*PI) angleValveSx -= 2*PI;
 
     ret->piston = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, bore, pistonAngle);
     ret->valveSx = ENRICinitDevice(rMin, rMax, lenValve, diamValve, angleValveSx, Gamma);
@@ -114,18 +116,28 @@ LBAMTTmotor * LBAMTTinitMotor(const int n, cDbl bore, cDbl displacement, cDbl an
     return ret;
 }
 
-int LBAMTTdeleteMotor(LBAMTTmotor * motor){
+int LBAMTTdelete(LBAMTTcylinder * cylinder){
+    if(cylinder == NULL) return 1;
+
+    if(LBAMTTdelete(cylinder->piston) == 1) return 1;
+    if(ENRICdelete(cylinder->valveDx) == 1) return 1;
+    if(ENRICdelete(cylinder->valveSx) == 1) return 1;
+    delete cylinder;
+
+    return 0;
+}
+
+int LBAMTTdelete(LBAMTTmotor * motor){
     if(motor == NULL) return 1;
 
     for(int i=0;i<motor->n;i++){
-        delete motor->cylinders[i]->piston;
-        delete motor->cylinders[i]->valveDx;
-        delete motor->cylinders[i]->valveSx;
-        delete motor->cylinders[i];
+        if(LBAMTTdelete(motor->cylinders[i]) == 1) return 1;
     }
+
     delete[] motor->cylinders;
     delete motor->offset;
     delete motor;
+
     return 0;
 } 
 
@@ -135,8 +147,14 @@ int LBAMTTrotateMotor(LBAMTTmotor * motor){
     for(int i=0; i<motor->n; i++){
         double cylinderAngle = fmod(motor->angle + motor->offset[i], 720);
         motor->cylinders[i]->piston->angle = cylinderAngle;
-        motor->cylinders[i]->valveSx->Alpha = PI*3/4 + (cylinderAngle * PI/180 / 2);
-        motor->cylinders[i]->valveDx->Alpha = PI*3/4 + (cylinderAngle * PI/180 / 2) + PI/2;
+
+        double angleValveSx = fmod(PI*3/4 + (cylinderAngle * PI/180 / 2), 2*PI);
+        //if(angleValveSx >= 2*PI) angleValveSx -= 2*PI;
+        double angleValveDx = fmod(angleValveSx + PI/2, 2*PI);
+        //if(angleValveDx >= 2*PI) angleValveSx -= 2*PI;
+
+        motor->cylinders[i]->valveSx->Alpha = angleValveSx;
+        motor->cylinders[i]->valveDx->Alpha = angleValveDx;
     }
     return 0;
 }
@@ -318,9 +336,30 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
 string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
 
     if(motor == NULL) return "";
+    double wRod = motor->cylinders[0]->piston->wRod;
+    double stroke = motor->cylinders[0]->piston->stroke;
+    double distance = wRod*8/5 + stroke;
+    double distances[] = {10, 10, 10, 10};
+    //double cxShaft0[] = {400, 400 - (distances[1] + bore)/2 , 400 - (distances[2] + bore), 400 - (distances[3] + bore)*3/2}
+    
+
     string motorSVG = "";
 
+    // if(motor->n == 1) motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[0], 400, 480, false, true);
+    // else if(motor->n == 2){
+    //     motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[0], 400 - 50 - bore/2, 480, false, false);
+    //     motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[1], 400 + 50 + bore/2, 480, false, false);
+    // }
+    for(int i=0;i<motor->n;i++){
+        //double cxShaft0 = 400 - (distances[motor->n-1] + stroke*)/2 * (motor->n-1);
+        double cxShaft0 = 400 - distance/2 * (motor->n-1);
+        motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[i], cxShaft0 + distance*i, 480, false, false);
+        motorSVG += "\n";
+    }
 
+    if(header){
+        motorSVG = LBAMTTheaderSVG(motorSVG);
+    }
 
     return motorSVG;
 }

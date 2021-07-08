@@ -312,7 +312,7 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
                 -device->rMax*device->rMin*cos(device->Gamma)-device->rMin*yC*sin(device->Alpha))/
                 (device->rMax*cos(device->Alpha-device->Gamma)-device->rMin*sin(device->Alpha));
             }
-            else if (device->Alpha >= PI && device->Alpha < 2*PI){
+            else if (device->Alpha >= PI && device->Alpha <= 2*PI){
                 ValveStartY = yC+device->rMin;
             }
 
