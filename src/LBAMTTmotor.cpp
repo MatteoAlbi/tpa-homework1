@@ -324,7 +324,7 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
     //valveDx
     double cxValveDx = cxShaft + cylinder->piston->dPiston/4; 
     cylinderSVG += ENRICtoStringSVG(cylinder->valveDx, cxValveDx, cyValve, false, false);
-    cylinderSVG += "\n\n";
+    cylinderSVG += "\n";
 
     if(quote){
         double lQuote = 10;
@@ -364,7 +364,7 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
         double cxShaft0 = 400 - distance/2 * (motor->n-1);
         if(quote && i==0) motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[i], cxShaft0 + distance*i, maxY, true, false);
         else motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[i], cxShaft0 + distance*i, maxY, false, false);
-        motorSVG += "\n";
+        //motorSVG += "\n";
     }
 
     if(quote){
@@ -378,6 +378,7 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
         motorSVG += LBAMTTquoteAngleSVG(400 - distance/2 * (motor->n-1), maxY, 
                                         90 - motor->angle, 90,
                                         stroke*5/16, lQuote);
+        motorSVG += "\n";
     }
 
     if(header){ //add SVG header with drawing dimensions
@@ -385,4 +386,19 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
     }
 
     return motorSVG;
+}
+
+LBAMTTmotor * LBAMTTmotorFromStringSVG(string s){
+    vector<string> vTot = LBAMTTsplitString(s, ">\n\n<");
+
+    //erase the strings that aren't circles or rectangles
+    int i = 0;
+    while(i < vTot.size()){
+        if(vTot[i][0] != 'r' && vTot[i][0] != 'c' && vTot[i][0] != 'p') vTot.erase(vTot.begin() + i);
+        else i++;
+    }
+
+    for(string s : vTot) cout << s[0] << endl;
+
+    return NULL;
 }

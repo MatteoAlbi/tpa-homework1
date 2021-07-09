@@ -372,7 +372,7 @@ LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s){
     //check number of figure
     if(vTot.size() != 8) return NULL;
 
-    //check if the figure succession id correct
+    //check if the figure succession is correct
     string control = "rrccrccc";
     for(i = 0; i < 8; i++) if(vTot[i][0] != control[i]) return NULL;
 
