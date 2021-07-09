@@ -28,7 +28,7 @@ TEST_CASE("test quoteDistSVG when error occures", "[LBAMTTcadSVG]"){
 }
 
 TEST_CASE("test quoteAngleSVG when error occures", "[LBAMTTcadSVG]"){
-    REQUIRE(LBAMTTquoteAngleSVG(0, 0, 0, 0, 10, 5) == "");
+    //REQUIRE(LBAMTTquoteAngleSVG(0, 0, 0, 0, 10, 5) == "");
     REQUIRE(LBAMTTquoteAngleSVG(0, 0, 0, 10, 10, 0.5) == "");
     REQUIRE(LBAMTTquoteAngleSVG(0, 0, 0, 10, 10, 20) == "");
 }

@@ -50,7 +50,7 @@ bool LBAMTTdeviceCompare (const LBAMTTdevice * device1, const LBAMTTdevice * dev
     return ret;
 }
 
-int LBAMTTdeviceDelete (LBAMTTdevice * device){
+int LBAMTTdelete (LBAMTTdevice * device){
     if (device == NULL) return 1;
     
     delete device;
@@ -165,50 +165,50 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
     //connecting rod
     deviceSVG += LBAMTTrectSVG(cxBiella, cyBiella - device->wRod/2, 
                                L2, device->wRod, 
-                               "blue", 
+                               "darkgray", 
                                90 + theta * 180 / PI, cxBiella, cyBiella);
     deviceSVG += "\n"; 
 
     //piston
     deviceSVG += LBAMTTrectSVG(cxPistone - device->dPiston/2, cyPistone + device->wRod*7/10 - device->hPiston , 
                                device->dPiston, device->hPiston, 
-                               "red");
+                               "gray");
     deviceSVG += "\n"; 
 
     //crank
         //shaft circle + coupling factor
     deviceSVG += LBAMTTcircleSVG(cxShaft, cyShaft, 
                                  device->dShaft*7/10, 
-                                 "green");
+                                 "gray");
     deviceSVG += "\n"; 
         //crank-connecting rod joint circle + coupling factor
     deviceSVG += LBAMTTcircleSVG(cxBiella, cyBiella, 
                                  device->wRod*7/10, 
-                                 "green");
+                                 "gray");
     deviceSVG += "\n"; 
         //rectangle that connects the two circles
     deviceSVG += LBAMTTrectSVG(cxShaft, cyShaft - device->wRod*7/10, 
                                L1, device->wRod*7/5, 
-                               "green", 
+                               "gray", 
                                q * 180 / PI, cxShaft, cyShaft);
     deviceSVG += "\n"; 
 
     //shaft
     deviceSVG += LBAMTTcircleSVG(cxShaft, cyShaft, 
                                  device->dShaft/2, 
-                                 "gray");
+                                 "darkgray");
     deviceSVG += "\n"; 
 
     //connecting rod joints
         //crank
     deviceSVG += LBAMTTcircleSVG(cxBiella, cyBiella, 
                                  device->wRod/2, 
-                                 "Blue");
+                                 "darkgray");
     deviceSVG += "\n"; 
         //piston
     deviceSVG += LBAMTTcircleSVG(cxPistone, cyPistone, 
                                  device->wRod/2, 
-                                 "Blue");
+                                 "darkgray");
     deviceSVG += "\n"; 
     
     //quotes

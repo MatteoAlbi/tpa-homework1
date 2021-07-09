@@ -16,11 +16,12 @@ typedef const double cDbl;
 using namespace std;
 
 /**
- * Modifies the angle value so that is inlcuded between 0 and 360.
+ * Modifies the angle value so that is inlcuded between 0 and norm.
  * @param angle angolo to be modified
+ * @param norm value of normalization
  * @return modified angle
  */
-double LBAMTTnormAng(double angle);
+double LBAMTTnormAng(double angle, double norm = 360.0);
 
 /**
  * Adds the SVG file header.

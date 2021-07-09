@@ -283,17 +283,18 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
 
     //Building the cam
         //Internal circle of the cam: I just need a section of the circle, so I just draw an arc
-    deviceSVG += ENRICarcSVG(xC, yC, device->rMin, device->Alpha*180/PI+90, device->Alpha*180/PI+270, device->rMin-1, "grey");
+    deviceSVG += ENRICarcSVG(xC, yC, device->rMin, device->Alpha*180/PI+90, device->Alpha*180/PI+270, device->rMin-1, "silver");
     deviceSVG += "\n"; 
         //External circle of the cam: I just need a section of the circle, so I just draw an arc
-    deviceSVG += ENRICarcSVG(xC, yC, device->rMax, device->Alpha*180/PI-(device->Gamma)*180/PI, device->Alpha*180/PI+(device->Gamma)*180/PI, device->rMax-1, "grey");   
+    deviceSVG += ENRICarcSVG(xC, yC, device->rMax, device->Alpha*180/PI-(device->Gamma)*180/PI, device->Alpha*180/PI+(device->Gamma)*180/PI, device->rMax-1, "silver");   
     deviceSVG += "\n";
     // Making a polygon to fill the empty space of the cam
     deviceSVG += "<polygon points=\"" + to_string(PCest1x) + ", " + to_string(PCest1y) + " " +
                                       to_string(PCest2x) + ", " + to_string(PCest2y) + " " +
                                       to_string(PCint2x) + ", " + to_string(PCint2y) + " " +
                                       to_string(PCint1x) + ", " + to_string(PCint1y) + " ";
-    deviceSVG += "\" style=\"fill:grey\" >\n</polygon>"; //defining colour
+    deviceSVG += "\" style=\"fill:silver\" >\n</polygon>"; //defining colour
+    
     
     //Valve
         //First rectangle componing the valve
@@ -311,18 +312,18 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
                 -device->rMax*device->rMin*cos(device->Gamma)-device->rMin*yC*sin(device->Alpha))/
                 (device->rMax*cos(device->Alpha-device->Gamma)-device->rMin*sin(device->Alpha));
             }
-            else if (device->Alpha >= PI && device->Alpha < 2*PI){
+            else if (device->Alpha >= PI && device->Alpha <= 2*PI){
                 ValveStartY = yC+device->rMin;
             }
 
     //First rectangle componing the valve            
     deviceSVG += "<rect x=\"" + to_string(xC-(device->lenValve)/20) + "\" y=\"" + to_string(ValveStartY) + "\" "; //defining starting point
     deviceSVG += "width=\"" + to_string((device->lenValve)/10) + "\" height=\"" + to_string(device->lenValve) + "\" "; //defining dimension
-    deviceSVG += "style=\"fill:black\" >\n</rect>"; //defining colour
+    deviceSVG += "style=\"fill:dimgray\" >\n</rect>"; //defining colour
     //Second rectangle componing the valve
     deviceSVG += "<rect x=\"" + to_string(xC-(device->diamValve)/2) + "\" y=\"" + to_string(device->lenValve+ValveStartY) + "\" "; //defining starting point
     deviceSVG += "width=\"" + to_string(device->diamValve) + "\" height=\"" + to_string((device->lenValve)/10) + "\" "; //defining dimension
-    deviceSVG += "style=\"fill:black\" >\n</rect>"; //defining colour
+    deviceSVG += "style=\"fill:dimgray\" >\n</rect>"; //defining colour
 
     // Making the quote of the device
     if(quote){

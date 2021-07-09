@@ -45,17 +45,18 @@ Example image:
 ![](device.svg)
 
 ### Command line parameters
--h: show the helper as follow:
-    Command format: `./mainentry -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
-    * `-i` import a device from the file with path `importPath`.
-    * `-e` export a device on the file with path `exportPath`. The device is taken from:
-        - an imported file called with the option `-i` (prioritized action).
-        - the one crated with the params passed after the option `-p` (ignoerd if `-i` is called).
-        `cxShaft`, `cyShaft` are the coordinates of the shaft's center on the SVG draw.
-    * `-eq` export a device with quotes on the file with path `exportPath` (options as before).
-    * `-p` followed by the params of the device to be exported (can't be called if `-e` or `-eq` isn't called before).
-        Params: `dShaft stroke lRod wRod hPiston dPiston angle`(defult value 0) (for details see README).
-    More following params will be ignored 
+`-h`: show the helper as follow:
+
+Command format: `./mainentry -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
+* `-i` import a device from the file with path `importPath`.
+* `-e` export a device on the file with path `exportPath`. The device is taken from:
+    - an imported file called with the option `-i` (prioritized action).
+    - the one crated with the params passed after the option `-p` (ignoerd if `-i` is called).
+    `cxShaft`, `cyShaft` are the coordinates of the shaft's center on the SVG draw.
+* `-eq` export a device with quotes on the file with path `exportPath` (options as before).
+* `-p` followed by the params of the device to be exported (can't be called if `-e` or `-eq` isn't called before).
+    Params: `dShaft stroke lRod wRod hPiston dPiston angle`(defult value 0) (for details see README).
+More following params will be ignored 
 
 ------
 
@@ -65,30 +66,32 @@ The objective is to implement a simple representation of a motor.
 ### Machine definition
 The motor is made by multiple structs called cylinder. Each cylinder is made by one piston and two camValve.
 
+![](motor.svg)
+
 #### Cylinder struct:
-* _piston_: pointer to piston (LBAMTTdevice).
-* _valveSx_: pointer to camValve, it's the left valve.
-* _valveDx_: pointer to camValve, it's the right valve.
+* `piston`: pointer to piston (LBAMTTdevice).
+* `valveSx`: pointer to camValve, it's the left valve.
+* `valveDx`: pointer to camValve, it's the right valve.
 
 #### Motor struct:
-* _n_: number of cylinders.
-* _cylinders_: array of pointers to cylinders.
-* _angle_: motor shaft's angle.
-* _offset_: array of double, angle offset of each cylinder with respect to the motor's shaft
+* `n`: number of cylinders.
+* `cylinders`: array of pointers to cylinders.
+* `angle`: motor shaft's angle.
+* `offset`: array of double, angle offset of each cylinder with respect to the motor's shaft
 
 #### Parameters:
 Using these parameters, multiple Cylinders are intialized and stored into the array of the struct motor:
-* _n_: number of cylinders of the motor
-* _bore_: cylinder's bore
-* _displacement_: motor's total displacement
-* _angle_: motor shaft's angle
-Depending on _n_, the array _offset_ is created with different values. 
+* `n`: number of cylinders of the motor
+* `bore`: cylinder's bore
+* `displacement`: motor's total displacement
+* `angle`: motor shaft's angle
+Depending on `n`, the array `offset` is created with different values. 
 
 #### Constraints:
-* __n__: can't be grater than four (to define _offset_ easier)
-* __bore__: It's equal the _dPiston_. Considering a car's motor, the _bore_ /_stroke_ ratio must be between 0.7 and 2.4 ([Stroke ratio](https://en.wikipedia.org/wiki/Stroke_ratio)); this set a limit to the _stroke_. The lower bound for the _bore_ is set to 60.
+* __n__: can't be grater than four (to define `offset` easier)
+* __bore__: It's equal the `dPiston`. Considering a car's motor, the `bore` /`stroke` ratio must be between 0.7 and 2.4 ([Stroke ratio](https://en.wikipedia.org/wiki/Stroke_ratio)); this set a limit to the `stroke`. The lower bound for the `bore` is set to 60.
   
-  Depending on _n_, there is a cap on the _bore_ value to allow the image to fit in the bounds. The caps are:
+  Depending on `n`, there is a cap on the `bore` value to allow the image to fit in the bounds. The caps are:
 
 | n  | cap |
 |---|---|
@@ -97,14 +100,14 @@ Depending on _n_, the array _offset_ is created with different values.
 | 3  | 200  |
 | 4  | 150  |
 
-* __displacement__: from the displacement is possible to get the _stroke_ of the single piston knowing that: 
+* __displacement__: from the displacement is possible to get the `stroke` of the single piston knowing that: 
   
-        _displacement_ = _bore_<sup>2</sup> * PI * _stroke_ * _n_
+        displacement = PI * (bore/2)^2 * stroke * n
 
-    To assure that the image fits in the bounds, the maximum value of the _stroke_ is 160, turning into a cap on the displacement.
+    To assure that the image fits in the bounds, the maximum value of the `stroke` is 140, turning into a cap on the displacement.
 
 #### Offset and valve angle
-Depending on _n_, the offset are set as follow:
+Depending on `n`, the offset are set as follow:
 
 | n  | offset | link |
 |---|---|---|
@@ -118,4 +121,8 @@ The cylinder's angle is defined from 0 to 720 degrees for a four-stroke engine. 
 * pistonAngle = 180 -> explosion: both valve closed
 * pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed
 * pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed
-To follow this scheme, the left valve has an offset of PI*3/4 between the piston (starting to close) and the right valve has an additional offset of PI/4, so it starts earlier to open.
+To follow this scheme, the left valve has an offset of PI*3/4 between the piston (starting to close) and the right valve has an additional offset of PI/4, so it starts to open earlier.
+
+#### Quotes
+When quoting the motor, only the main parameters like bore, stroke, displacement, angle and n are displayed. The single devices aren't quoted to avoid confusion.
+The quoted angle has range between 0-360° (angles grater than 360 are normalized in the range).
