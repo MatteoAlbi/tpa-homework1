@@ -376,8 +376,8 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
         motorSVG += LBAMTTtextSVG("N: " + to_string(motor->n), 30, 40, 0.0, 0.0, 0.0, "black", "start");
         motorSVG += "\n";
         motorSVG += LBAMTTquoteAngleSVG(400 - distance/2 * (motor->n-1), maxY, 
-                                        motor->angle, 90,
-                                        stroke*5/8, lQuote);
+                                        90 - motor->angle, 90,
+                                        stroke*5/16, lQuote);
     }
 
     if(header){ //add SVG header with drawing dimensions

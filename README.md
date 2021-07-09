@@ -124,4 +124,5 @@ The cylinder's angle is defined from 0 to 720 degrees for a four-stroke engine. 
 To follow this scheme, the left valve has an offset of PI*3/4 between the piston (starting to close) and the right valve has an additional offset of PI/4, so it starts to open earlier.
 
 #### Quotes
-When quoting the motor only the main parameters like bore, stroke, displacement, angle and n are displayed. The single devices aren't quoted to avoid confusion
+When quoting the motor, only the main parameters like bore, stroke, displacement, angle and n are displayed. The single devices aren't quoted to avoid confusion.
+The quoted angle has range between 0-360° (angles grater than 360 are normalized in the range).

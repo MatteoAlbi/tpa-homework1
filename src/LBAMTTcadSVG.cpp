@@ -201,7 +201,7 @@ string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cD
 
 string LBAMTTquoteAngleSVG(cDbl cx, cDbl cy, cDbl startAngle, cDbl endAngle, cDbl distQuote, cDbl lQuote){
 
-    if(startAngle == endAngle) return "";
+    //if(startAngle == endAngle) return "";
     if(lQuote < 1) return "";
     if(lQuote > distQuote) return "";
 

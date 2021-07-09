@@ -264,4 +264,18 @@ style="fill:silver" >
 <text x="30.000000" y="20.000000" fill="black" text-anchor="start"  >DISPLACEMENT: 8620530.23</text>
 <text x="30.000000" y="40.000000" fill="black" text-anchor="start"  >N: 4</text>
 
+<line x1="107.866667" y1="480.000000" x2="161.616667" y2="480.000000" style="stroke:black;stroke-width:2"  />
+<line x1="107.866667" y1="480.000000" x2="107.866667" y2="533.750000" style="stroke:black;stroke-width:2"  />
+<path d="
+M 151.644017 489.279336
+A 44.750000 44.750000 0 0 1 117.146003 523.777350
+L 116.731284 521.820821
+A 42.750000 42.750000 0 0 0 149.687488 488.864617
+Z"
+style="fill:black" />
+<path d="
+M 150.665753 489.071977
+A 43.750000 43.750000 0 0 1 116.938644 522.799086"
+fill="transparent" stroke-width="2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
+<text x="149.409190" y="521.542523" fill="black" transform="rotate(315.000000,149.409190,521.542523)" text-anchor="middle"  >90.0</text>
 </svg>
