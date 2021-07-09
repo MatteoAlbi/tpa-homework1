@@ -227,3 +227,11 @@ TEST_CASE("test LBAMTTmotorsCompare","[LBAMTTmotor]"){
     LBAMTTsetMotorAngle(b, 180);
     REQUIRE(! LBAMTTmotorsCompare(b, a));
 }
+
+TEST_CASE("test LBAMTTcylinderToStringSVG when error occures", "[LBAMTTmotor]"){
+    REQUIRE(LBAMTTcylinderToStringSVG(NULL,0,0) == "");
+}
+
+TEST_CASE("test LBAMTTmotorToStringSVG when error occures", "[LBAMTTmotor]"){
+    REQUIRE(LBAMTTmotorToStringSVG(NULL,0,0) == "");
+}

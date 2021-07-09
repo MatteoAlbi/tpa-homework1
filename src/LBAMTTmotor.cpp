@@ -48,16 +48,16 @@ LBAMTTcylinder * LBAMTTinitCylinder(cDbl bore, cDbl stroke, cDbl angle){
     double lenValve = stroke/3;
     double Gamma = PI /8;
 
-    double pistonAngle = fmod(angle, 720);
+    double pistonAngle = LBAMTTnormAng(angle, 720);
     /**
      * pistonAngle = 0 -> start compression: both valve closed
      * pistonAngle = 180 -> explosion: both valve closed
      * pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed
      * pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed
     */
-    double angleValveSx = fmod(PI*3/4 + (pistonAngle * PI/180 / 2), 2*PI);
+    double angleValveSx = LBAMTTnormAng(PI*3/4 + (pistonAngle * PI/180 / 2), 2*PI);
     //if(angleValveSx >= 2*PI) angleValveSx -= 2*PI;
-    double angleValveDx = fmod(angleValveSx + PI/2, 2*PI);
+    double angleValveDx = LBAMTTnormAng(angleValveSx + PI/2, 2*PI);
     //if(angleValveDx >= 2*PI) angleValveSx -= 2*PI;
 
     ret->piston = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, bore, pistonAngle);
@@ -105,8 +105,9 @@ LBAMTTmotor * LBAMTTinitMotor(const int n, cDbl bore, cDbl displacement, cDbl an
         return NULL;
     }
 
-    if(angle < 0) ret->angle = 720 - fmod(angle, 720);
-    else ret->angle =  fmod(angle, 720);
+    // if(angle < 0) ret->angle = 720 - fmod(angle, 720);
+    // else ret->angle =  fmod(angle, 720);
+    ret->angle = LBAMTTnormAng(angle, 720);
     
     ret->cylinders = new LBAMTTcylinder* [n];
     for(int i=0; i<ret->n; i++){
@@ -145,12 +146,12 @@ int LBAMTTrotateMotor(LBAMTTmotor * motor){
     if (motor == NULL) return 1;
 
     for(int i=0; i<motor->n; i++){
-        double cylinderAngle = fmod(motor->angle + motor->offset[i], 720);
+        double cylinderAngle = LBAMTTnormAng(motor->angle + motor->offset[i], 720);
         motor->cylinders[i]->piston->angle = cylinderAngle;
 
-        double angleValveSx = fmod(PI*3/4 + (cylinderAngle * PI/180 / 2), 2*PI);
+        double angleValveSx = LBAMTTnormAng(PI*3/4 + (cylinderAngle * PI/180 / 2), 2*PI);
         //if(angleValveSx >= 2*PI) angleValveSx -= 2*PI;
-        double angleValveDx = fmod(angleValveSx + PI/2, 2*PI);
+        double angleValveDx = LBAMTTnormAng(angleValveSx + PI/2, 2*PI);
         //if(angleValveDx >= 2*PI) angleValveSx -= 2*PI;
 
         motor->cylinders[i]->valveSx->Alpha = angleValveSx;
@@ -259,9 +260,9 @@ int LBAMTTsetMotorDisplacement(LBAMTTmotor * motor, cDbl displacement){
 int LBAMTTsetMotorAngle(LBAMTTmotor* motor, cDbl angle){
     if(motor == NULL) return 1;
 
-    double newAngle;
-    if(angle < 0) newAngle = 720 - fmod(angle,720);
-    else newAngle = fmod(angle,720);
+    double newAngle = LBAMTTnormAng(angle,720);
+    // if(angle < 0) newAngle = 720 - fmod(angle,720);
+    // else newAngle = fmod(angle,720);
 
     //checks
     if(motor->angle == newAngle) return 0; //no need to modify
@@ -288,11 +289,10 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
     if(cylinder == NULL) return "";
 
     double maxPistonY = cyShaft - cylinder->piston->stroke/2 - cylinder->piston->lRod - cylinder->piston->hPiston + cylinder->piston->wRod*7/10;
-    double additionalY = 10; 
-    double valveSpace = cylinder->valveDx->rMax - cylinder->valveDx->rMin;
-    double rMax = cylinder->valveSx->rMax;
+    double additionalY = 5; //additional height for the combustion chamber
+    double valveSpace = cylinder->valveDx->rMax - cylinder->valveDx->rMin; //valve Y movement
     double lenValve = cylinder->valveSx->lenValve;
-    double cyValve =  maxPistonY - additionalY -1 - rMax - lenValve * 1.1;
+    double cyValve =  maxPistonY - additionalY - cylinder->valveSx->rMax - lenValve * 1.1;
 
     //piston
     string cylinderSVG = LBAMTTdeviceToStringSVG(cylinder->piston, cxShaft, cyShaft, false, false);
@@ -300,18 +300,18 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
     //combustion chamber
     //horizontal line
     cylinderSVG +=  LBAMTTlineSVG(  cxShaft - cylinder->piston->dPiston/2 -2, 
-                                    maxPistonY - additionalY - valveSpace - lenValve/10 -2,
+                                    maxPistonY - additionalY - valveSpace - lenValve/10 -1,
                                     cxShaft + cylinder->piston->dPiston/2 +2, 
-                                    maxPistonY - additionalY - valveSpace - lenValve/10 -2);
+                                    maxPistonY - additionalY - valveSpace - lenValve/10 -1);
     cylinderSVG += "\n";
     //vertical lines
     cylinderSVG +=  LBAMTTlineSVG(  cxShaft - cylinder->piston->dPiston/2 -1, 
-                                    maxPistonY - additionalY - valveSpace- lenValve/10 -3,
+                                    maxPistonY - additionalY - valveSpace - lenValve/10 -2,
                                     cxShaft - cylinder->piston->dPiston/2 -1, 
                                     maxPistonY + cylinder->piston->stroke + additionalY);
     cylinderSVG += "\n";
     cylinderSVG +=  LBAMTTlineSVG(  cxShaft + cylinder->piston->dPiston/2 +1, 
-                                    maxPistonY - additionalY - valveSpace- lenValve/10 -3,
+                                    maxPistonY - additionalY - valveSpace - lenValve/10 -2,
                                     cxShaft + cylinder->piston->dPiston/2 +1, 
                                     maxPistonY + cylinder->piston->stroke + additionalY);
     cylinderSVG += "\n";
@@ -324,7 +324,22 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
     //valveDx
     double cxValveDx = cxShaft + cylinder->piston->dPiston/4; 
     cylinderSVG += ENRICtoStringSVG(cylinder->valveDx, cxValveDx, cyValve, false, false);
-    cylinderSVG += "\n";
+    cylinderSVG += "\n\n";
+
+    if(quote){
+        double lQuote = 10;
+        cylinderSVG = LBAMTTarrowMarkerSVG() + cylinderSVG; //marker arrow def
+        //bore
+        cylinderSVG += LBAMTTquoteDistSVG(  cxShaft - cylinder->piston->dPiston/2, maxPistonY - additionalY - valveSpace - lenValve/10,
+                                            cxShaft + cylinder->piston->dPiston/2, maxPistonY - additionalY - valveSpace - lenValve/10,
+                                            cylinder->valveSx->rMax*2 + lenValve * 1.1, lQuote, false);
+        cylinderSVG += "\n";
+        //stroke
+        cylinderSVG += LBAMTTquoteDistSVG(  cxShaft - cylinder->piston->dPiston/2, maxPistonY,
+                                            cxShaft - cylinder->piston->dPiston/2, maxPistonY + cylinder->piston->stroke,
+                                            lQuote, lQuote, true);
+        cylinderSVG += "\n";
+    }
 
     if(header){
         cylinderSVG = LBAMTTheaderSVG(cylinderSVG);
@@ -336,28 +351,36 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
 string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
 
     if(motor == NULL) return "";
+
+    double maxY = 480; // maxY for the cylinder to fit in the draw
     double wRod = motor->cylinders[0]->piston->wRod;
     double stroke = motor->cylinders[0]->piston->stroke;
     double distance = wRod*8/5 + stroke;
-    double distances[] = {10, 10, 10, 10};
-    //double cxShaft0[] = {400, 400 - (distances[1] + bore)/2 , 400 - (distances[2] + bore), 400 - (distances[3] + bore)*3/2}
+    double lQuote = 10;
     
-
     string motorSVG = "";
 
-    // if(motor->n == 1) motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[0], 400, 480, false, true);
-    // else if(motor->n == 2){
-    //     motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[0], 400 - 50 - bore/2, 480, false, false);
-    //     motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[1], 400 + 50 + bore/2, 480, false, false);
-    // }
     for(int i=0;i<motor->n;i++){
-        //double cxShaft0 = 400 - (distances[motor->n-1] + stroke*)/2 * (motor->n-1);
         double cxShaft0 = 400 - distance/2 * (motor->n-1);
-        motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[i], cxShaft0 + distance*i, 480, false, false);
+        if(quote && i==0) motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[i], cxShaft0 + distance*i, maxY, true, false);
+        else motorSVG += LBAMTTcylinderToStringSVG(motor->cylinders[i], cxShaft0 + distance*i, maxY, false, false);
         motorSVG += "\n";
     }
 
-    if(header){
+    if(quote){
+        //cout << "quote motor" << endl;
+        double displacement = PI * pow(motor->cylinders[0]->piston->dPiston/2, 2) * motor->cylinders[0]->piston->stroke * motor->n;
+        string s = "DISPLACEMENT: " + to_string(displacement);
+        s.erase(s.end()-4, s.end());
+        motorSVG += LBAMTTtextSVG(s, 30, 20, 0.0, 0.0, 0.0, "black", "start");
+        motorSVG += LBAMTTtextSVG("N: " + to_string(motor->n), 30, 40, 0.0, 0.0, 0.0, "black", "start");
+        motorSVG += "\n";
+        motorSVG += LBAMTTquoteAngleSVG(400 - distance/2 * (motor->n-1), maxY, 
+                                        motor->angle, 90,
+                                        stroke*5/8, lQuote);
+    }
+
+    if(header){ //add SVG header with drawing dimensions
         motorSVG = LBAMTTheaderSVG(motorSVG);
     }
 

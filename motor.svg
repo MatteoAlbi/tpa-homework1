@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" >
+
+<defs>
+<!-- arrowhead marker definition for quotes -->
+<marker id="arrowDist" viewBox="0 0 10 10" refX="0" refY="5"
+markerWidth="4" markerHeight="4"
+orient="auto-start-reverse">
+<path d="M 0 1.5 L 10 5 L 0 8.5 z" />
+</marker>
+</defs>
+
+<rect x="177.866667" y="462.888889" width="154.000000" height="34.222222" fill="darkgray" transform="rotate(242.964308,177.866667,480.000000)" />
+
+<rect x="37.866667" y="264.117464" width="140.000000" height="102.666667" fill="gray" transform="rotate(0.000000,0.000000,0.000000)" />
+
+<circle cx="107.866667" cy="480.000000" r="49.000000" fill="gray" />
+
+<circle cx="177.866667" cy="480.000000" r="23.955556" fill="gray" />
+
+<rect x="107.866667" y="456.044444" width="70.000000" height="47.911111" fill="gray" transform="rotate(0.000000,107.866667,480.000000)" />
+
+<circle cx="107.866667" cy="480.000000" r="35.000000" fill="darkgray" />
+
+<circle cx="177.866667" cy="480.000000" r="17.111111" fill="darkgray" />
+
+<circle cx="107.866667" cy="342.828575" r="17.111111" fill="darkgray" />
+
+<line x1="35.866667" y1="159.955556" x2="179.866667" y2="159.955556" style="stroke:black;stroke-width:2"  />
+
+<line x1="36.866667" y1="158.955556" x2="36.866667" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<line x1="178.866667" y1="158.955556" x2="178.866667" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<path d="
+M 72.866667 80.955556
+A 16.666667 16.666667 0 0 1 72.866667 114.288889
+L 72.866667 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 51.309478 106.551503
+A 23.333333 23.333333 0 0 1 51.309478 88.692943
+L 72.866667 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="51.309478, 106.551503 51.309478, 88.692943 72.866667, 80.955556 72.866667, 114.288889 " style="fill:silver" >
+</polygon><rect x="70.533334" y="114.288889" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="44.866667" y="160.955556" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+<path d="
+M 159.533334 97.622223
+A 16.666667 16.666667 0 0 1 126.200000 97.622223
+L 142.866667 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 133.937387 76.065034
+A 23.333333 23.333333 0 0 1 151.795947 76.065034
+L 142.866667 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="133.937387, 76.065034 151.795947, 76.065034 159.533334, 97.622223 126.200000, 97.622223 " style="fill:silver" >
+</polygon><rect x="140.533334" y="114.288889" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="114.866667" y="160.955556" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+
+<line x1="37.866667" y1="160.955556" x2="37.866667" y2="52.955556" style="stroke:black;stroke-width:2"  />
+<line x1="177.866667" y1="160.955556" x2="177.866667" y2="52.955556" style="stroke:black;stroke-width:2"  />
+<line x1="46.866667" y1="62.955556" x2="168.866667" y2="62.955556" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
+<text x="107.866667" y="59.955556" fill="black" text-anchor="middle"  >140.0</text>
+
+<line x1="37.866667" y1="177.288889" x2="17.866667" y2="177.288889" style="stroke:black;stroke-width:2"  />
+<line x1="37.866667" y1="317.288889" x2="17.866667" y2="317.288889" style="stroke:black;stroke-width:2"  />
+<line x1="27.866667" y1="186.288889" x2="27.866667" y2="308.288889" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
+<text x="24.866667" y="247.288889" fill="black" transform="rotate(270.000000,24.866667,247.288889)" text-anchor="middle"  >140.0</text>
+
+
+<rect x="232.622222" y="462.888889" width="154.000000" height="34.222222" fill="darkgray" transform="rotate(297.035692,232.622222,480.000000)" />
+
+<rect x="232.622222" y="264.117463" width="140.000000" height="102.666667" fill="gray" transform="rotate(0.000000,0.000000,0.000000)" />
+
+<circle cx="302.622222" cy="480.000000" r="49.000000" fill="gray" />
+
+<circle cx="232.622222" cy="480.000000" r="23.955556" fill="gray" />
+
+<rect x="302.622222" y="456.044444" width="70.000000" height="47.911111" fill="gray" transform="rotate(180.000000,302.622222,480.000000)" />
+
+<circle cx="302.622222" cy="480.000000" r="35.000000" fill="darkgray" />
+
+<circle cx="232.622222" cy="480.000000" r="17.111111" fill="darkgray" />
+
+<circle cx="302.622222" cy="342.828574" r="17.111111" fill="darkgray" />
+
+<line x1="230.622222" y1="159.955556" x2="374.622222" y2="159.955556" style="stroke:black;stroke-width:2"  />
+
+<line x1="231.622222" y1="158.955556" x2="231.622222" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<line x1="373.622222" y1="158.955556" x2="373.622222" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<path d="
+M 284.288889 97.622223
+A 16.666667 16.666667 0 0 1 250.955556 97.622223
+L 267.622222 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 258.692942 76.065034
+A 23.333333 23.333333 0 0 1 276.551502 76.065034
+L 267.622222 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="258.692942, 76.065034 276.551502, 76.065034 284.288889, 97.622223 250.955556, 97.622223 " style="fill:silver" >
+</polygon><rect x="265.288889" y="114.288889" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="239.622222" y="160.955556" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+<path d="
+M 337.622222 114.288889
+A 16.666667 16.666667 0 0 1 337.622222 80.955556
+L 337.622222 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 359.179411 88.692943
+A 23.333333 23.333333 0 0 1 359.179411 106.551503
+L 337.622222 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="359.179411, 88.692943 359.179411, 106.551503 337.622222, 114.288889 337.622222, 80.955556 " style="fill:silver" >
+</polygon><rect x="335.288889" y="114.288889" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="309.622222" y="160.955556" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+
+
+<rect x="427.377778" y="462.888888" width="154.000000" height="34.222222" fill="darkgray" transform="rotate(297.035692,427.377778,479.999999)" />
+
+<rect x="427.377778" y="264.117463" width="140.000000" height="102.666667" fill="gray" transform="rotate(0.000000,0.000000,0.000000)" />
+
+<circle cx="497.377778" cy="480.000000" r="49.000000" fill="gray" />
+
+<circle cx="427.377778" cy="479.999999" r="23.955556" fill="gray" />
+
+<rect x="497.377778" y="456.044444" width="70.000000" height="47.911111" fill="gray" transform="rotate(180.000000,497.377778,480.000000)" />
+
+<circle cx="497.377778" cy="480.000000" r="35.000000" fill="darkgray" />
+
+<circle cx="427.377778" cy="479.999999" r="17.111111" fill="darkgray" />
+
+<circle cx="497.377778" cy="342.828574" r="17.111111" fill="darkgray" />
+
+<line x1="425.377778" y1="159.955556" x2="569.377778" y2="159.955556" style="stroke:black;stroke-width:2"  />
+
+<line x1="426.377778" y1="158.955556" x2="426.377778" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<line x1="568.377778" y1="158.955556" x2="568.377778" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<path d="
+M 445.711111 97.622223
+A 16.666667 16.666667 0 0 1 479.044444 97.622223
+L 462.377778 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 471.307058 119.179412
+A 23.333333 23.333333 0 0 1 453.448498 119.179412
+L 462.377778 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="471.307058, 119.179412 453.448498, 119.179412 445.711111, 97.622223 479.044444, 97.622223 " style="fill:silver" >
+</polygon><rect x="460.044444" y="120.955556" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="434.377778" y="167.622223" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+<path d="
+M 532.377778 80.955556
+A 16.666667 16.666667 0 0 1 532.377778 114.288889
+L 532.377778 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 510.820589 106.551503
+A 23.333333 23.333333 0 0 1 510.820589 88.692943
+L 532.377778 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="510.820589, 106.551503 510.820589, 88.692943 532.377778, 80.955556 532.377778, 114.288889 " style="fill:silver" >
+</polygon><rect x="530.044444" y="114.288889" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="504.377778" y="160.955556" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+
+
+<rect x="762.133333" y="462.888889" width="154.000000" height="34.222222" fill="darkgray" transform="rotate(242.964308,762.133333,480.000001)" />
+
+<rect x="622.133333" y="264.117464" width="140.000000" height="102.666667" fill="gray" transform="rotate(0.000000,0.000000,0.000000)" />
+
+<circle cx="692.133333" cy="480.000000" r="49.000000" fill="gray" />
+
+<circle cx="762.133333" cy="480.000001" r="23.955556" fill="gray" />
+
+<rect x="692.133333" y="456.044444" width="70.000000" height="47.911111" fill="gray" transform="rotate(360.000000,692.133333,480.000000)" />
+
+<circle cx="692.133333" cy="480.000000" r="35.000000" fill="darkgray" />
+
+<circle cx="762.133333" cy="480.000001" r="17.111111" fill="darkgray" />
+
+<circle cx="692.133333" cy="342.828575" r="17.111111" fill="darkgray" />
+
+<line x1="620.133333" y1="159.955556" x2="764.133333" y2="159.955556" style="stroke:black;stroke-width:2"  />
+
+<line x1="621.133333" y1="158.955556" x2="621.133333" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<line x1="763.133333" y1="158.955556" x2="763.133333" y2="322.288889" style="stroke:black;stroke-width:2"  />
+
+<path d="
+M 657.133333 114.288889
+A 16.666667 16.666667 0 0 1 657.133333 80.955556
+L 657.133333 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 678.690522 88.692943
+A 23.333333 23.333333 0 0 1 678.690522 106.551503
+L 657.133333 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="678.690522, 88.692943 678.690522, 106.551503 657.133333, 114.288889 657.133333, 80.955556 " style="fill:silver" >
+</polygon><rect x="654.800000" y="114.288889" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="629.133333" y="160.955556" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+<path d="
+M 710.466666 97.622223
+A 16.666667 16.666667 0 0 1 743.800000 97.622223
+L 727.133333 97.622223
+Z"
+style="fill:silver" >
+</path>
+<path d="
+M 736.062613 119.179412
+A 23.333333 23.333333 0 0 1 718.204053 119.179412
+L 727.133333 97.622223
+Z"
+style="fill:silver" >
+</path>
+<polygon points="736.062613, 119.179412 718.204053, 119.179412 710.466666, 97.622223 743.800000, 97.622223 " style="fill:silver" >
+</polygon><rect x="724.800000" y="120.955556" width="4.666667" height="46.666667" style="fill:dimgray" >
+</rect><rect x="699.133333" y="167.622223" width="56.000000" height="4.666667" style="fill:dimgray" >
+</rect>
+
+
+<text x="150.000000" y="20.000000" fill="black" text-anchor="middle"  >DISPLACEMENT: 8620530.23</text>
+
+</svg>

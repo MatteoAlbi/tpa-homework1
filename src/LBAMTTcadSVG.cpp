@@ -1,8 +1,8 @@
 # include "LBAMTTcadSVG.h"
 
-double LBAMTTnormAng(double angle){
-    if(angle >= 360) while(angle >= 360) angle -= 360;
-    else if(angle < 0) while(angle < 0) angle += 360;
+double LBAMTTnormAng(double angle, double norm){
+    if(angle >= norm) while(angle >= norm) angle -= norm;
+    else if(angle < 0) while(angle < 0) angle += norm;
 
     return angle;
 }
@@ -14,7 +14,7 @@ string LBAMTTheaderSVG(string s){
 
 string LBAMTTarrowMarkerSVG(){
     return  "<defs>\n"
-            "<!-- arrowhead marker definition for distance quote -->\n"
+            "<!-- arrowhead marker definition for quotes -->\n"
             "<marker id=\"arrowDist\" viewBox=\"0 0 10 10\" refX=\"0\" refY=\"5\"\n"
             "markerWidth=\"4\" markerHeight=\"4\"\n"
             "orient=\"auto-start-reverse\">\n"

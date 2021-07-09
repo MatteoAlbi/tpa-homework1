@@ -66,6 +66,8 @@ The objective is to implement a simple representation of a motor.
 ### Machine definition
 The motor is made by multiple structs called cylinder. Each cylinder is made by one piston and two camValve.
 
+![](motor.svg)
+
 #### Cylinder struct:
 * `piston`: pointer to piston (LBAMTTdevice).
 * `valveSx`: pointer to camValve, it's the left valve.
@@ -120,3 +122,6 @@ The cylinder's angle is defined from 0 to 720 degrees for a four-stroke engine. 
 * pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed
 * pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed
 To follow this scheme, the left valve has an offset of PI*3/4 between the piston (starting to close) and the right valve has an additional offset of PI/4, so it starts to open earlier.
+
+#### Quotes
+When quoting the motor only the main parameters like bore, stroke, displacement, angle and n are displayed. The single devices aren't quoted to avoid confusion
