@@ -261,6 +261,7 @@ style="fill:silver" >
 </rect>
 
 
-<text x="150.000000" y="20.000000" fill="black" text-anchor="middle"  >DISPLACEMENT: 8620530.23</text>
+<text x="30.000000" y="20.000000" fill="black" text-anchor="start"  >DISPLACEMENT: 8620530.23</text>
+<text x="30.000000" y="40.000000" fill="black" text-anchor="start"  >N: 4</text>
 
 </svg>
