@@ -20,7 +20,7 @@ int main(int argc, char ** argv) {
     // LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor, true, true), "motor_1.svg");
     // LBAMTTsetMotorAngle(motor, 630);
     // LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor, true, true), "motor_2.svg");
-
+    
     //multiple test with angle from 0 a 330, step 15
     int m = 24;
     for(int i=0;i<m;i++){
