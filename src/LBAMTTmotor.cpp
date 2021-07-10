@@ -289,10 +289,15 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
     if(cylinder == NULL) return "";
 
     double maxPistonY = cyShaft - cylinder->piston->stroke/2 - cylinder->piston->lRod - cylinder->piston->hPiston + cylinder->piston->wRod*7/10;
-    double additionalY = 5; //additional height for the combustion chamber
+    double additionalY = 5; //additional height for the combustion chamber to not touch the valves
     double valveSpace = cylinder->valveDx->rMax - cylinder->valveDx->rMin; //valve Y movement
     double lenValve = cylinder->valveSx->lenValve;
     double cyValve =  maxPistonY - additionalY - cylinder->valveSx->rMax - lenValve * 1.1;
+    //piston height
+    double L1 = cylinder->piston->stroke/2; //crank lenght
+    double L2 = cylinder->piston->lRod;
+    double q = PI/2 - cylinder->piston->angle * PI / 180.0; //crank angle in radiants
+    double cyPistone = cyShaft - sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) + L1 * sin(q);
 
     //piston
     string cylinderSVG = LBAMTTdeviceToStringSVG(cylinder->piston, cxShaft, cyShaft, false, false);
@@ -314,6 +319,43 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
                                     maxPistonY - additionalY - valveSpace - lenValve/10 -2,
                                     cxShaft + cylinder->piston->dPiston/2 +1, 
                                     maxPistonY + cylinder->piston->stroke + additionalY);
+    cylinderSVG += "\n";
+    //fill combustion chamber
+    /**
+     * pistonAngle = 0 -> start compression: both valve closed
+     * pistonAngle = 180 -> explosion: both valve closed
+     * pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed
+     * pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed
+    */
+    double angle = cylinder->piston->angle;
+    double r,g,b;
+    double brightness = 225;
+    if(angle < 180){ //compression -> yellow--red
+        b = 0;
+        g = brightness * (180 - angle) / 180;
+        r = brightness;
+    }
+    else if(angle >= 180 && angle < 360){//expanding -> red--blue
+        g = 0;
+        r = brightness * (360 - angle) / 180;
+        b = brightness * (angle - 180) / 180;
+    }
+    else if(angle >= 360 && angle < 540){ //expelling -> blue--green
+        r = 0;
+        b = brightness * (540 - angle) / 180;
+        g = brightness * (angle - 360) / 180;
+    }
+    else {//aspiration -> green--yellow
+        b = 0;
+        r = brightness * (angle - 540) / 180;
+        g = brightness;
+    }
+    string color = "rgb(" + to_string(r) + ", " + to_string(g) + ", " + to_string(b) + ")";
+    double rectBottom = maxPistonY - additionalY - valveSpace - lenValve/10;
+    double rectTop = cyPistone + cylinder->piston->wRod*7/10 - cylinder->piston->hPiston;
+    cylinderSVG += LBAMTTrectSVG(   cxShaft - cylinder->piston->dPiston/2, rectBottom,
+                                    cylinder->piston->dPiston, rectTop - rectBottom,
+                                    color);
     cylinderSVG += "\n";
 
     //valves
@@ -391,14 +433,36 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
 LBAMTTmotor * LBAMTTmotorFromStringSVG(string s){
     vector<string> vTot = LBAMTTsplitString(s, ">\n\n<");
 
-    //erase the strings that aren't circles or rectangles
+    //erase the strings that aren't circles, rectangles or paths
     int i = 0;
     while(i < vTot.size()){
         if(vTot[i][0] != 'r' && vTot[i][0] != 'c' && vTot[i][0] != 'p') vTot.erase(vTot.begin() + i);
         else i++;
     }
 
-    for(string s : vTot) cout << s[0] << endl;
+    string control = "rrccrcccrpp";
+    //check number of figure
+    if(vTot.size() % control.size() != 0) return NULL;
 
-    return NULL;
+    //check if the figure succession is correct
+    for(i = 0; i < vTot.size(); i++) if(vTot[i][0] != control[i%control.size()]) return NULL;
+
+    //param extraction
+    int n = vTot.size()/control.size();
+    double bore, stroke, angle;
+
+    vector<string> vTmp;
+    vTmp = LBAMTTsplitString(vTot[1],"\"");
+    bore = atof(vTmp[5].c_str());
+    vTmp = LBAMTTsplitString(vTot[4],"\"");
+    stroke = 2 * atof(vTmp[5].c_str());
+    vTmp = LBAMTTsplitString(vTmp[11],"(");
+    vTmp = LBAMTTsplitString(vTmp[1],",");//gets rotate values
+    angle = 90 - atof(vTmp[0].c_str());
+
+    double displacement = PI * pow(bore/2,2) * stroke * n;
+
+    LBAMTTmotor * ret = LBAMTTinitMotor(n, bore, displacement, angle);
+
+    return ret;
 }

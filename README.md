@@ -117,10 +117,11 @@ Depending on `n`, the offset are set as follow:
 | 4  | 0-180-540-360 |  [Straight-four engine](https://en.wikipedia.org/wiki/Straight-four_engine)  |
 
 The cylinder's angle is defined from 0 to 720 degrees for a four-stroke engine. The camshafts moving the valves rotate half the speed of the motor's shaft, so their angle is defined from 0 to 360 degrees and the rotation speed is halved also. The cycle is defined as follow:
-* pistonAngle = 0 -> start compression: both valve closed
-* pistonAngle = 180 -> explosion: both valve closed
-* pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed
-* pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed
+* pistonAngle = 0 -> start compression: both valve closed (__color <span style="color:yellow">yellow</span>__)
+* pistonAngle = 180 -> explosion: both valve closed (__color <span style="color:red">red__)
+* pistonAngle = 360 -> start expelling: valve Dx open, valve Sx closed (__color <span style="color:blue">blue</span>__)
+* pistonAngle = 540 -> start aspiration: valve Sx open, valve Dx closed (__color <span style="color:green">green</span>__)
+  
 To follow this scheme, the left valve has an offset of PI*3/4 between the piston (starting to close) and the right valve has an additional offset of PI/4, so it starts to open earlier.
 
 #### Quotes

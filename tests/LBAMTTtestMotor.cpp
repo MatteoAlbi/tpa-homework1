@@ -235,3 +235,18 @@ TEST_CASE("test LBAMTTcylinderToStringSVG when error occures", "[LBAMTTmotor]"){
 TEST_CASE("test LBAMTTmotorToStringSVG when error occures", "[LBAMTTmotor]"){
     REQUIRE(LBAMTTmotorToStringSVG(NULL,0,0) == "");
 }
+
+TEST_CASE("test LBAMTTmotorFromStringSVG when succeed", "[LBAMTTmotor]"){
+    int n = 3;
+    double bore = 120;
+    double stroke = 120;
+    double angle = 90;
+    double displacement = PI * pow(bore/2,2) * stroke * n;
+
+    LBAMTTmotor * motor = LBAMTTinitMotor(n, bore, displacement, angle);
+    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor), "test.svg");
+
+    REQUIRE(LBAMTTmotorsCompare(motor, LBAMTTmotorFromStringSVG(LBAMTTloadFromFile("test.svg"))));
+
+    remove("test.svg");
+}
