@@ -8,6 +8,27 @@ LBAMTTanimation * LBAMTTinitAnimation(int i, int n, int T){
     return ret;
 }
 
+int LBAMTTanimSetIndex (LBAMTTanimation * anim, const int index){
+    if(index < 0 || index >= anim->n) return 1;
+
+    anim->index = index;
+    return 0;
+}
+
+int LBAMTTanimSetN (LBAMTTanimation * anim, const int n){
+    if(n <= anim->index) return 1;
+
+    anim->n = n;
+    return 0;
+}
+
+int LBAMTTanimSetT (LBAMTTanimation * anim, cDbl T){
+    if(T <= 0) return 1;
+
+    anim->T = T;
+    return 0;
+}
+
 double LBAMTTnormAng(double angle, double norm){
     if(angle >= norm) while(angle >= norm) angle -= norm;
     else if(angle < 0) while(angle < 0) angle += norm;

@@ -17,20 +17,46 @@ typedef const double cDbl;
 using namespace std;
 
 typedef struct LBAMTTanimation{
-    int index; //instant index when appear
-    int n; //number of steps in the animation
+    int index; //frame index
+    int n; //number of frame in the animation
     double T; //period of animation
 } LBAMTTanimation;
 
 /**
  * ALLOCATE animation struct
- * @param index instant index when appear
- * @param n number of steps in the animation
+ * @param index frame index
+ * @param n number of frame in the animation
  * @param T period of animation
- * @param color original color
  * @return pointer to struct
  */
 LBAMTTanimation * LBAMTTinitAnimation(int i, int n, int T);
+
+/**
+ * Modify index of the structure pointed by the given pointer
+ * @param anim pointer to structure to be modified
+ * @param index new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+*/
+int LBAMTTanimSetIndex (LBAMTTanimation * anim, const int index);
+
+/**
+ * Modify n of the structure pointed by the given pointer
+ * @param anim pointer to structure to be modified
+ * @param n new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+*/
+int LBAMTTanimSetN (LBAMTTanimation * anim, const int n);
+
+/**
+ * Modify T of the structure pointed by the given pointer
+ * @param anim pointer to structure to be modified
+ * @param T new value
+ * @return 0 if the function succeed;
+ *      1 if error occures, and keeps the original value
+*/
+int LBAMTTanimSetT (LBAMTTanimation * anim, cDbl T);
 
 /**
  * Modifies the angle value so that is inlcuded between 0 and norm.
