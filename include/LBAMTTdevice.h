@@ -190,13 +190,4 @@ string LBAMTTloadFromFile(string fileName);
  */
 LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s);
 
-/**
- * Manage the params red by command line
- * @param argc number of params passed
- * @param argv array where the params are stored as char arrays
- * @return pointer to device created following commands
- *      NULL if error occurs or no creation is requested
- */
-LBAMTTdevice * LBAMTTcommandLineParam(int argc, char** argv);
-
 #endif

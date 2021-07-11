@@ -440,9 +440,10 @@ LBAMTTmotor * LBAMTTmotorFromStringSVG(string s){
         else i++;
     }
 
+
     string control = "rrccrcccrpp";
     //check number of figure
-    if(vTot.size() % control.size() != 0) return NULL;
+    if(vTot.size() % control.size() != 0 || vTot.size() < control.size()) return NULL;
 
     //check if the figure succession is correct
     for(i = 0; i < vTot.size(); i++) if(vTot[i][0] != control[i%control.size()]) return NULL;
@@ -465,4 +466,161 @@ LBAMTTmotor * LBAMTTmotorFromStringSVG(string s){
     LBAMTTmotor * ret = LBAMTTinitMotor(n, bore, displacement, angle);
 
     return ret;
+}
+
+LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
+    LBAMTTcmdlineRet * ret = new LBAMTTcmdlineRet;
+    ret->device = NULL;
+    ret->motor = NULL;
+
+    string sargv[argc];
+    for(int i=0;i<argc;i++) sargv[i] = string(argv[i]);
+    // ./mainentry -device/motor -i /path_da_cui_importare -eq cx cy /path_dove_esportare -p <param>
+    if(argc == 1) return NULL; //no params
+
+    if(sargv[1] == "-h"){//help
+        string help =   "--HELP\n"
+                        "Command format: ./mainentry -\"struct\" -i importPath -e/-eq cxShaft cyShaft esportPath -p params...\n"
+                        "-\"struct\" must be device or motor: define wich one is used"
+                        "-i import a struct from the file with path importPath\n"
+                        "-e export a struct (-eq export with quotes) on the file with path exportPath.\n"
+                        "   The struct is taken from:\n"
+                        "       an imported file called with the option -i (prioritized action)\n"
+                        "       the one crated with the params passed after the option -p (ignoerd if -i is called)\n"
+                        "   cxShaft cyShaft are the coordinates of the shaft's center on the SVG draw, needed only with device\n"
+                        "-eq export a struct with quotes on the file with path exportPath (options as before)\n"
+                        "-p followed by the params of the struct to be exported (can't be called if -e or -eq isn't called before)\n"
+                        "   Params: dShaft stroke lRod wRod hPiston dPiston angle(defult value 0) for device (for details see README)\n"
+                        "           n bore displacement angle(defult value 0) for motor                      (for details see README)\n"
+                        "More following params will be ignored";
+        cout << help << endl;
+        return NULL;
+    }
+
+    else if(sargv[1] == "-device"){//device
+    // ./mainentry -device -i /path_da_cui_importare -eq cx cy /path_dove_esportare -p <param>*7
+        if(argc >= 4){
+            if(sargv[2] == "-i"){ //import
+                cout << "DEBUG: Importing device from " << sargv[3] << endl;
+                string file = LBAMTTloadFromFile(sargv[3]);
+                if(file == "") { //file not found
+                    cout << "DEBUG: File not found" << endl;
+                    return NULL;
+                } 
+
+                ret->device = LBAMTTdeviceFromStringSVG(file);
+
+                if(ret->device == NULL) {  //string isn't a device
+                    cout << "DEBUG: Can't import device from file " << sargv[3] <<", wrong format" << endl;
+                    return NULL;
+                }
+                cout << "DEBUG: Import successful" << endl;
+
+                if(argc >= 8){ //requested import + export
+                    if(sargv[4] == "-e"){ //export
+                        cout << "DEBUG: Exporting device on file " << sargv[7] << endl;
+                        LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[5]), stod(sargv[6])), sargv[7]);
+                    }
+                    else if(sargv[4] == "-eq"){ //export with quotes
+                        cout << "DEBUG: Exporting device with quotes on file " << sargv[7] << endl;
+                        LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[5]), stod(sargv[6]), true), sargv[7]);
+                    }
+                    cout << "DEBUG: Export successful" << endl;
+                }
+                else if(argc >= 5 && (sargv[4] == "-e" || sargv[4] == "-eq")){ //more than 4 arguments but not enough to export
+                    cout << "DEBUG: Missing arguments for export" << endl;
+                }
+
+                return ret;
+            }
+
+            else if(argc >= 13){// only export with params
+                if(sargv[2] == "-e" || sargv[2] == "-eq"){ 
+                    cout << "DEBUG: Exporting device with params on file " << sargv[5] << endl;
+                    if(sargv[6] != "-p"){ //params not found
+                        cout << "DEBUG: Params not found" << endl;
+                        return NULL;
+                    } 
+
+                    if(argc == 13) ret->device = LBAMTTinitDevice(stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]));
+                    else if(argc == 14) ret->device = LBAMTTinitDevice(stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]), stod(sargv[13]));
+
+                    if(ret->device == NULL) { //params don't match constraints
+                        cout << "DEBUG: Unable to init device with the given params, see README and check the constraints" << endl;
+                        return NULL;
+                    } 
+                    if(sargv[2] == "-e") LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[3]), stod(sargv[4])), sargv[5]);
+                    else LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[3]), stod(sargv[4]), true), sargv[5]);
+                    cout << "DEBUG: Export successful" << endl;
+                    
+                    return ret;
+                }
+            }
+        }
+    }
+
+    else if(sargv[1] == "-motor"){//motor
+    // ./mainentry -motor -i /path_da_cui_importare -eq /path_dove_esportare -p <param>*4
+        if(argc >= 4){
+            if(sargv[2] == "-i"){ //import
+                cout << "DEBUG: Importing motor from " << sargv[3] << endl;
+                string file = LBAMTTloadFromFile(sargv[3]);
+                if(file == "") { //file not found
+                    cout << "DEBUG: File not found" << endl;
+                    return NULL;
+                } 
+
+                ret->motor = LBAMTTmotorFromStringSVG(file);
+
+                if(ret->motor == NULL) {  //string isn't a motor
+                    cout << "DEBUG: Can't import motor from file " << sargv[3] <<", wrong format" << endl;
+                    return NULL;
+                }
+                cout << "DEBUG: Import successful" << endl;
+
+                if(argc >= 6){ //requested export
+                    if(sargv[4] == "-e"){ //export
+                        cout << "DEBUG: Exporting motor on file " << sargv[5] << endl;
+                        LBAMTTsaveToFile(LBAMTTmotorToStringSVG(ret->motor), sargv[5]);
+                    }
+                    else if(sargv[4] == "-eq"){ //export with quotes
+                        cout << "DEBUG: Exporting motor with quotes on file " << sargv[5] << endl;
+                        LBAMTTsaveToFile(LBAMTTmotorToStringSVG(ret->motor, true), sargv[5]);
+                    }
+                    cout << "DEBUG: Export successful" << endl;
+                }
+                else if(argc >= 5 && (sargv[4] == "-e" || sargv[4] == "-eq")){ //more than 4 arguments but not enough to export
+                    cout << "DEBUG: Missing arguments for export" << endl;
+                }
+                return ret;
+            }
+
+            else if(argc >= 8){
+                if(sargv[2] == "-e" || sargv[2] == "-eq"){ //export with params
+                    cout << "DEBUG: Exporting motor with params on file " << sargv[3] << endl;
+                    if(sargv[4] != "-p"){ //params not found
+                        cout << "DEBUG: Params not found" << endl;
+                        return NULL;
+                    } 
+
+                    if(argc == 8) ret->motor = LBAMTTinitMotor(stoi(sargv[5]), stod(sargv[6]), stod(sargv[7]));
+                    else if(argc == 9)ret->motor = LBAMTTinitMotor(stoi(sargv[5]), stod(sargv[6]), stod(sargv[7]), stod(sargv[8]));
+
+                    if(ret->motor == NULL) { //params don't match constraints
+                        cout << "DEBUG: Unable to init motor with the given params, see README and check the constraints" << endl;
+                        return NULL;
+                    } 
+                    if(sargv[2] == "-e") LBAMTTsaveToFile(LBAMTTmotorToStringSVG(ret->motor), sargv[3]);
+                    else LBAMTTsaveToFile(LBAMTTmotorToStringSVG(ret->motor, true), sargv[3]);
+                    cout << "DEBUG: Export successful" << endl;
+                    
+                    return ret;
+                }
+            }
+        }
+    }
+
+    cout << "command not found or too few arguments, type -h to display the helper" << endl;
+
+    return NULL;
 }
