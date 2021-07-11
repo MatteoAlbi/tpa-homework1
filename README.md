@@ -42,7 +42,7 @@ P.S. The coupling term is an additional portion of material around the whole joi
 
 Example image: 
 
-![](device.svg)
+![](svg_examples/device.svg)
 
 ------
 
@@ -52,7 +52,7 @@ The objective is to implement a simple representation of a motor.
 ### Machine definition
 The motor is made by multiple structs called cylinder. Each cylinder is made by one piston and two camValve.
 
-![](motor.svg)
+![](svg_examples/motor.svg)
 
 #### Cylinder struct:
 * `piston`: pointer to piston (LBAMTTdevice).
@@ -153,3 +153,9 @@ The animations are created adding to the SVG the rappresentation of the device/m
 `n`/`T` ratio define the fps of the animation.
 
 ATT: given the unefficient method with wich the animation is created, to avoid lags don't set a too higher value of `n` (suggested 720). 
+
+Examples animations: 
+
+![](svg_examples/animDevice.svg)
+
+![](svg_examples/animMotor.svg)

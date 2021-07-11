@@ -168,7 +168,7 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
                                L2, device->wRod, 
                                "darkgray", 
                                90 + theta * 180 / PI, cxBiella, cyBiella,
-                               LBAMTTappearSVG("dimgray", anim));
+                               LBAMTTappearSVG("darkgray", anim));
     deviceSVG += "\n"; 
 
     //piston

@@ -22,7 +22,7 @@ int main(int argc, char ** argv) {
     LBAMTTanimSetN(anim, 360);
     LBAMTTanimSetT(anim, 6);
     LBAMTTsaveToFile(LBAMTTanimateDeviceSVG(motor->cylinders[0]->piston, 400, 480, anim, true), "anim_device.svg");
-    
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(motor->cylinders[0]->piston, 400, 480), "device_example.svg");
     //multiple test with angle from 0 a 630, step 30
     // int m = 24;
     // for(int i=0;i<m;i++){
