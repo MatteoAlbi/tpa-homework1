@@ -12,6 +12,8 @@
 #include <string.h>
 #include <math.h>
 
+#include "LBAMTTcadSVG.h"
+
 #ifndef PI
 #define PI 3.14159265358979323846
 #endif
@@ -117,10 +119,11 @@ string ENRIClineSVG(double x1, double y1, double x2, double y2, int stroke = 2, 
  * @param endAngle ending point of the arc (in degrees)
  * @param stroke thickness arc (need to be > 0 && < r)
  * @param color arc color
+ * @param anim to add animations
  * @return SVG string of the arc
  *      empty in case of error
  */
-string ENRICarcSVG(double cx, double cy, double r, double startAngle, double endAngle, int stroke = 2, string color = "black");
+string ENRICarcSVG(double cx, double cy, double r, double startAngle, double endAngle, int stroke = 2, string color = "black", string anim = "");
 
 /**
  * Creates a string to rapresent an arc in SVG format, with a beautiful animation
@@ -160,9 +163,10 @@ string ENRICquoteDistSVG(double xA, double yA, double xB, double yB, double dist
  * @param cyShaft y coordinate of the shaft's axis within the drawing area
  * @param quote flag: if true quotes the device (default false)
  * @param header flag: if trueadd the SVG header (default true)
+ * @param anim to add animations
  * @return String that rapresents a SVG device
 */
-string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
+string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true, LBAMTTanimation * anim = NULL);
 
 /**
  * Creates a string that defines an arrow shaped marked, it is used in the quote

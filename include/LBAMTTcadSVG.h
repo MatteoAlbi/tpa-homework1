@@ -2,7 +2,8 @@
 #define LBAMTT_SVG
 
 #include <string>       
-#include <math.h>      
+#include <math.h>    
+#include <iostream>  
 
 #ifndef PI
 #define PI 3.14159265
@@ -14,6 +15,22 @@ typedef const double cDbl;
 #endif
 
 using namespace std;
+
+typedef struct LBAMTTanimation{
+    int index; //instant index when appear
+    int n; //number of steps in the animation
+    double T; //period of animation
+} LBAMTTanimation;
+
+/**
+ * ALLOCATE animation struct
+ * @param index instant index when appear
+ * @param n number of steps in the animation
+ * @param T period of animation
+ * @param color original color
+ * @return pointer to struct
+ */
+LBAMTTanimation * LBAMTTinitAnimation(int i, int n, int T);
 
 /**
  * Modifies the angle value so that is inlcuded between 0 and norm.
@@ -46,10 +63,11 @@ string LBAMTTarrowMarkerSVG();
  * @param rotation rectangle's rotation angle (default 0.0)
  * @param xr x coordinate of the center rotation point (default 0.0)
  * @param yr y coordinate of the center rotation point (default 0.0)
+ * @param anim to add animations
  * @return SVG rectangle string;
  *      EMPTY if error occures
  */
-string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotation = 0.0, cDbl xr = 0.0, cDbl yr = 0.0);
+string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotation = 0.0, cDbl xr = 0.0, cDbl yr = 0.0, string anim = "");
 
 /**
  * Create a string to represent an SVG circle.
@@ -57,10 +75,11 @@ string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotati
  * @param y y coordinate of the circle's center
  * @param r circle's radius (must be greater than 0)
  * @param color circle's color (must be in SVG format)
+ * @param anim to add animations
  * @return SVG circle string;
  *      EMPTY if error occures
  */
-string LBAMTTcircleSVG(cDbl x, cDbl y, cDbl r, string color);
+string LBAMTTcircleSVG(cDbl x, cDbl y, cDbl r, string color, string anim = "");
 
 /**
  * Create a string to represent an SVG line,
@@ -87,10 +106,11 @@ string LBAMTTlineSVG(cDbl x1, cDbl y1, cDbl x2, cDbl y2, int stroke = 2, string 
  * @param endAngle arc's end angle (in degrees)
  * @param stroke arc's thickness (must be greater 0 and lower than r)
  * @param color arc's color (must be in SVG format) (default black)
+ * @param anim to add animations
  * @return SVG arc string;
  *      EMPTY if error occures
  */
-string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle, int stroke = 2, string color = "black");
+string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle, int stroke = 2, string color = "black", string anim = "");
 
 /**
  * Create a string to add an SVG text.
@@ -137,5 +157,17 @@ string LBAMTTquoteDistSVG(cDbl xA, cDbl yA, cDbl xB, cDbl yB, cDbl distQuote, cD
  *      EMPTY if error occures
  */
 string LBAMTTquoteAngleSVG(cDbl cx, cDbl cy, cDbl startAngle, cDbl endAngle, cDbl distQuote, cDbl lQuote);
+
+/**
+ * Create the string to make the figure appear at a certain instant.
+ * It sets the initial color to transparent, change it back to the original one,
+ * and then again to transparent.
+ * The string must be insterted between the open-close tags of the figure.
+ * The figure must have attribute "fill".
+ * @param animStruct struct from wich read parameters
+ * @param color original color
+ * @return SVG string for animation
+ */ 
+string LBAMTTappearSVG(string color, LBAMTTanimation * animStruct = NULL);
 
 #endif

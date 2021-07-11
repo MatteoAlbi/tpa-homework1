@@ -26,7 +26,7 @@ typedef struct LBAMTTmotor{
  * @return true If their difference is lower than precision
  *      false otherways
  */
-bool dblCompare(cDbl a, cDbl b, cDbl precision = PRECISION);
+bool LBAMTTdblCompare(cDbl a, cDbl b, cDbl precision = PRECISION);
 
 /**
  * Given the motor struct, set the offset for each cylinder
@@ -158,5 +158,27 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote = false, bool head
  *      NULL if error occures
  */
 LBAMTTmotor * LBAMTTmotorFromStringSVG(string s);
+
+/**
+ * Create an SVG string to represent the cylinder animated
+ * @param cylinder pointer to structure to be represented
+ * @param cxShaft x coordinate of the shaft's axis within the drawing area
+ * @param cyShaft y coordinate of the shaft's axis within the drawing area
+ * @param anim struct that define the animation
+ * @param header flag: if true add the SVG header (default false)
+ * @return string cylinderSVG;
+ *      EMPTY if error occures
+*/
+string LBAMTTanimateCylinderSVG(LBAMTTcylinder * cylinder, double cxShaft, double cyShaft, LBAMTTanimation * anim, bool header = true);
+
+/**
+ * Create an SVG string to represent the motor animated
+ * @param motor pointer to structure to be represented
+ * @param anim struct that define the animation
+ * @param header flag: if true add the SVG header (default false)
+ * @return string motorSVG;
+ *      EMPTY if error occures
+*/
+string LBAMTTanimateMotorSVG(LBAMTTmotor * motor, LBAMTTanimation * anim, bool header = true);
 
 #endif
