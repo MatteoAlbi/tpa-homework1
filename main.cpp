@@ -17,9 +17,9 @@ int main(int argc, char ** argv) {
     double displacement = PI * pow(bore/2,2) * stroke * n;
     LBAMTTmotor * motor = LBAMTTinitMotor(n, bore, displacement, 90);
 
-    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor, true, true), "motor_1.svg");
-    LBAMTTsetMotorAngle(motor, 630);
-    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor, true, true), "motor_2.svg");
+    LBAMTTanimation * anim = LBAMTTinitAnimation(0, 360, 6);
+    LBAMTTsaveToFile(LBAMTTanimateMotorSVG(motor, anim, true), "anim_motor.svg");
+    LBAMTTsaveToFile(LBAMTTanimateDeviceSVG(motor->cylinders[0]->piston, 400, 480, anim, true), "anim_device.svg");
     
     //multiple test with angle from 0 a 630, step 30
     // int m = 24;

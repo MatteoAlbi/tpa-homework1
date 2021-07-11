@@ -5,13 +5,13 @@ This is a piston like device, to convert a rotation motion into a translation on
 ### Device definition
 
 #### Parameters:
-* `dShaft`: shaft's diameter 
-* `stroke`: distance covered by the movement of the piston
-* `lRod`: connecting rod's lenght
-* `wRod`: connecting rod's width
-* `hPiston`: piston's hight
-* `dPiston`: piston's diameter
-* `angle`: crank's rotation angle 
+* `dShaft`: shaft's diameter .
+* `stroke`: distance covered by the movement of the piston.
+* `lRod`: connecting rod's lenght.
+* `wRod`: connecting rod's width.
+* `hPiston`: piston's hight.
+* `dPiston`: piston's diameter.
+* `angle`: crank's rotation angle.
 
 #### Definizione corpi e vincoli dei parametri:
 * __SHAFT__: connection element to the rotation motion, defined by its diameter (`dShaft`).
@@ -67,10 +67,10 @@ The motor is made by multiple structs called cylinder. Each cylinder is made by 
 
 #### Parameters:
 Using these parameters, multiple Cylinders are intialized and stored into the array of the struct motor:
-* `n`: number of cylinders of the motor
-* `bore`: cylinder's bore
-* `displacement`: motor's total displacement
-* `angle`: motor shaft's angle
+* `n`: number of cylinders of the motor.
+* `bore`: cylinder's bore.
+* `displacement`: motor's total displacement.
+* `angle`: motor shaft's angle.
 Depending on `n`, the array `offset` is created with different values. 
 
 #### Constraints:
@@ -139,3 +139,17 @@ Command format: `./mainentry -"struct" -i importPath -e/-eq cxShaft cyShaft expo
 `n bore displacement angle` &ensp;&ensp;for motor (for details see README).
 
 More following params will be ignored 
+
+------
+
+### Animation
+The animations are created adding to the SVG the rappresentation of the device/motor of every frame. Than is added an animation option that change the color of each figure from transparent to the original color the instant the frame must appear, and than reset the color to transparent fir the next frame to be displayed.
+
+#### Animation struct
+* `index`: animation frame index.
+* `n`: number of frame of the animation.
+* `T`: duration of the animation.
+
+`n`/`T` ratio define the fps of the animation.
+
+ATT: given the unefficient method with wich the animation is created, to avoid lags don't set a too higher value of `n` (suggested 720). 

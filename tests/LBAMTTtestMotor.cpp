@@ -48,9 +48,9 @@ TEST_CASE("test LBAMTTinitMotor, LBAMTTinitCylinder when succeed","[LBAMTTmotor]
     REQUIRE(motor->cylinders[0]->valveDx != NULL);
     //piston values
     REQUIRE(motor->cylinders[0]->piston->dPiston == bore);
-    REQUIRE(dblCompare(motor->cylinders[0]->piston->stroke, stroke));
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[0]->piston->stroke, stroke));
     //valve values
-    REQUIRE(dblCompare(motor->cylinders[0]->valveSx->rMax, stroke/6));
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[0]->valveSx->rMax, stroke/6));
     REQUIRE(motor->cylinders[0]->valveDx->diamValve == bore*2/5);
     REQUIRE(motor->cylinders[0]->valveDx->Gamma == PI/8);
 
@@ -60,9 +60,9 @@ TEST_CASE("test LBAMTTinitMotor, LBAMTTinitCylinder when succeed","[LBAMTTmotor]
     REQUIRE(motor->cylinders[2]->valveDx != NULL);
     //piston values
     REQUIRE(motor->cylinders[2]->piston->dPiston == bore);
-    REQUIRE(dblCompare(motor->cylinders[2]->piston->stroke, stroke));
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[2]->piston->stroke, stroke));
     //valve values
-    REQUIRE(dblCompare(motor->cylinders[2]->valveSx->rMax, stroke/6));
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[2]->valveSx->rMax, stroke/6));
     REQUIRE(motor->cylinders[2]->valveDx->diamValve == bore*2/5);
     REQUIRE(motor->cylinders[2]->valveDx->Gamma == PI/8);
 }
@@ -94,8 +94,8 @@ TEST_CASE("test LBAMTTrotateMotor when succceed and error occures","[LBAMTTmotor
     REQUIRE(motor->cylinders[0]->piston->angle == 180);
     REQUIRE(motor->cylinders[1]->piston->angle == 180 + 240);
     REQUIRE(motor->cylinders[2]->piston->angle == 180 + 480);
-    REQUIRE(motor->cylinders[0]->valveSx->Alpha == PI*3/4 + PI / 2);
-    REQUIRE(motor->cylinders[0]->valveDx->Alpha == PI*3/4 + PI);
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[0]->valveSx->Alpha, PI*3/4 + PI / 2));
+    REQUIRE( motor->cylinders[0]->valveDx->Alpha == PI*3/4 + PI);
 }
 
 TEST_CASE("test LBAMTTsetMotorN when succceed and error occures","[LBAMTTmotor]"){
@@ -120,7 +120,7 @@ TEST_CASE("test LBAMTTsetMotorN when succceed and error occures","[LBAMTTmotor]"
     REQUIRE(motor->n == 4);
     REQUIRE(motor->cylinders[2]->piston->angle == 540);
     REQUIRE(motor->cylinders[2]->piston->dPiston == bore);
-    REQUIRE(dblCompare(motor->cylinders[2]->piston->stroke, stroke));    
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[2]->piston->stroke, stroke));    
 }
 
 TEST_CASE("test LBAMTTsetMotorBore when succceed and error occures","[LBAMTTmotor]"){
@@ -162,22 +162,22 @@ TEST_CASE("test LBAMTTsetMotorDisplacement when succceed and error occures","[LB
     double stroke = 200;
     double displacement = pow(bore/2,2)*PI * stroke * n;
     REQUIRE(LBAMTTsetMotorDisplacement(motor, displacement) == 1); //invalid stroke: too high
-    REQUIRE(dblCompare(motor->cylinders[0]->piston->stroke, oldStroke)); 
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[0]->piston->stroke, oldStroke)); 
 
     stroke = 35;
     displacement = pow(bore/2,2)*PI * stroke * n;
     REQUIRE(LBAMTTsetMotorDisplacement(motor, displacement) == 1); //invalid ratio: too high
-    REQUIRE(dblCompare(motor->cylinders[0]->piston->stroke, oldStroke)); 
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[0]->piston->stroke, oldStroke)); 
 
     stroke = 150;
     displacement = pow(bore/2,2)*PI * stroke * n;
     REQUIRE(LBAMTTsetMotorDisplacement(motor, displacement) == 1); //invalid ratio: too low
-    REQUIRE(dblCompare(motor->cylinders[0]->piston->stroke, oldStroke)); 
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[0]->piston->stroke, oldStroke)); 
 
     stroke = 100;
     displacement = pow(bore/2,2)*PI * stroke * n;
     REQUIRE(LBAMTTsetMotorDisplacement(motor, displacement) == 0); //valid
-    REQUIRE(dblCompare(motor->cylinders[0]->piston->stroke, stroke)); 
+    REQUIRE(LBAMTTdblCompare(motor->cylinders[0]->piston->stroke, stroke)); 
 }
 
 TEST_CASE("test LBAMTTsetMotorAngle when succceed and error occures","[LBAMTTmotor]"){

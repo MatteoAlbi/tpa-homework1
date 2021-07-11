@@ -152,10 +152,11 @@ int LBAMTTdeviceSetAngle (LBAMTTdevice * device, cDbl angle);
  * @param cyShaft y coordinate of the shaft's axis within the drawing area
  * @param quote flag: if true quotes the device (default false)
  * @param header flag: if true add the SVG header (default true)
+ * @param anim to add animations
  * @return string deviceSVG;
  *      EMPTY if error occures
 */
-string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true);
+string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote = false, bool header = true, LBAMTTanimation * anim = NULL);
 
 /**
  * Split a string relying on a given substring
@@ -189,5 +190,17 @@ string LBAMTTloadFromFile(string fileName);
  *      NULL if error occures
  */
 LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s);
+
+/**
+ * Create an SVG string to represent the device animated
+ * @param device pointer to structure to be represented
+ * @param cxShaft x coordinate of the shaft's axis within the drawing area
+ * @param cyShaft y coordinate of the shaft's axis within the drawing area
+ * @param anim struct that define the animation
+ * @param header flag: if true add the SVG header (default false)
+ * @return string deviceSVG;
+ *      EMPTY if error occures
+*/
+string LBAMTTanimateDeviceSVG(LBAMTTdevice * device, double cxShaft, double cyShaft, LBAMTTanimation * anim, bool header = true);
 
 #endif

@@ -1,5 +1,13 @@
 # include "LBAMTTcadSVG.h"
 
+LBAMTTanimation * LBAMTTinitAnimation(int i, int n, int T){
+    LBAMTTanimation * ret = new LBAMTTanimation;
+    ret->index = i;
+    ret->n = n;
+    ret->T = T;
+    return ret;
+}
+
 double LBAMTTnormAng(double angle, double norm){
     if(angle >= norm) while(angle >= norm) angle -= norm;
     else if(angle < 0) while(angle < 0) angle += norm;
@@ -23,7 +31,7 @@ string LBAMTTarrowMarkerSVG(){
             "</defs>\n\n";
 }
 
-string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotation, cDbl xr, cDbl yr){
+string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotation, cDbl xr, cDbl yr, string anim){
 
     rotation = LBAMTTnormAng(rotation);
 
@@ -35,19 +43,19 @@ string LBAMTTrectSVG(cDbl x, cDbl y, cDbl w, cDbl h, string color, double rotati
     rect += "width=\"" + to_string(w) + "\" height=\"" + to_string(h) + "\" "; //def dimensions 
     rect += "fill=\"" + color + "\" "; //def color
     rect += "transform=\"rotate(" + to_string(rotation) + "," + to_string(xr) + "," + to_string(yr) + ")\" "; //def rotation
-    rect += "/>\n";
+    rect += ">" + anim + "</rect>\n";
 
     return rect;
 }
 
-string LBAMTTcircleSVG(cDbl x, cDbl y, cDbl r, string color){
+string LBAMTTcircleSVG(cDbl x, cDbl y, cDbl r, string color, string anim){
 
     //check values
     if(r <= 0) return "";
 
     string circle = "";
     circle += "<circle cx=\"" + to_string(x) + "\" cy=\"" + to_string(y) + "\" "; //def creation point
-    circle += "r=\"" + to_string(r) +"\" fill=\"" + color + "\" />\n"; //def radius and color
+    circle += "r=\"" + to_string(r) +"\" fill=\"" + color + "\">" + anim + "</circle>\n"; //def radius and color
 
     return circle;
 }
@@ -65,7 +73,7 @@ string LBAMTTlineSVG(cDbl x1, cDbl y1, cDbl x2, cDbl y2, int stroke, string colo
     return line;
 }
 
-string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle, int stroke, string color){
+string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle, int stroke, string color, string anim){
 
     startAngle = LBAMTTnormAng(startAngle);
     endAngle = LBAMTTnormAng(endAngle);
@@ -76,7 +84,7 @@ string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle
     //check values
     if(r <= 1) return "";
     if(stroke <= 0 || stroke >= r) return "";
-    if(abs( LBAMTTnormAng(startAngle) - endAngle) == 0) return "";
+    if(abs( startAngle - endAngle) == 0) return "";
 
     //4 points to define the arc (as arc of ring)
     double rMin = r - stroke/2;
@@ -102,7 +110,7 @@ string LBAMTTarcSVG(cDbl cx, cDbl cy, cDbl r, double startAngle, double endAngle
           " 0 " + to_string(int(largeArcFlag)) + 
           " 0 " + to_string(x1start) + " " + to_string(y1start) + "\n";
     arc += "Z\"\n";
-    arc += "style=\"fill:" + color + "\" />\n";
+    arc += "style=\"fill:" + color + "\">" + anim + "</path>\n";
 
     return arc;
 }
@@ -254,4 +262,29 @@ string LBAMTTquoteAngleSVG(cDbl cx, cDbl cy, cDbl startAngle, cDbl endAngle, cDb
     quote += LBAMTTtextSVG(val, xText, yText, angleText, xText, yText); 
 
     return quote;
+}
+
+string LBAMTTappearSVG(const string color, LBAMTTanimation * anim){
+    if(anim == NULL) return "";
+    
+    int n = anim->n;
+    int index = anim->index;
+    double T = anim->T;
+
+    if(n == index){
+        cout << "ERR: index = n" << endl;
+        return "";
+    }
+    double t = index / double(n); //appear instant
+    double t1 = (index+1) / double(n); //disappear instant
+
+    string s =  "\n<animate attributeName=\"fill\" attributeType=\"XML\"\n";
+    s += "calcMode=\"discrete\"\n";
+    if(index == 0){
+        s += "values=\"" + color + ";transparent\" " + string("keyTimes= \"0; ") + to_string(t1) + "\"\n";
+    }
+    else s+= "values=\"transparent;" + color + ";transparent\" " + "keyTimes= \"0; " + to_string(t) + "; " + to_string(t1) + "\"\n";
+    s += "dur=\"" + to_string(T) + "s\" repeatCount=\"indefinite\"/>";
+
+    return s;
 }

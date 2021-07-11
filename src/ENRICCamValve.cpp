@@ -96,14 +96,14 @@ string ENRIClineSVG(double x1, double y1, double x2, double y2, int stroke, stri
     return line;
 }
 
-string ENRICarcSVG(double cx, double cy, double r, double startAngle, double endAngle, int stroke, string color){
+string ENRICarcSVG(double cx, double cy, double r, double startAngle, double endAngle, int stroke, string color, string anim){
 
     startAngle = fmod(startAngle, 360);
     endAngle = fmod(endAngle, 360);
 
     //checking values
     if(r <= 1) return "";
-    if(abs(fmod(startAngle, 360) - endAngle) == 0) return "";
+    if(abs( startAngle - endAngle) == 0) return "";
 
     //defining the arc using 4 points
     double x2 = cx + (r) * cos(startAngle * PI/180);
@@ -118,7 +118,7 @@ string ENRICarcSVG(double cx, double cy, double r, double startAngle, double end
     arc += "A " + to_string(r) + " " + to_string(r) + " 0 0 1 " + to_string(x4) + " " + to_string(y4) + "\n";
     arc += "L " + to_string(cx) + " " + to_string(cy) + "\n";
     arc += "Z\"\n";
-    arc += "style=\"fill:" + color + "\" >\n</path>";
+    arc += "style=\"fill:" + color + "\" >" + anim + "</path>";
 
     return arc;
 }
@@ -261,7 +261,9 @@ string ENRICarrowMarkerSVG(){
             "</defs>\n\n";
 }
 
-string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, bool quote, bool header){
+string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, bool quote, bool header, LBAMTTanimation * anim){
+    if(quote) anim = NULL; //priority to quotes
+
     string deviceSVG = "";
     double xC, yC; //cooridnates center of rotation (internal circle of the cam)
     double ValveStartY; // starting point to draw the valve
@@ -283,17 +285,17 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
 
     //Building the cam
         //Internal circle of the cam: I just need a section of the circle, so I just draw an arc
-    deviceSVG += ENRICarcSVG(xC, yC, device->rMin, device->Alpha*180/PI+90, device->Alpha*180/PI+270, device->rMin-1, "silver");
+    deviceSVG += ENRICarcSVG(xC, yC, device->rMin, device->Alpha*180/PI+90, device->Alpha*180/PI+270, device->rMin-1, "silver", LBAMTTappearSVG("silver", anim));
     deviceSVG += "\n"; 
         //External circle of the cam: I just need a section of the circle, so I just draw an arc
-    deviceSVG += ENRICarcSVG(xC, yC, device->rMax, device->Alpha*180/PI-(device->Gamma)*180/PI, device->Alpha*180/PI+(device->Gamma)*180/PI, device->rMax-1, "silver");   
+    deviceSVG += ENRICarcSVG(xC, yC, device->rMax, device->Alpha*180/PI-(device->Gamma)*180/PI, device->Alpha*180/PI+(device->Gamma)*180/PI, device->rMax-1, "silver", LBAMTTappearSVG("silver", anim));   
     deviceSVG += "\n";
     // Making a polygon to fill the empty space of the cam
     deviceSVG += "<polygon points=\"" + to_string(PCest1x) + ", " + to_string(PCest1y) + " " +
                                       to_string(PCest2x) + ", " + to_string(PCest2y) + " " +
                                       to_string(PCint2x) + ", " + to_string(PCint2y) + " " +
                                       to_string(PCint1x) + ", " + to_string(PCint1y) + " ";
-    deviceSVG += "\" style=\"fill:silver\" />\n"; //defining colour
+    deviceSVG += "\" style=\"fill:silver\">" + LBAMTTappearSVG("silver", anim) + "</polygon>\n"; //defining colour
     
     
     //Valve
@@ -319,11 +321,11 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
     //First rectangle componing the valve            
     deviceSVG += "<rect x=\"" + to_string(xC-(device->lenValve)/20) + "\" y=\"" + to_string(ValveStartY) + "\" "; //defining starting point
     deviceSVG += "width=\"" + to_string((device->lenValve)/10) + "\" height=\"" + to_string(device->lenValve) + "\" "; //defining dimension
-    deviceSVG += "style=\"fill:dimgray\" />\n"; //defining colour
+    deviceSVG += "style=\"fill:dimgray\">" + LBAMTTappearSVG("dimgray", anim) + "</rect>\n"; //defining colour
     //Second rectangle componing the valve
     deviceSVG += "<rect x=\"" + to_string(xC-(device->diamValve)/2) + "\" y=\"" + to_string(device->lenValve+ValveStartY) + "\" "; //defining starting point
     deviceSVG += "width=\"" + to_string(device->diamValve) + "\" height=\"" + to_string((device->lenValve)/10) + "\" "; //defining dimension
-    deviceSVG += "style=\"fill:dimgray\"/>\n"; //defining colour
+    deviceSVG += "style=\"fill:dimgray\">" + LBAMTTappearSVG("dimgray", anim) + "</rect>\n"; //defining colour
 
     // Making the quote of the device
     if(quote){
