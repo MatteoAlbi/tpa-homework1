@@ -43,7 +43,7 @@ int LBAMTTsetOffsets(LBAMTTmotor * motor);
  * @param angle cyilinder's rotation angle
  * @return pointer to initialized motor structure;
 */
-LBAMTTcylinder * LBAMTTinitCylinder (cDbl bore, cDbl stroke, cDbl angle);
+LBAMTTcylinder * LBAMTTinitCylinder (cDbl bore, cDbl stroke, cDbl angle = 0);
 
 /**
  * ALLOCATE an LBAMTTmotor structure.
@@ -56,7 +56,7 @@ LBAMTTcylinder * LBAMTTinitCylinder (cDbl bore, cDbl stroke, cDbl angle);
  * @return pointer to initialized motor structure; 
  *      NULL if error occures
 */
-LBAMTTmotor * LBAMTTinitMotor (const int n, cDbl bore, cDbl displacement, cDbl angle);
+LBAMTTmotor * LBAMTTinitMotor (const int n, cDbl bore, cDbl displacement, cDbl angle = 0);
 
 /**
  * DEALLOCATE the structure pointed by the given pointer
@@ -158,5 +158,22 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote = false, bool head
  *      NULL if error occures
  */
 LBAMTTmotor * LBAMTTmotorFromStringSVG(string s);
+
+/**
+ * Struct to allow to return a pointer to device or motor
+ */
+typedef struct LBAMTTcmdlineRet{
+    LBAMTTdevice * device;
+    LBAMTTmotor * motor;
+} LBAMTTcmdlineRet;
+
+/**
+ * Manage the params red by command line
+ * @param argc number of params passed
+ * @param argv array where the params are stored as char arrays
+ * @return pointer to struct created following commands
+ *      NULL if error occurs or no creation is requested
+ */
+LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv);
 
 #endif

@@ -44,20 +44,6 @@ Example image:
 
 ![](device.svg)
 
-### Command line parameters
-`-h`: show the helper as follow:
-
-Command format: `./mainentry -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
-* `-i` import a device from the file with path `importPath`.
-* `-e` export a device on the file with path `exportPath`. The device is taken from:
-    - an imported file called with the option `-i` (prioritized action).
-    - the one crated with the params passed after the option `-p` (ignoerd if `-i` is called).
-    `cxShaft`, `cyShaft` are the coordinates of the shaft's center on the SVG draw.
-* `-eq` export a device with quotes on the file with path `exportPath` (options as before).
-* `-p` followed by the params of the device to be exported (can't be called if `-e` or `-eq` isn't called before).
-    Params: `dShaft stroke lRod wRod hPiston dPiston angle`(defult value 0) (for details see README).
-More following params will be ignored 
-
 ------
 
 ## Motor
@@ -128,3 +114,28 @@ To follow this scheme, the left valve has an offset of PI*3/4 between the piston
 When quoting the motor, only the main parameters like bore, stroke, displacement, angle and n are displayed. The single devices aren't quoted to avoid confusion.
 
 The quoted angle has range between 0-360° (angles grater than 360 are normalized in the range).
+
+------
+
+### Command line parameters
+`-h`: show the helper as follow:
+
+Command format: `./mainentry -"struct" -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
+* `"struct"` must be device or motor: define wich one is used"
+* `-i` import a struct from the file with path `importPath`.
+* `-e` export a struct on the file with path `exportPath`. The struct is taken from:
+    - an imported file called with the option `-i` (prioritized action).
+    - the one crated with the params passed after the option `-p` (ignoerd if `-i` is called);
+  
+    `cxShaft`, `cyShaft` are the coordinates of the shaft's center on the SVG draw, needed only with struct `device`. 
+
+    ATT: passing `cxShaft`, `cyShaft` with struct `motor` will raise an error.
+* `-eq` export a struct with quotes on the file with path `exportPath` (options as before).
+* `-p` followed by the params of the struct to be exported (can't be called if `-e` or `-eq` isn't called before).
+  
+    Params :&ensp; `dShaft stroke lRod wRod hPiston dPiston angle` &ensp;&ensp;for device (for details see README);
+            
+&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+`n bore displacement angle` &ensp;&ensp;for motor (for details see README).
+
+More following params will be ignored 

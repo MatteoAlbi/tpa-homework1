@@ -236,7 +236,7 @@ TEST_CASE("test LBAMTTmotorToStringSVG when error occures", "[LBAMTTmotor]"){
     REQUIRE(LBAMTTmotorToStringSVG(NULL,0,0) == "");
 }
 
-TEST_CASE("test LBAMTTmotorFromStringSVG when succeed", "[LBAMTTmotor]"){
+TEST_CASE("test LBAMTTmotorFromStringSVG when succeed and error occures", "[LBAMTTmotor]"){
     int n = 3;
     double bore = 120;
     double stroke = 120;
@@ -248,5 +248,199 @@ TEST_CASE("test LBAMTTmotorFromStringSVG when succeed", "[LBAMTTmotor]"){
 
     REQUIRE(LBAMTTmotorsCompare(motor, LBAMTTmotorFromStringSVG(LBAMTTloadFromFile("test.svg"))));
 
+    LBAMTTsaveToFile("test", "test.svg");
+    REQUIRE(LBAMTTmotorFromStringSVG(LBAMTTloadFromFile("test.svg")) == NULL);
+
     remove("test.svg");
+}
+
+//FIX
+
+char** s_arr2c_arr(string * s_arr, int n){
+    char ** c_arr = new char*[n];
+    for(int i=0; i<n; i++){
+        c_arr[i] = new char[s_arr[i].length()+1];
+        strcpy(c_arr[i], s_arr[i].c_str());
+    }    
+    return c_arr;
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, helper", "[LBAMTTmotor]"){
+    int argc = 3;
+    string s_arr[] = {"./mainentry", "-h", "test.svg"};
+    char **argv = s_arr2c_arr(s_arr, argc);
+    
+    cout << "\nhelper display:\n";
+    LBAMTTcommandLineParam(argc, argv);
+    cout << "\n";
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, import request", "[LBAMTTmotor]"){
+    LBAMTTcmdlineRet * out;
+    char **argv;
+    int argc = 4;
+    string s_arr_d[] = {"./mainentry", "-device", "-i", "test.svg"};
+    argv = s_arr2c_arr(s_arr_d, argc);
+    
+    //device
+    LBAMTTdevice *device_in = LBAMTTinitDevice(80, 200, 300, 60, 100, 100);
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device_in, 400, 400, true, true), "test.svg");
+
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out->device != NULL); //import successful
+    REQUIRE(LBAMTTdeviceCompare(out->device, device_in));
+
+    LBAMTTsaveToFile("test", "test.svg");
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //not a device
+
+    remove("test.svg");
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //file not found   
+
+    //motor
+    LBAMTTmotor *motor_in = LBAMTTinitMotor(4, 140, 8620530, 90);
+    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor_in, true), "test.svg");
+
+    string s_arr_m[] = {"./mainentry", "-motor", "-i", "test.svg"};
+    argv = s_arr2c_arr(s_arr_m, argc);
+    
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out->motor != NULL); //import successful
+    REQUIRE(LBAMTTmotorsCompare(out->motor, motor_in));
+
+    LBAMTTsaveToFile("test", "test.svg");
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //not a motor
+
+    remove("test.svg");
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //file not found
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, export with params request", "[LBAMTTmotor]"){
+    char **argv; 
+    LBAMTTcmdlineRet * out;
+    
+    //device
+    double dShaft = 120;
+    double stroke = 300;
+    double lRod = 300;
+    double wRod = 60;
+    double hPiston = 100;
+    double dPiston = 150;
+    double angle = 90;
+    LBAMTTdevice *device_in = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
+    string s_arr_d[] = {"./mainentry", "-device", "-eq", "400", "200", "test.svg", "-p", to_string(dShaft), to_string(stroke), to_string(lRod), 
+                                                                            to_string(wRod), to_string(hPiston), to_string(dPiston), 
+                                                                            to_string(angle)};
+    int argc = 14;
+    argv = s_arr2c_arr(s_arr_d, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out->device != NULL);
+    REQUIRE(LBAMTTdeviceCompare(out->device, device_in));
+
+    s_arr_d[10] = "600";
+    argv = s_arr2c_arr(s_arr_d, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //constraints not respected
+
+    s_arr_d[10] = to_string(wRod);
+    s_arr_d[6] = "-q";
+    argv = s_arr2c_arr(s_arr_d, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //missing params
+
+    argc = 12;
+    argv = s_arr2c_arr(s_arr_d, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //missing argument
+
+    //motor
+    int n = 4;
+    double bore = 140;
+    double displacement = 8620530;
+    LBAMTTmotor *motor_in = LBAMTTinitMotor(n, bore, displacement, angle);
+    string s_arr_m[] = {"./mainentry", "-motor", "-eq", "test.svg", "-p", to_string(n), to_string(bore), to_string(displacement), to_string(angle)};
+
+    argc = 9;
+    argv = s_arr2c_arr(s_arr_m, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out->motor != NULL);
+    REQUIRE(LBAMTTmotorsCompare(out->motor, motor_in));
+
+    s_arr_m[7] = "600";
+    argv = s_arr2c_arr(s_arr_m, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //constraints not respected
+
+    s_arr_m[7] = to_string(displacement);
+    s_arr_m[4] = "-q";
+    argv = s_arr2c_arr(s_arr_m, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //missing params
+
+    argc = 7;
+    argv = s_arr2c_arr(s_arr_m, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(out == NULL); //missing param
+
+    remove("test.svg");
+}
+
+TEST_CASE("test LBAMTTcommandLineParam, import and export request", "[LBAMTTmotor]"){
+    //device
+    LBAMTTdevice * device_in = LBAMTTinitDevice(80, 200, 300, 60, 100, 100);
+    int argc = 15;
+    string s_arr_d[] = {"./mainentry", "-device", "-i", "test.svg", "-eq", "400", "200", "test_copy.svg", "-p", "80", "200", "300", "60", "100", "80"};
+    
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device_in, 400, 200, true, true), "test.svg");
+    char **argv = s_arr2c_arr(s_arr_d, argc);
+    LBAMTTcmdlineRet * out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(LBAMTTdeviceCompare(LBAMTTdeviceFromStringSVG(LBAMTTloadFromFile("test.svg")),LBAMTTdeviceFromStringSVG(LBAMTTloadFromFile("test_copy.svg"))));
+
+    LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(device_in, 400, 200), "test.svg");
+    s_arr_d[4] = "-e";
+    argv = s_arr2c_arr(s_arr_d, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(LBAMTTdeviceCompare(LBAMTTdeviceFromStringSVG(LBAMTTloadFromFile("test.svg")),LBAMTTdeviceFromStringSVG(LBAMTTloadFromFile("test_copy.svg"))));
+
+    remove("test_copy.svg");
+
+    argc = 7;
+    argv = s_arr2c_arr(s_arr_d, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    ifstream fin_d("test_copy.svg");
+    //not enough arguments to export
+    REQUIRE(! fin_d.is_open()); //file not found
+    REQUIRE(LBAMTTdeviceCompare(out->device, device_in)); //file still imported
+
+    //motor
+    LBAMTTmotor * motor_in = LBAMTTinitMotor(4, 140, 8620530, 90);
+    argc = 11;
+    string s_arr_m[] = {"./mainentry", "-motor", "-i", "test.svg", "-eq", "test_copy.svg", "-p", "4", "140", "8620530", "60"};
+    
+    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor_in, true), "test.svg");
+    argv = s_arr2c_arr(s_arr_m, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(LBAMTTmotorsCompare(LBAMTTmotorFromStringSVG(LBAMTTloadFromFile("test.svg")),LBAMTTmotorFromStringSVG(LBAMTTloadFromFile("test_copy.svg"))));
+
+    LBAMTTsaveToFile(LBAMTTmotorToStringSVG(motor_in), "test.svg");
+    s_arr_m[4] = "-e";
+    argv = s_arr2c_arr(s_arr_m, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    REQUIRE(LBAMTTmotorsCompare(LBAMTTmotorFromStringSVG(LBAMTTloadFromFile("test.svg")),LBAMTTmotorFromStringSVG(LBAMTTloadFromFile("test_copy.svg"))));
+
+    remove("test_copy.svg");
+
+    argc = 5;
+    argv = s_arr2c_arr(s_arr_m, argc);
+    out = LBAMTTcommandLineParam(argc, argv);
+    ifstream fin_m("test_copy.svg");
+    //not enough arguments to export
+    REQUIRE(! fin_m.is_open()); //file not found
+    REQUIRE(LBAMTTmotorsCompare(out->motor, motor_in)); //file still imported
+
+    remove("test.svg");
+    remove("test_copy.svg");
 }
