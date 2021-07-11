@@ -496,7 +496,7 @@ string LBAMTTanimateCylinderSVG(LBAMTTcylinder * cylinder, double cxShaft, doubl
     cylinderSVG += "\n";
 
     for(int i = 0; i < anim->n; i++){
-        anim->index = i;
+        LBAMTTanimSetIndex(anim, i);
         cylinder->piston->angle += 720.0 / anim->n;
         cylinder->piston->angle = LBAMTTnormAng(cylinder->piston->angle, 720);
         cylinder->valveSx->Alpha = LBAMTTnormAng(PI*3/4 + (cylinder->piston->angle * PI/180 / 2), 2*PI);
