@@ -184,7 +184,7 @@ string LBAMTTloadFromFile(string fileName);
 
 /**
  * Read an SVG string and return the device associated to the drawing
- * @param s string to be analized, must have the same format of the one created by LBAMTTdeviceToString
+ * @param s string to be analized, must have the same format of the one created by LBAMTTdeviceToStringSVG
  * @return pointer to device device if the function succeed;
  *      NULL if error occures
  */

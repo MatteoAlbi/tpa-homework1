@@ -151,4 +151,12 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
 */
 string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote = false, bool header = true);
 
+/**
+ * Read an SVG string and return the motor associated to the drawing
+ * @param s string to be analized, must have the same format of the one created by LBAMTTmotorToStringSVG
+ * @return pointer to device device if the function succeed;
+ *      NULL if error occures
+ */
+LBAMTTmotor * LBAMTTmotorFromStringSVG(string s);
+
 #endif

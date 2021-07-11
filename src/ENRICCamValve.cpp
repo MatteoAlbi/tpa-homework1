@@ -293,7 +293,7 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
                                       to_string(PCest2x) + ", " + to_string(PCest2y) + " " +
                                       to_string(PCint2x) + ", " + to_string(PCint2y) + " " +
                                       to_string(PCint1x) + ", " + to_string(PCint1y) + " ";
-    deviceSVG += "\" style=\"fill:silver\" >\n</polygon>"; //defining colour
+    deviceSVG += "\" style=\"fill:silver\" />\n"; //defining colour
     
     
     //Valve
@@ -319,11 +319,11 @@ string ENRICtoStringSVG (ENRICdevice * device, double cxShaft, double cyShaft, b
     //First rectangle componing the valve            
     deviceSVG += "<rect x=\"" + to_string(xC-(device->lenValve)/20) + "\" y=\"" + to_string(ValveStartY) + "\" "; //defining starting point
     deviceSVG += "width=\"" + to_string((device->lenValve)/10) + "\" height=\"" + to_string(device->lenValve) + "\" "; //defining dimension
-    deviceSVG += "style=\"fill:dimgray\" >\n</rect>"; //defining colour
+    deviceSVG += "style=\"fill:dimgray\" />\n"; //defining colour
     //Second rectangle componing the valve
     deviceSVG += "<rect x=\"" + to_string(xC-(device->diamValve)/2) + "\" y=\"" + to_string(device->lenValve+ValveStartY) + "\" "; //defining starting point
     deviceSVG += "width=\"" + to_string(device->diamValve) + "\" height=\"" + to_string((device->lenValve)/10) + "\" "; //defining dimension
-    deviceSVG += "style=\"fill:dimgray\" >\n</rect>"; //defining colour
+    deviceSVG += "style=\"fill:dimgray\"/>\n"; //defining colour
 
     // Making the quote of the device
     if(quote){
