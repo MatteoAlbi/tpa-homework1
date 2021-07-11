@@ -419,7 +419,7 @@ string LBAMTTanimateDeviceSVG(LBAMTTdevice * device, double cxShaft, double cySh
     string deviceSVG = "";
 
     for(int i = 0; i < anim->n; i++){
-        anim->index = i;
+        LBAMTTanimSetIndex(anim, i);
         device->angle += 360.0 / anim->n;
         device->angle = LBAMTTnormAng(device->angle, 360);
         //piston
