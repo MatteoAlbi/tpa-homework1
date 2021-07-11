@@ -144,9 +144,10 @@ int LBAMTTdeviceSetAngle (LBAMTTdevice * device, cDbl angle){
     return 0;
 };
 
-string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote, bool header){
-
+string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cyShaft, bool quote, bool header, LBAMTTanimation * anim){
     if(device == NULL) return "";
+
+    if(quote) anim = NULL; //priority to quotes
 
     double cxBiella, cyBiella; //crank-connecting rod joint's center
     double cxPistone, cyPistone; //piston-connecting rod joint's center
@@ -166,49 +167,51 @@ string LBAMTTdeviceToStringSVG (LBAMTTdevice * device, double cxShaft, double cy
     deviceSVG += LBAMTTrectSVG(cxBiella, cyBiella - device->wRod/2, 
                                L2, device->wRod, 
                                "darkgray", 
-                               90 + theta * 180 / PI, cxBiella, cyBiella);
+                               90 + theta * 180 / PI, cxBiella, cyBiella,
+                               LBAMTTappearSVG("dimgray", anim));
     deviceSVG += "\n"; 
 
     //piston
     deviceSVG += LBAMTTrectSVG(cxPistone - device->dPiston/2, cyPistone + device->wRod*7/10 - device->hPiston , 
                                device->dPiston, device->hPiston, 
-                               "gray");
+                               "gray", 0.0, 0.0, 0.0, LBAMTTappearSVG("gray", anim));
     deviceSVG += "\n"; 
 
     //crank
         //shaft circle + coupling factor
     deviceSVG += LBAMTTcircleSVG(cxShaft, cyShaft, 
                                  device->dShaft*7/10, 
-                                 "gray");
+                                 "gray", LBAMTTappearSVG("gray", anim));
     deviceSVG += "\n"; 
         //crank-connecting rod joint circle + coupling factor
     deviceSVG += LBAMTTcircleSVG(cxBiella, cyBiella, 
                                  device->wRod*7/10, 
-                                 "gray");
+                                 "gray", LBAMTTappearSVG("gray", anim));
     deviceSVG += "\n"; 
         //rectangle that connects the two circles
     deviceSVG += LBAMTTrectSVG(cxShaft, cyShaft - device->wRod*7/10, 
                                L1, device->wRod*7/5, 
                                "gray", 
-                               q * 180 / PI, cxShaft, cyShaft);
+                               q * 180 / PI, cxShaft, cyShaft,
+                               LBAMTTappearSVG("gray", anim));
     deviceSVG += "\n"; 
 
     //shaft
     deviceSVG += LBAMTTcircleSVG(cxShaft, cyShaft, 
                                  device->dShaft/2, 
-                                 "darkgray");
+                                 "darkgray", LBAMTTappearSVG("darkgray", anim));
     deviceSVG += "\n"; 
 
     //connecting rod joints
         //crank
     deviceSVG += LBAMTTcircleSVG(cxBiella, cyBiella, 
                                  device->wRod/2, 
-                                 "darkgray");
+                                 "darkgray", LBAMTTappearSVG("darkgray", anim));
     deviceSVG += "\n"; 
         //piston
     deviceSVG += LBAMTTcircleSVG(cxPistone, cyPistone, 
                                  device->wRod/2, 
-                                 "darkgray");
+                                 "darkgray", LBAMTTappearSVG("darkgray", anim));
     deviceSVG += "\n"; 
     
     //quotes
@@ -408,4 +411,24 @@ LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s){
     dShaft = 2 * atof(vTmp[5].c_str());
 
     return LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
+}
+
+string LBAMTTanimateDeviceSVG(LBAMTTdevice * device, double cxShaft, double cyShaft, LBAMTTanimation * anim, bool header){
+    if(device == NULL) return "";
+
+    string deviceSVG = "";
+
+    for(int i = 0; i < anim->n; i++){
+        anim->index = i;
+        device->angle += 360.0 / anim->n;
+        device->angle = LBAMTTnormAng(device->angle, 360);
+        //piston
+        deviceSVG += LBAMTTdeviceToStringSVG(device, cxShaft, cyShaft, false, false, anim);
+    }
+
+    if(header){
+        deviceSVG = LBAMTTheaderSVG(deviceSVG);
+    }
+
+    return deviceSVG;
 }
