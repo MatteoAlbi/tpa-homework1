@@ -70,6 +70,6 @@ style="fill:black" />
 M 471.422188 409.103358
 A 72.000000 72.000000 0 0 1 409.103358 471.422187"
 fill="transparent" stroke-width="2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="461.518290" y="461.518290" fill="black" transform="rotate(315.000000,461.518290,461.518290)" text-anchor="middle"  >90.0</text>
+<text x="461.518290" y="461.518290" fill="black" transform="rotate(315.000000,461.518290,461.518290)" text-anchor="middle"  >angle</text>
 
 </svg>

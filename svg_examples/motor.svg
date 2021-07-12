@@ -73,12 +73,12 @@ style="fill:silver" >
 <line x1="37.866667" y1="160.955556" x2="37.866667" y2="52.955556" style="stroke:black;stroke-width:2"  />
 <line x1="177.866667" y1="160.955556" x2="177.866667" y2="52.955556" style="stroke:black;stroke-width:2"  />
 <line x1="46.866667" y1="62.955556" x2="168.866667" y2="62.955556" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="107.866667" y="59.955556" fill="black" text-anchor="middle"  >140.0</text>
+<text x="107.866667" y="59.955556" fill="black" text-anchor="middle"  >bore</text>
 
 <line x1="37.866667" y1="177.288889" x2="17.866667" y2="177.288889" style="stroke:black;stroke-width:2"  />
 <line x1="37.866667" y1="317.288889" x2="17.866667" y2="317.288889" style="stroke:black;stroke-width:2"  />
 <line x1="27.866667" y1="186.288889" x2="27.866667" y2="308.288889" style="stroke:black;stroke-width:2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="24.866667" y="247.288889" fill="black" transform="rotate(270.000000,24.866667,247.288889)" text-anchor="middle"  >140.0</text>
+<text x="24.866667" y="247.288889" fill="black" transform="rotate(270.000000,24.866667,247.288889)" text-anchor="middle"  >stroke</text>
 
 
 <rect x="232.622222" y="462.888889" width="154.000000" height="34.222222" fill="dimgray" transform="rotate(297.035692,232.622222,480.000000)" />
@@ -261,8 +261,8 @@ style="fill:silver" >
 </rect>
 
 
-<text x="30.000000" y="20.000000" fill="black" text-anchor="start"  >DISPLACEMENT: 8620530.23</text>
-<text x="30.000000" y="40.000000" fill="black" text-anchor="start"  >N: 4</text>
+<text x="30.000000" y="20.000000" fill="black" text-anchor="start"  >DISPLACEMENT: PI * (bore/2)^2 * stroke * n</text>
+<text x="30.000000" y="40.000000" fill="black" text-anchor="start"  >N: n</text>
 
 <line x1="107.866667" y1="480.000000" x2="161.616667" y2="480.000000" style="stroke:black;stroke-width:2"  />
 <line x1="107.866667" y1="480.000000" x2="107.866667" y2="533.750000" style="stroke:black;stroke-width:2"  />
@@ -277,5 +277,5 @@ style="fill:black" />
 M 150.665753 489.071977
 A 43.750000 43.750000 0 0 1 116.938644 522.799086"
 fill="transparent" stroke-width="2" marker-start="url(#arrowDist)" marker-end="url(#arrowDist)" />
-<text x="149.409190" y="521.542523" fill="black" transform="rotate(315.000000,149.409190,521.542523)" text-anchor="middle"  >90.0</text>
+<text x="149.409190" y="521.542523" fill="black" transform="rotate(315.000000,149.409190,521.542523)" text-anchor="middle"  >angle</text>
 </svg>
