@@ -160,5 +160,4 @@ ATT: given the unefficient method with wich the animation is created, to avoid l
 Examples animations: 
 
 ![](svg_examples/animDevice.svg)
-
 ![](svg_examples/animMotor.svg)
