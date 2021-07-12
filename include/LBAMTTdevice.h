@@ -46,7 +46,7 @@ typedef struct LBAMTTdevice{
  * @param wRod connecting rod's width
  * @param hPiston piston's height
  * @param dPiston piston's diameter
- * @param angle crank rotation's angle (default 0.0, higher dead point)
+ * @param angle crank rotation's angle (default 0.0, lower dead point)
  * @return pointer to initialized device structure; 
  *      NULL if error occures
 */
@@ -66,7 +66,7 @@ LBAMTTdevice * LBAMTTinitDevice (cDbl dShaft, cDbl stroke, cDbl lRod, cDbl wRod,
 int LBAMTTcheckDeviceIntegrity (const LBAMTTdevice * device);
 
 /**
- * Checks if two devices are the same
+ * Checks if two devices are the same ignoring angle
  * @param device1 first device to compare
  * @param device2 second device to compare
  * @return true if the devices are the same
@@ -197,7 +197,7 @@ LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s);
  * @param cxShaft x coordinate of the shaft's axis within the drawing area
  * @param cyShaft y coordinate of the shaft's axis within the drawing area
  * @param anim struct that define the animation
- * @param header flag: if true add the SVG header (default false)
+ * @param header flag: if true add the SVG header (default true)
  * @return string deviceSVG;
  *      EMPTY if error occures
 */

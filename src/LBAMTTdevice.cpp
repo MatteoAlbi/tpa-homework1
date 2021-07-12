@@ -45,7 +45,6 @@ bool LBAMTTdeviceCompare (const LBAMTTdevice * device1, const LBAMTTdevice * dev
     ret*= device1->wRod == device2->wRod;
     ret*= device1->hPiston == device2->hPiston;
     ret*= device1->dPiston == device2->dPiston;
-    ret*= device1->angle == device2->angle;
 
     return ret;
 }
@@ -372,12 +371,11 @@ LBAMTTdevice * LBAMTTdeviceFromStringSVG(string s){
         else i++;
     }
 
-    //check number of figure
-    if(vTot.size() != 8) return NULL;
-
-    //check if the figure succession is correct
     string control = "rrccrccc";
-    for(i = 0; i < 8; i++) if(vTot[i][0] != control[i]) return NULL;
+    //check number of figure
+    if(vTot.size()%control.size() != 0 || vTot.size() < control.size()) return NULL;
+    //check if the figure succession is correct
+    for(i = 0; i < vTot.size(); i++) if(vTot[i][0] != control[i%control.size()]) return NULL;
 
     //parameters extraction
     double dShaft;

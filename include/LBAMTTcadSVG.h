@@ -24,12 +24,12 @@ typedef struct LBAMTTanimation{
 
 /**
  * ALLOCATE animation struct
- * @param index frame index
  * @param n number of frame in the animation
  * @param T period of animation
- * @return pointer to struct
+ * @return pointer to struct,
+ *          NULL if error occures
  */
-LBAMTTanimation * LBAMTTinitAnimation(int i, int n, int T);
+LBAMTTanimation * LBAMTTinitAnimation(const int n, cDbl T);
 
 /**
  * Modify index of the structure pointed by the given pointer

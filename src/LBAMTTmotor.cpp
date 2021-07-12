@@ -272,11 +272,10 @@ int LBAMTTsetMotorAngle(LBAMTTmotor* motor, cDbl angle){
     return 0;
 }
 
-bool LBAMTTmotorsCompare(LBAMTTmotor * a, LBAMTTmotor * b){
+bool LBAMTTmotorCompare(LBAMTTmotor * a, LBAMTTmotor * b){
     if(a == b) return true;
     if(a == NULL || b == NULL) return false;
     if(a->n != b->n) return false;
-    if(a->angle != b->angle) return false;
     if(a->cylinders[0]->piston->dPiston != b->cylinders[0]->piston->dPiston) return false;
     if(! LBAMTTdblCompare(a->cylinders[0]->piston->stroke, b->cylinders[0]->piston->stroke)) return false;
     return true;
@@ -297,8 +296,7 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
     double q = PI/2 - cylinder->piston->angle * PI / 180.0; //crank angle in radiants
     double cyPistone = cyShaft - sqrt(pow(L2, 2) - pow(L1 * cos(q), 2)) + L1 * sin(q);
 
-    //piston
-    string cylinderSVG = LBAMTTdeviceToStringSVG(cylinder->piston, cxShaft, cyShaft, false, false);
+    string cylinderSVG = "";
 
     //combustion chamber
     //horizontal line
@@ -318,6 +316,10 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
                                     cxShaft + cylinder->piston->dPiston/2 +1, 
                                     maxPistonY + cylinder->piston->stroke + additionalY);
     cylinderSVG += "\n";
+
+    //piston
+    cylinderSVG += LBAMTTdeviceToStringSVG(cylinder->piston, cxShaft, cyShaft, false, false);
+
     //fill combustion chamber
     /**
      * pistonAngle = 0 -> start compression: both valve closed
@@ -364,7 +366,6 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
     //valveDx
     double cxValveDx = cxShaft + cylinder->piston->dPiston/4; 
     cylinderSVG += ENRICtoStringSVG(cylinder->valveDx, cxValveDx, cyValve, false, false);
-    cylinderSVG += "\n";
 
     if(quote){
         double lQuote = 10;
@@ -373,13 +374,13 @@ string LBAMTTcylinderToStringSVG (LBAMTTcylinder * cylinder, double cxShaft, dou
         cylinderSVG += LBAMTTquoteDistSVG(  cxShaft - cylinder->piston->dPiston/2, maxPistonY - additionalY - valveSpace - lenValve/10,
                                             cxShaft + cylinder->piston->dPiston/2, maxPistonY - additionalY - valveSpace - lenValve/10,
                                             cylinder->valveSx->rMax*2 + lenValve * 1.1, lQuote, false);
-        cylinderSVG += "\n";
         //stroke
         cylinderSVG += LBAMTTquoteDistSVG(  cxShaft - cylinder->piston->dPiston/2, maxPistonY,
                                             cxShaft - cylinder->piston->dPiston/2, maxPistonY + cylinder->piston->stroke,
                                             lQuote, lQuote, true);
-        cylinderSVG += "\n";
     }
+
+    cylinderSVG += "\n";
 
     if(header){
         cylinderSVG = LBAMTTheaderSVG(cylinderSVG);
@@ -414,7 +415,6 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
         s.erase(s.end()-4, s.end());
         motorSVG += LBAMTTtextSVG(s, 30, 20, 0.0, 0.0, 0.0, "black", "start");
         motorSVG += LBAMTTtextSVG("N: " + to_string(motor->n), 30, 40, 0.0, 0.0, 0.0, "black", "start");
-        motorSVG += "\n";
         motorSVG += LBAMTTquoteAngleSVG(400 - distance/2 * (motor->n-1), maxY, 
                                         90 - motor->angle, 90,
                                         stroke*5/16, lQuote);
@@ -431,29 +431,40 @@ string LBAMTTmotorToStringSVG(LBAMTTmotor * motor, bool quote, bool header){
 LBAMTTmotor * LBAMTTmotorFromStringSVG(string s){
     vector<string> vTot = LBAMTTsplitString(s, ">\n\n<");
 
-    //erase the strings that aren't circles, rectangles or paths
+    //erase the strings that aren't circles, rectangles, paths or lines
     int i = 0;
     while(i < vTot.size()){
-        if(vTot[i][0] != 'r' && vTot[i][0] != 'c' && vTot[i][0] != 'p') vTot.erase(vTot.begin() + i);
+        if(vTot[i][0] != 'r' && vTot[i][0] != 'c' && vTot[i][0] != 'p' && vTot[i][0] != 'l') vTot.erase(vTot.begin() + i);
         else i++;
     }
 
+    string control = "lllrrccrcccrpp";
+    //count number of cylinders
+    string firstColumn = "";
+    for(i = 0; i < vTot.size(); i++) firstColumn += vTot[i][0]; //string with the first character of each row
+    bool found = true;
+    int position = -1;
+    int n = 0;
+    while(found){
+        position = firstColumn.find(control, position+1);
+        if(position < 0) found = false;
+        else n++;
+    }
 
-    string control = "rrccrcccrpp";
     //check number of figure
-    if(vTot.size() % control.size() != 0 || vTot.size() < control.size()) return NULL;
+    if((vTot.size() - 3*n) % (control.size() - 3) != 0 || vTot.size() < control.size()) return NULL;
 
     //check if the figure succession is correct
-    for(i = 0; i < vTot.size(); i++) if(vTot[i][0] != control[i%control.size()]) return NULL;
+    //for(i = 0; i < vTot.size(); i++) if(vTot[i][0] != control[i%control.size()]) return NULL;
 
     //param extraction
-    int n = vTot.size()/control.size();
+
     double bore, stroke, angle;
 
     vector<string> vTmp;
-    vTmp = LBAMTTsplitString(vTot[1],"\"");
-    bore = atof(vTmp[5].c_str());
     vTmp = LBAMTTsplitString(vTot[4],"\"");
+    bore = atof(vTmp[5].c_str());
+    vTmp = LBAMTTsplitString(vTot[7],"\"");
     stroke = 2 * atof(vTmp[5].c_str());
     vTmp = LBAMTTsplitString(vTmp[11],"(");
     vTmp = LBAMTTsplitString(vTmp[1],",");//gets rotate values
@@ -478,15 +489,18 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
 
     if(sargv[1] == "-h"){//help
         string help =   "--HELP\n"
-                        "Command format: ./mainentry -\"struct\" -i importPath -e/-eq cxShaft cyShaft esportPath -p params...\n"
+                        "Command format: ./mainentry -\"struct\" -i importPath -e/-eq/-ea (n T) cxShaft cyShaft exportPath -p params...\n"
                         "-\"struct\" must be device or motor: define wich one is used"
                         "-i import a struct from the file with path importPath\n"
-                        "-e export a struct (-eq export with quotes) on the file with path exportPath.\n"
+                        "-e export a struct (-eq export with quotes, -ea export animated) on the file with path exportPath.\n"
                         "   The struct is taken from:\n"
                         "       an imported file called with the option -i (prioritized action)\n"
                         "       the one crated with the params passed after the option -p (ignoerd if -i is called)\n"
                         "   cxShaft cyShaft are the coordinates of the shaft's center on the SVG draw, needed only with device\n"
                         "-eq export a struct with quotes on the file with path exportPath (options as before)\n"
+                        "-ea export a struct animated on the file with path exportPath. Must specify two more options\n"
+                        "   n number of frame\n"
+                        "   T duration of the animation\n"
                         "-p followed by the params of the struct to be exported (can't be called if -e or -eq isn't called before)\n"
                         "   Params: dShaft stroke lRod wRod hPiston dPiston angle(defult value 0) for device (for details see README)\n"
                         "           n bore displacement angle(defult value 0) for motor                      (for details see README)\n"
@@ -496,7 +510,7 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
     }
 
     else if(sargv[1] == "-device"){//device
-    // ./mainentry -device -i /path_da_cui_importare -eq cx cy /path_dove_esportare -p <param>*7
+    // ./mainentry -device -i /path_da_cui_importare -eq (n T) cx cy /path_dove_esportare -p <param>*7
         if(argc >= 4){
             if(sargv[2] == "-i"){ //import
                 cout << "DEBUG: Importing device from " << sargv[3] << endl;
@@ -523,9 +537,14 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
                         cout << "DEBUG: Exporting device with quotes on file " << sargv[7] << endl;
                         LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[5]), stod(sargv[6]), true), sargv[7]);
                     }
+                    else if(sargv[4] == "-ea" && argc >= 10){ //export animated
+                        cout << "DEBUG: Exporting device animated on file " << sargv[9] << endl;
+                        LBAMTTanimation * anim = LBAMTTinitAnimation(stoi(sargv[5]), stod(sargv[6]));
+                        LBAMTTsaveToFile(LBAMTTanimateDeviceSVG(ret->device, stod(sargv[7]), stod(sargv[8]), anim, true), sargv[9]);
+                    }
                     cout << "DEBUG: Export successful" << endl;
                 }
-                else if(argc >= 5 && (sargv[4] == "-e" || sargv[4] == "-eq")){ //more than 4 arguments but not enough to export
+                else if(argc >= 5 && (sargv[4] == "-e" || sargv[4] == "-eq" || sargv[4] == "-ea")){ //more than 4 arguments but not enough to export
                     cout << "DEBUG: Missing arguments for export" << endl;
                 }
 
@@ -536,21 +555,44 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
                 if(sargv[2] == "-e" || sargv[2] == "-eq"){ 
                     cout << "DEBUG: Exporting device with params on file " << sargv[5] << endl;
                     if(sargv[6] != "-p"){ //params not found
-                        cout << "DEBUG: Params not found" << endl;
+                        cout << "DEBUG: Params not found or wrong syntax" << endl;
                         return NULL;
                     } 
 
                     if(argc == 13) ret->device = LBAMTTinitDevice(stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]));
-                    else if(argc == 14) ret->device = LBAMTTinitDevice(stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]), stod(sargv[13]));
+                    else if(argc >= 14) ret->device = LBAMTTinitDevice(stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]), stod(sargv[13]));
 
                     if(ret->device == NULL) { //params don't match constraints
                         cout << "DEBUG: Unable to init device with the given params, see README and check the constraints" << endl;
                         return NULL;
                     } 
                     if(sargv[2] == "-e") LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[3]), stod(sargv[4])), sargv[5]);
-                    else LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[3]), stod(sargv[4]), true), sargv[5]);
+                    else if(sargv[2] == "-eq") LBAMTTsaveToFile(LBAMTTdeviceToStringSVG(ret->device, stod(sargv[3]), stod(sargv[4]), true), sargv[5]);
+
                     cout << "DEBUG: Export successful" << endl;
                     
+                    return ret;
+                }
+                else if(sargv[2] == "-ea"){
+                    cout << "DEBUG: Exporting device animated with params on file " << sargv[7] << endl;
+                    if(sargv[8] != "-p"){ //params not found
+                        cout << "DEBUG: Params not found or wrong syntax" << endl;
+                        return NULL;
+                    } 
+                    if(argc == 15) ret->device = LBAMTTinitDevice(stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]), stod(sargv[13]), stod(sargv[14]));
+                    else if(argc >= 16) ret->device = LBAMTTinitDevice(stod(sargv[9]), stod(sargv[10]), stod(sargv[11]), stod(sargv[12]), stod(sargv[13]), stod(sargv[14]), stod(sargv[15]));
+
+                    if(ret->device == NULL) { //params don't match constraints
+                        cout << "DEBUG: Unable to init device with the given params, see README and check the constraints" << endl;
+                        return NULL;
+                    }
+                    LBAMTTanimation * anim = LBAMTTinitAnimation(stoi(sargv[3]), stod(sargv[4]));
+                    if(anim == NULL){
+                        cout << "DEBUG: Unable to init animation with the given params, see README and check the constraints" << endl;
+                        return ret; //still return the device
+                    } 
+                    LBAMTTsaveToFile(LBAMTTanimateDeviceSVG(ret->device, stod(sargv[5]), stod(sargv[6]), anim), sargv[7]);
+                    cout << "DEBUG: Export successful" << endl;
                     return ret;
                 }
             }
@@ -558,7 +600,7 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
     }
 
     else if(sargv[1] == "-motor"){//motor
-    // ./mainentry -motor -i /path_da_cui_importare -eq /path_dove_esportare -p <param>*4
+    // ./mainentry -motor -i /path_da_cui_importare -eq/ea (n,T) /path_dove_esportare -p <param>*4
         if(argc >= 4){
             if(sargv[2] == "-i"){ //import
                 cout << "DEBUG: Importing motor from " << sargv[3] << endl;
@@ -585,9 +627,14 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
                         cout << "DEBUG: Exporting motor with quotes on file " << sargv[5] << endl;
                         LBAMTTsaveToFile(LBAMTTmotorToStringSVG(ret->motor, true), sargv[5]);
                     }
+                    else if(sargv[4] == "-ea" && argc >= 8){ //export animated
+                        cout << "DEBUG: Exporting motor animated on file " << sargv[7] << endl;
+                        LBAMTTanimation * anim = LBAMTTinitAnimation(stoi(sargv[5]), stod(sargv[6]));
+                        LBAMTTsaveToFile(LBAMTTanimateMotorSVG(ret->motor, anim, true), sargv[7]);
+                    }
                     cout << "DEBUG: Export successful" << endl;
                 }
-                else if(argc >= 5 && (sargv[4] == "-e" || sargv[4] == "-eq")){ //more than 4 arguments but not enough to export
+                else if(argc >= 5 && (sargv[4] == "-e" || sargv[4] == "-eq" || sargv[4] == "-ea")){ //more than 4 arguments but not enough to export
                     cout << "DEBUG: Missing arguments for export" << endl;
                 }
                 return ret;
@@ -602,7 +649,7 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
                     } 
 
                     if(argc == 8) ret->motor = LBAMTTinitMotor(stoi(sargv[5]), stod(sargv[6]), stod(sargv[7]));
-                    else if(argc == 9)ret->motor = LBAMTTinitMotor(stoi(sargv[5]), stod(sargv[6]), stod(sargv[7]), stod(sargv[8]));
+                    else if(argc >= 9)ret->motor = LBAMTTinitMotor(stoi(sargv[5]), stod(sargv[6]), stod(sargv[7]), stod(sargv[8]));
 
                     if(ret->motor == NULL) { //params don't match constraints
                         cout << "DEBUG: Unable to init motor with the given params, see README and check the constraints" << endl;
@@ -612,6 +659,28 @@ LBAMTTcmdlineRet * LBAMTTcommandLineParam(int argc, char** argv){
                     else LBAMTTsaveToFile(LBAMTTmotorToStringSVG(ret->motor, true), sargv[3]);
                     cout << "DEBUG: Export successful" << endl;
                     
+                    return ret;
+                }
+                else if(sargv[2] == "-ea"){
+                    cout << "DEBUG: Exporting motor animated with params on file " << sargv[5] << endl;
+                    if(sargv[6] != "-p"){ //params not found
+                        cout << "DEBUG: Params not found or wrong syntax" << endl;
+                        return NULL;
+                    } 
+                    if(argc == 10) ret->motor = LBAMTTinitMotor(stod(sargv[7]), stod(sargv[8]), stod(sargv[9]));
+                    else if(argc >= 11) ret->motor = LBAMTTinitMotor(stod(sargv[7]), stod(sargv[8]), stod(sargv[9]), stod(sargv[10]));
+
+                    if(ret->motor == NULL) { //params don't match constraints
+                        cout << "DEBUG: Unable to init motor with the given params, see README and check the constraints" << endl;
+                        return NULL;
+                    }
+                    LBAMTTanimation * anim = LBAMTTinitAnimation(stoi(sargv[3]), stod(sargv[4]));
+                    if(anim == NULL){
+                        cout << "DEBUG: Unable to init animation with the given params, see README and check the constraints" << endl;
+                        return ret; //still return the motor
+                    } 
+                    LBAMTTsaveToFile(LBAMTTanimateMotorSVG(ret->motor, anim, true), sargv[5]);
+                    cout << "DEBUG: Export successful" << endl;
                     return ret;
                 }
             }
@@ -715,7 +784,7 @@ string LBAMTTanimateCylinderSVG(LBAMTTcylinder * cylinder, double cxShaft, doubl
         //valveDx
         double cxValveDx = cxShaft + cylinder->piston->dPiston/4; 
         cylinderSVG += ENRICtoStringSVG(cylinder->valveDx, cxValveDx, cyValve, false, false, anim);
-        cylinderSVG += "\n\n\n";
+        cylinderSVG += "\n";
     }
 
     if(header){

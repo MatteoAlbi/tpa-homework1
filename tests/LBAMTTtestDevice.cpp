@@ -352,13 +352,13 @@ TEST_CASE("test LBAMTTdeviceFromStringSVG when succeed", "[LBAMTTdevice]"){
     test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
     test += LBAMTTcircleSVG(0, 0, 10, "black") + "\n";
     
-    LBAMTTdevice * device = LBAMTTdeviceFromStringSVG(test);
-    REQUIRE(device != NULL);
-    REQUIRE(device->dShaft == dShaft);
-    REQUIRE(device->stroke == stroke);
-    REQUIRE(device->lRod == lRod);
-    REQUIRE(device->wRod == wRod);
-    REQUIRE(device->hPiston == hPiston);
-    REQUIRE(device->dPiston == dPiston);
-    REQUIRE(device->angle == angle);
+    LBAMTTdevice * device_in = LBAMTTinitDevice(dShaft, stroke, lRod, wRod, hPiston, dPiston, angle);
+    LBAMTTdevice * device_out = LBAMTTdeviceFromStringSVG(test);
+    REQUIRE(device_out != NULL);
+    REQUIRE(LBAMTTdeviceCompare(device_in, device_out));
+
+    device_out = LBAMTTdeviceFromStringSVG(LBAMTTanimateDeviceSVG(device_in, 400, 480, LBAMTTinitAnimation(360,6)));
+    REQUIRE(device_out != NULL);
+    REQUIRE(LBAMTTdeviceCompare(device_in, device_out));
+
 }

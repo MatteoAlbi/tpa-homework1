@@ -121,13 +121,13 @@ int LBAMTTsetMotorDisplacement(LBAMTTmotor * motor, cDbl displacement);
 int LBAMTTsetMotorAngle(LBAMTTmotor* motor, cDbl angle);
 
 /**
- * Compare two motor structes. 
+ * Compare two motor structes ignoring angle
  * @param a first struct to compare
  * @param b second struct to compare
  * @return true if the structs have the same values
  *      false otherways (also if one pointer is NULL)
  */
-bool LBAMTTmotorsCompare(LBAMTTmotor * a, LBAMTTmotor * b);
+bool LBAMTTmotorCompare(LBAMTTmotor * a, LBAMTTmotor * b);
 
 /**
  * Create an SVG string to represent the cylinder

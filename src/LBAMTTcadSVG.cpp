@@ -1,8 +1,11 @@
 # include "LBAMTTcadSVG.h"
 
-LBAMTTanimation * LBAMTTinitAnimation(int i, int n, int T){
+LBAMTTanimation * LBAMTTinitAnimation(int n, cDbl T){
+    if(n < 1) return NULL;
+    if(T <= 0) return NULL;
+
     LBAMTTanimation * ret = new LBAMTTanimation;
-    ret->index = i;
+    ret->index = 0;
     ret->n = n;
     ret->T = T;
     return ret;
@@ -16,8 +19,8 @@ int LBAMTTanimSetIndex (LBAMTTanimation * anim, const int index){
 }
 
 int LBAMTTanimSetN (LBAMTTanimation * anim, const int n){
-    if(n <= anim->index) return 1;
-
+    if(n < 1) return 1;
+    
     anim->n = n;
     return 0;
 }

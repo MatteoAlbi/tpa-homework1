@@ -120,7 +120,7 @@ The quoted angle has range between 0-360° (angles grater than 360 are normalize
 ### Command line parameters
 `-h`: show the helper as follow:
 
-Command format: `./mainentry -"struct" -i importPath -e/-eq cxShaft cyShaft exportPath -p {params}`
+Command format: `./mainentry -"struct" -i importPath -e/-eq/-ea cxShaft cyShaft exportPath -p {params}`
 * `"struct"` must be device or motor: define wich one is used"
 * `-i` import a struct from the file with path `importPath`.
 * `-e` export a struct on the file with path `exportPath`. The struct is taken from:
@@ -131,6 +131,7 @@ Command format: `./mainentry -"struct" -i importPath -e/-eq cxShaft cyShaft expo
 
     ATT: passing `cxShaft`, `cyShaft` with struct `motor` will raise an error.
 * `-eq` export a struct with quotes on the file with path `exportPath` (options as before).
+* `-ea` export a struct animated on the file with path `exportPath` (options as before).
 * `-p` followed by the params of the struct to be exported (can't be called if `-e` or `-eq` isn't called before).
   
     Params :&ensp; `dShaft stroke lRod wRod hPiston dPiston angle` &ensp;&ensp;for device (for details see README);
@@ -151,6 +152,8 @@ The animations are created adding to the SVG the rappresentation of the device/m
 * `T`: duration of the animation.
 
 `n`/`T` ratio define the fps of the animation.
+
+Constraints: `n` and `T` must be greater that zero. 
 
 ATT: given the unefficient method with wich the animation is created, to avoid lags don't set a too higher value of `n` (suggested 720). 
 
